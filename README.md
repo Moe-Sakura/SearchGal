@@ -3,9 +3,20 @@
 EXE可执行文件见Release
 ![演示图片](./shot.png)
 
-## 收录平台
-2025/02/03:
-VikaACG|TouchACG|晴空咖啡馆|天游二次元|绅仕天堂|ACG嘤嘤怪|忧郁的loli|GAL图书馆|量子acg|fufugal|绮梦ACG|青桔ACG
+## 更新记录
+2025/02/03 收录平台:<br>
+- [VikaACG](https://www.vikacg.com/) *(需要魔法)*
+- [TouchACG](https://www.touchgal.io/) **（免登录下载）**
+- [晴空咖啡馆](https://aozoracafe.com/) **（免登录下载）**
+- [天游二次元](https://www.tiangal.com/) *(需要魔法)*
+- [绅仕天堂](https://www.gogalgame.com/)
+- [ACG嘤嘤怪](https://acgyyg.ru/)
+- [忧郁的loli](https://www.ttloli.com/) **（免登录下载）**
+- [GAL图书馆](https://gallibrary.pw/) **（免登录下载）**
+- [量子acg](https://lzacg.org/)
+- [fufugal](https://www.fufugal.com/)
+- [绮梦ACG](https://acgs.one/) **（免登录下载）**
+- [青桔ACG](https://spare.qingju.org/) **（免登录下载）**
 
 ## 免责声明
 本程序仅供学习交流使用，请支持正版游戏<br>
