@@ -10,8 +10,8 @@
 - 将Core和GUI/Cli启动的代码分离
 - 新增WEB界面 (可以在线供其他终端使用)
 - 新收录平台:
--- [失落的小站](https://shinnku.com) **（免登录下载）**
--- [鲲Galgame](https://www.kungal.com/zh-cn/) **（免登录下载）**
+  - [失落的小站](https://shinnku.com) **（免登录下载）**
+  - [鲲Galgame](https://www.kungal.com/zh-cn/) **（免登录下载）**
 - *Cli终端界面已弃用*
 <br>
 2025/02/03 收录平台:<br>
