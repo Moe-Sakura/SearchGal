@@ -6,7 +6,7 @@
 ![GUI演示图片](./shot-WEB-Phone.jpg)<br>
 
 ## 更新记录
-2025/02/04 更新内容:<br>
+2025/02/04 V2 更新内容:<br>
 - 将Core和GUI/Cli启动的代码分离
 - 新增WEB界面 **(可以在线供其他终端使用)**
 - 新收录平台:
@@ -15,7 +15,7 @@
 - *Cli终端界面已弃用*
 <br><hr>
 
-2025/02/03 收录平台:<br>
+2025/02/03 V1 收录平台:<br>
 - [VikaACG](https://www.vikacg.com/) *(需要魔法)*
 - [TouchACG](https://www.touchgal.io/) **（免登录下载）**
 - [晴空咖啡馆](https://aozoracafe.com/) **（免登录下载）**
