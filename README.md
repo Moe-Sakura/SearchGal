@@ -1,9 +1,19 @@
 # SearchGal
-聚合Gal平台搜索工具
-EXE可执行文件见Release
-![演示图片](./shot.png)
+聚合Gal平台搜索工具<br>
+分为 EXE可执行文件 与 WEB界面 详见Release<br>
+![GUI演示图片](./shot-GUI.png)<br>
+![GUI演示图片](./shot-WEB.png)<br>
+![GUI演示图片](./shot-WEB-Phone.jpg)<br>
 
 ## 更新记录
+2025/02/04 更新内容:<br>
+- 将Core和GUI/Cli启动的代码分离
+- 新增WEB界面 (可以在线供其他终端使用)
+- 新收录平台:
+-- [失落的小站](https://shinnku.com) **（免登录下载）**
+-- [鲲Galgame](https://www.kungal.com/zh-cn/) **（免登录下载）**
+- *Cli终端界面已弃用*
+<br>
 2025/02/03 收录平台:<br>
 - [VikaACG](https://www.vikacg.com/) *(需要魔法)*
 - [TouchACG](https://www.touchgal.io/) **（免登录下载）**
