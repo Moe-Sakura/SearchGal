@@ -1,0 +1,9 @@
+requests
+webbrowser
+urllib3
+tqdm
+colorama
+cloudscraper
+rich
+PyQt5
+flask
