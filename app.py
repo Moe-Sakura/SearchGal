@@ -1,7 +1,7 @@
 # WEB页面启动
 # 访问 http://127.0.0.1:8898
 # 打包: 将Core.py内容全部复制到此处并删除第八行import
-# pyinstaller --onefile --add-data "templates;templates" app.py
+# pyinstaller --onefile --add-data "templates:index" app.py
 from flask import Flask, render_template, request, make_response, jsonify
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import traceback
