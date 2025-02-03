@@ -17,16 +17,6 @@
 2025/02/03 收录平台:<br>
 - [VikaACG](https://www.vikacg.com/) *(需要魔法)*
 - [TouchACG](https://www.touchgal.io/) **（免登录下载）**
-- [晴空咖啡馆](https://aozoracafe.com/) **（免登录下载）**
-- [天游二次元](https://www.tiangal.com/) *(需要魔法)*
-- [绅仕天堂](https://www.gogalgame.com/)
-- [ACG嘤嘤怪](https://acgyyg.ru/)
-- [忧郁的loli](https://www.ttloli.com/) **（免登录下载）**
-- [GAL图书馆](https://gallibrary.pw/) **（免登录下载）**
-- [量子acg](https://lzacg.org/)
-- [fufugal](https://www.fufugal.com/)
-- [绮梦ACG](https://acgs.one/) **（免登录下载）**
-- [青桔ACG](https://spare.qingju.org/) **（免登录下载）**
 
 ## 其他
 访问海外站点需要启用魔法搜索功能，自己配好魔法<br>
