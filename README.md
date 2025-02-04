@@ -45,7 +45,7 @@
 ### ⚪ 需登录/特殊条件
 [![绅仕天堂](https://img.shields.io/badge/绅仕天堂-FFFFFF)](https://www.gogalgame.com/) 
 [![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)  
-[![FuFugal](https://img.shields.io/badge/fufugal-FFFFFF)](https://www.fufugal.com/)
+[![FuFugal](https://img.shields.io/badge/FuFuGal-FFFFFF)](https://www.fufugal.com/)
 [![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
 
 ---
