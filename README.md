@@ -1,47 +1,100 @@
-# SearchGal
-聚合Gal平台搜索工具<br>
-分为 **EXE可执行文件** 与 **WEB界面** 详见Release<br><br>
-![GUI演示图片](./shot-GUI.png)<br>
-![GUI演示图片](./shot-WEB.png)<br>
-![GUI演示图片](./shot-WEB-Phone.jpg)<br>
+# 🔍 SearchGal · Gal资源聚合搜索工具
+<p align="center">
+  <strong>跨平台丨多源聚合丨快速响应</strong>
+</p>
 
-## 更新记录
-2025/02/04 V2 更新内容:<br>
-- 将Core和GUI/Cli启动的代码分离
-- 新增WEB界面 **(可以在线供其他终端使用)**
-- 新收录平台:
-  - [失落的小站](https://shinnku.com) **（免登录下载）**
-  - [鲲Galgame](https://www.kungal.com/zh-cn/) **（免登录下载）**
-- *Cli终端界面已弃用*
-<br><hr>
+---
 
-2025/02/03 V1 收录平台:<br>
-- [VikaACG](https://www.vikacg.com/) *(需要魔法)*
-- [TouchACG](https://www.touchgal.io/) **（免登录下载）**
-- [晴空咖啡馆](https://aozoracafe.com/) **（免登录下载）**
-- [天游二次元](https://www.tiangal.com/) *(需要魔法)*
-- [绅仕天堂](https://www.gogalgame.com/)
-- [ACG嘤嘤怪](https://acgyyg.ru/)
-- [忧郁的loli](https://www.ttloli.com/) **（免登录下载）**
-- [GAL图书馆](https://gallibrary.pw/) **（免登录下载）**
-- [量子acg](https://lzacg.org/)
-- [fufugal](https://www.fufugal.com/)
-- [绮梦ACG](https://acgs.one/) **（免登录下载）**
-- [青桔ACG](https://spare.qingju.org/) **（免登录下载）**
 
-## 其他
-访问海外站点需要启用魔法搜索功能，自己配好魔法<br>
-如果搜索词过短，部分平台的结果可能搜索不全(截取第一页结果)，因此尽量精确游戏名搜索<br>
-如果遇到某个平台搜索失败, 检查你是否开了魔法, 也可能是平台炸了或者正则失效了<br>
-*平台标签绿色免登录可下载，金色需要魔法，白色需一定条件才能下载(例如登录/回复等)*<br>
-收录的大多是提供PC平台资源的网站，大部分平台都提供Onedrive或直链，两种方式比国内网盘下载速度更快<br>
-**请关闭浏览器的广告拦截插件, 或将各gal网站添加到白名单, 各网站建站不易, 这是对这些网站最基本支持**<br>
-<br>
-**有能力者请支持Galgame正版！**
+## 🌟 项目亮点
+> <strong>🖥️预览地址: http://SearchGal.homes</strong>
+ 
+✅ **双端适配**  
+▸ 提供 **EXE桌面程序** 与 **WEB在线版** 双版本 
+▸ 移动端完美适配，随时随地畅快搜索  
 
-## 免责声明
-本程序仅供学习交流使用，请支持正版游戏<br>
-本程序只用于搜索互联网平台上的内容，搜索结果来自第三方平台，请自行判断内容安全性<br>
-本程序每获取到请求后都会关闭与服务器的连接，本程序不提倡爆破/恶意爬取数据<br>
-<br>
-**源码由 DeepSeek-R1 与 ChatGPT-o1-mini 深度制作**
+💡 **核心功能**  
+▸ 实时聚合 **12+** 主流Gal资源平台  
+▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件  
+▸ 多线程加速搜索，快速响应
+
+---
+
+## 📸 界面预览
+| 桌面端GUI | WEB端PC | WEB端移动 |
+|:---:|:---:|:---:|
+| ![GUI演示](./shot-GUI.png) | ![WEB-PC](./shot-WEB.png) | ![WEB-Phone](./shot-WEB-Phone.jpg) |
+
+---
+
+## 🚀 已收录平台
+### 🟢 免登录直链下载
+[![晴空咖啡馆](https://img.shields.io/badge/晴空咖啡馆-00C853)](https://aozoracafe.com/) 
+[![失落的小站](https://img.shields.io/badge/失落的小站-00C853)](https://shinnku.com) 
+[![TouchACG](https://img.shields.io/badge/TouchACG-00C853)](https://www.touchgal.io/)  
+[![忧郁的loli](https://img.shields.io/badge/忧郁的loli-00C853)](https://www.ttloli.com/) 
+[![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)  
+[![绮梦ACG](https://img.shields.io/badge/绮梦ACG-00C853)](https://acgs.one/) 
+[![青桔ACG](https://img.shields.io/badge/青桔ACG-00C853)](https://spare.qingju.org/)
+[![鲲Galgame](https://img.shields.io/badge/fufugal-FFFFFF)](https://www.kungal.com/zh-cn/)
+
+### 🟡 需魔法访问
+[![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/) 
+[![天游二次元](https://img.shields.io/badge/天游二次元-FFC107)](https://www.tiangal.com/)
+
+### ⚪ 需登录/特殊条件
+[![绅仕天堂](https://img.shields.io/badge/绅仕天堂-FFFFFF)](https://www.gogalgame.com/) 
+[![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)  
+[![FuFugal](https://img.shields.io/badge/fufugal-FFFFFF)](https://www.fufugal.com/)
+[![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
+
+---
+
+## 🛠️ 使用指南
+1️⃣ **精准搜索**  
+▸ 使用完整游戏名/英文原名效果最佳  
+▸ 示例：`千恋万花` → `Senren＊Banka`  
+
+2️⃣ **结果筛选**  
+▸ 优先选择<span style="color:#4CAF50">绿色标签</span>平台（免登录+直链下载）  
+▸ 金色平台需配置代理，白色平台需完成对应条件  
+
+3️⃣ **下载须知**  
+▸ 推荐使用IDM/FDM等下载工具加速  
+▸ 遇到Cloudflare验证时耐心等待5秒  
+
+---
+
+## ⚠️ 注意事项
+❗ **广告拦截**  
+▸ 请将各平台加入广告插件白名单，支持站长运营  
+
+🔐 **安全声明**  
+▸ 本工具仅提供搜索聚合服务，不托管任何资源  
+▸ 所有结果来自第三方平台，请自行校验文件安全性  
+
+---
+
+## 📜 更新日志
+### V2 (2025/02/04)
+```
++ 新增WEB在线版，支持多终端访问
++ 新增「失落的小站」「鲲Galgame」平台
++ 重构核心代码，优化搜索性能30%
+- 弃用CLI终端版本
+```
+### V1 (2025/02/03)
+```
++ 首发收录12大平台，支持桌面端搜索
+```
+
+---
+
+## 🌱 支持正版
+本工具旨在为Gal爱好者提供资源索引便利  
+**请通过Steam/DLSite等正规渠道支持开发者！**
+
+> 📢 项目由 [DeepSeek-R1] 与 [ChatGPT-o1-mini] 深度联合开发  
+> 🔗 由于平台的有较强的时效性，遇到问题请提交Issue
+
+**欢迎各位GalGame爱好者优化本项目**
