@@ -36,7 +36,7 @@
 [![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)  
 [![绮梦ACG](https://img.shields.io/badge/绮梦ACG-00C853)](https://acgs.one/) 
 [![青桔ACG](https://img.shields.io/badge/青桔ACG-00C853)](https://spare.qingju.org/)
-[![鲲Galgame](https://img.shields.io/badge/fufugal-FFFFFF)](https://www.kungal.com/zh-cn/)
+[![鲲Galgame](https://img.shields.io/badge/鲲Galgame-00C853)](https://www.kungal.com/zh-cn/)
 
 ### 🟡 需魔法访问
 [![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/) 
