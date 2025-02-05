@@ -7,7 +7,7 @@
 
 
 ## 🌟 项目亮点
-> <strong>🖥️预览地址: http://SearchGal.homes</strong>
+> <strong>🖥️预览地址: http://SearchGal.homes<br>❗2025/02/05 前访问过请清空浏览器缓存, 或访问 http://www.SearchGal.homes</strong>
  
 ✅ **双端适配**  
 ▸ 提供 **EXE桌面程序** 与 **WEB在线版** 双版本 <br>
