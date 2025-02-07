@@ -1,7 +1,7 @@
 # WEB页面启动
 # 访问 http://127.0.0.1:8898
 # 打包: 将Core.py内容全部复制到此处并删除第八行import
-# pyinstaller --add-data "templates:index" -F app.py
+# pyinstaller --add-data "templates:templates" -F app.py
 from flask import Flask, render_template, request, make_response, jsonify
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import traceback
@@ -70,8 +70,10 @@ def search():
         return jsonify({'error': '游戏名称不能为空'}), 400
 
     # 日志记录
-    search_log(request.remote_addr, game) 
-    
+    # ip_address = request.headers.get('X-Real-Ip', request.remote_addr)
+    ip_address = request.remote_addr
+    search_log(ip_address, game)
+
     results = []
     futures = {
         executor.submit(search_platform, platform, game): platform
@@ -87,4 +89,4 @@ def search():
 
 if __name__ == '__main__':
     print('搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入WEB搜索')
-    app.run(host='0.0.0.0', port=8898, threaded=True)
+    app.run(host='0.0.0.0', port=8898, threaded=True, debug=True)
