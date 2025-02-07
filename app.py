@@ -13,6 +13,10 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 executor = ThreadPoolExecutor(max_workers=20)
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 # 平台配置列表
 PLATFORMS = [
     {'func': vika, 'color': 'gold', 'magic': True},
@@ -31,9 +35,19 @@ PLATFORMS = [
     {'func': qingjiacg, 'color': 'lime', 'magic': False},
 ]
 
-def search_log(ip:str, searchgame:str):
+def search_log(ip:str, searchgame:str, ua:str='unknow'):
     now = datetime.now()
-    logstr = now.strftime("%Y-%m-%d %H:%M:%S")+" "+ip+" 搜索: "+searchgame
+    logstr = now.strftime("%Y-%m-%d %H:%M:%S")+" "+ip
+    logstr += " "+ua
+    logstr += " 搜索: "+searchgame
+    print(logstr)
+    with lock:  # 获取锁，确保只有一个线程能写
+        with open("log.txt", "a", encoding="utf-8") as f:
+            f.write(logstr + "\n")
+            
+def request_log(ip:str, ua:str, method, url):
+    now = datetime.now()
+    logstr = now.strftime("%Y-%m-%d %H:%M:%S")+f' {ip} {ua} {method} 访问 {url}'
     print(logstr)
     with lock:  # 获取锁，确保只有一个线程能写
         with open("log.txt", "a", encoding="utf-8") as f:
@@ -41,6 +55,9 @@ def search_log(ip:str, searchgame:str):
 
 @app.route('/')
 def index():
+    rip = request.headers.get('X-Real-Ip', request.remote_addr)
+    ua = request.headers.get('Sec-Ch-Ua-Platform', 'unknow').strip("\"")
+    if rip != '127.0.0.1': request_log(rip, ua, request.method, request.base_url)
     seen_splash = request.cookies.get('seen_splash')
     response = make_response(render_template('index.html'))
     if not seen_splash:
@@ -70,9 +87,11 @@ def search():
         return jsonify({'error': '游戏名称不能为空'}), 400
 
     # 日志记录
-    # ip_address = request.headers.get('X-Real-Ip', request.remote_addr)
-    ip_address = request.remote_addr
-    search_log(ip_address, game)
+    ip_address = request.headers.get('X-Real-Ip', request.remote_addr)
+    ua = request.headers.get('Sec-Ch-Ua-Platform', 'unknow').strip("\"")
+    # ip_address = request.remote_addr
+    search_log(ip_address, game, ua)
+    # search_log(ip_address, game)
 
     results = []
     futures = {
