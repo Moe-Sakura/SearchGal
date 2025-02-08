@@ -8,6 +8,8 @@ import cloudscraper
 from concurrent.futures import ThreadPoolExecutor
 
 session = requests.Session()
+# 超时时间/秒
+timeoutsec = 15
 
 # 如果需要设置代理请取消注释
 # proxy = "http://127.0.0.1:7890"
@@ -29,7 +31,7 @@ def PinTai_Name(game:str,mode=False) -> list:
         searul = re.compile(r'使用的正则表达式，子页面链接用(?P<URL>.*?)匹配，项目名用(?P<NAME>.*?)匹配', re.S)
         
         #设置平台的链接，搜索所使用的参数 (如果搜索页不使用GET传参s关键字，则需要另外写session规则)
-        searesp = session.get(url='平台主链接', params={'s':game}, headers=headers)
+        searesp = session.get(url='平台主链接', params={'s':game}, headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
 
         count = 0
@@ -41,9 +43,9 @@ def PinTai_Name(game:str,mode=False) -> list:
 
         # 返回的内容为一个装载 包含搜索到的多个{项目名:子页面链接}字典的列表,搜索到的数量,平台的名字  (正常这里不用动)
         return [gamelst,count,yinqin]
-    except:
+    except Exception as e:
         # 异常处理，当搜索到的数量返回-1，会判定为搜索失败
-        return [[],-1,yinqin]
+        return [[],-1,yinqin,e]
     
     # 记得在底下的 search 列表追加添加新的搜索函数
 
@@ -53,7 +55,7 @@ def loli(game:str,mode=False) -> list:
     if mode: return yinqin
     try:
         searul = re.compile(r'<p style="text-align: center;"> <a href=".*?" target="_blank">.*?<p style="text-align: center;"> <a href="(?P<URL>.*?)" title="(?P<NAME>.*?)"> <img src=', re.S)
-        searesp = session.get(url='https://www.ttloli.com/', params={'s':game}, headers=headers)
+        searesp = session.get(url='https://www.ttloli.com/', params={'s':game}, headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         count = 0
         gamelst = []
@@ -63,8 +65,8 @@ def loli(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 def vika(game:str,mode=False) -> list:
     yinqin = "VikaACG"
@@ -75,7 +77,8 @@ def vika(game:str,mode=False) -> list:
         # searul = re.compile(r'<h2><a  href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h2>',re.S)
         searesp = session.post(url='https://www.vikacg.com/wp-json/b2/v1/getPostList', 
                                json={"paged":1,"post_paged":1,"post_count":24,"post_type":"post-1","post_cat":[6],"post_order":"modified","post_meta":["user","date","des","cats","like","comment","views","video","download","hide"],"metas":{},"search":f"{game}"},
-                               headers={'Connection': 'close','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36','Content-Type': 'application/json'})
+                               headers={'Connection': 'close','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36','Content-Type': 'application/json'},
+                               timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         searesp = searesp.text.replace('\\/','/').replace('\\\\','\\').encode("utf-8").decode('unicode_escape')
         count = 0
@@ -84,8 +87,8 @@ def vika(game:str,mode=False) -> list:
             gamelst.append({'name':i.group('NAME').strip(),'url':i.group('URL')})
             count += 1
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 # 倒了
 # def jidian(game:str,mode=False) -> list:
@@ -111,7 +114,7 @@ def tianyou(game:str,mode=False) -> list:
     if mode: return yinqin
     try:
         searul = re.compile(r'</i></a><h2><a href="(?P<URL>.*?)" title="(?P<NAME>.*?)"',re.S)
-        searesp = session.get(url=f'https://www.tiangal.com/search/{game}', headers=headers)
+        searesp = session.get(url=f'https://www.tiangal.com/search/{game}', headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         count = 0
         gamelst = []
@@ -120,15 +123,15 @@ def tianyou(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
     
 def acgyyg(game:str,mode=False) -> list:
     yinqin = "ACG嘤嘤怪"
     if mode: return yinqin
     try:
         searul = re.compile(r'<a  target="_blank" href="(?P<URL>.*?)" title="(?P<NAME>.*?)"  class="post-overlay">')
-        searesp = session.get(url=f'https://acgyyg.ru/', params={'s':game}, headers=headers)
+        searesp = session.get(url=f'https://acgyyg.ru/', params={'s':game}, headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         count = 0
         gamelst = []
@@ -137,8 +140,8 @@ def acgyyg(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 # 倒了
 # def xinling(game:str,mode=False) -> list:
@@ -170,7 +173,7 @@ def touch(game:str,mode=False) -> list:
     try:
         # searul = re.compile(r'.jpg" alt="(?P<NAME>.*?)" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">',re.S)
         # searesp = session.get(url='https://www.touchgal.com/', params={'s':game,'type':'post'}, headers=headers)
-        searesp = session.post(url='https://www.touchgal.io/api/search', headers=headers, data='{"query":["'+game+'"],"page":1,"limit":24,"searchOption":{"searchInIntroduction":false,"searchInAlias":false,"searchInTag":false}}')
+        searesp = session.post(url='https://www.touchgal.io/api/search', headers=headers, data='{"query":["'+game+'"],"page":1,"limit":24,"searchOption":{"searchInIntroduction":false,"searchInAlias":false,"searchInTag":false}}',timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         resjson = json.loads(searesp.text)
         count = 0
@@ -181,15 +184,15 @@ def touch(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
     
 def sakustar(game:str,mode=False) -> list:
     yinqin = "晴空咖啡馆"
     color = "#1FD700"
     if mode: return yinqin
     try:
-        searesp = session.get(url='https://api.aozoracafe.com/api/home/list?page=1&pageSize=100&search='+game, headers=headers)
+        searesp = session.get(url='https://api.aozoracafe.com/api/home/list?page=1&pageSize=100&search='+game, headers=headers,timeout=timeoutsec)
         resjson = json.loads(searesp.text)
         if resjson['success'] != True: raise Exception
         count = 0
@@ -200,15 +203,15 @@ def sakustar(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]    
+    except Exception as e:
+        return [[],-1,yinqin,e]
     
 def shinnku(game:str,mode=False) -> list:
     yinqin = "失落的小站"
     color = "#1FD700"
     if mode: return yinqin
     try:
-        searesp = session.get(url='https://www.shinnku.com/api/search?q='+game, headers=headers)
+        searesp = session.get(url='https://www.shinnku.com/api/search?q='+game, headers=headers,timeout=timeoutsec)
         resjson = json.loads(searesp.text)
         count = 0
         gamelst = []
@@ -218,15 +221,15 @@ def shinnku(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
     
 def KunGal(game:str,mode=False) -> list:
     yinqin = "鲲Galgame"
     color = "#1FD700"
     if mode: return yinqin
     try:
-        searesp = session.get(url=f'https://www.kungal.com/api/search?keywords={game}&type=galgame&page=1&limit=10', headers=headers)
+        searesp = session.get(url=f'https://www.kungal.com/api/search?keywords={game}&type=galgame&page=1&limit=10', headers=headers,timeout=timeoutsec)
         resjson = json.loads(searesp.text)
         count = 0
         gamelst = []
@@ -238,15 +241,15 @@ def KunGal(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
     
 def gallibrary(game:str,mode=False) -> list:
     yinqin = "GAL图书馆"
     color = "#1FD700"
     if mode: return yinqin
     try:
-        searesp = session.get(url='https://gallibrary.pw/galgame/game/manyGame?page=1&type=1&keyWord='+game, headers=headers)
+        searesp = session.get(url='https://gallibrary.pw/galgame/game/manyGame?page=1&type=1&keyWord='+game, headers=headers,timeout=timeoutsec)
         resjson = json.loads(searesp.text)
         if resjson['code'] != 200: raise Exception
         count = 0
@@ -257,15 +260,15 @@ def gallibrary(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 def shenshi(game:str,mode=False) -> list:
     yinqin = "绅仕天堂"
     if mode: return yinqin
     try:
         searul = re.compile(r'-->\s*<h2 class="post-list-title">\s*<a  href="(?P<URL>.*?)">(?P<NAME>.*?)</a>\s*</h2>\s*<span class="category-meta">',re.S)
-        searesp = session.get(url='https://www.gogalgame.com/', params={'s':game}, verify=False, headers=headers)
+        searesp = session.get(url='https://www.gogalgame.com/', params={'s':game}, verify=False, headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         count = 0
         gamelst = []
@@ -274,8 +277,8 @@ def shenshi(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 # 倒了
 # def acgngames(game:str,mode=False) -> list:
@@ -318,7 +321,7 @@ def lzacg(game:str,mode=False) -> list:
     if mode: return yinqin
     try:
         searul = re.compile(r'><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h2><div', re.S)
-        searesp = session.get(url='https://lzacg.org/', params={'s':game}, headers=headers)
+        searesp = session.get(url='https://lzacg.org/', params={'s':game}, headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         count = 0
         gamelst = []
@@ -327,8 +330,8 @@ def lzacg(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
     
 def fufugal(game:str,mode=False) -> list:
     yinqin = "FuFuACG"
@@ -337,7 +340,7 @@ def fufugal(game:str,mode=False) -> list:
                 'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', \
                 'Accept': 'application/json, text/plain, */*'}
     try:
-        searesp = session.get(url='https://www.fufugal.com/so', params={'query':game}, headers=ynheaders)
+        searesp = session.get(url='https://www.fufugal.com/so', params={'query':game}, headers=ynheaders,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         dt = json.loads(searesp.text)
         count = len(dt['obj'])
@@ -346,8 +349,8 @@ def fufugal(game:str,mode=False) -> list:
             gamelst.append({'url': "https://www.fufugal.com/detail?id="+str(i['game_id']),'name': i['game_name']})
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 def jimengacg(game:str,mode=False) -> list:
     yinqin = '绮梦ACG'
@@ -355,7 +358,7 @@ def jimengacg(game:str,mode=False) -> list:
     if mode: return yinqin
     try:
         searul = re.compile(r'<div class="flex-1">\s*?<a href="(?P<URL>.*?)" class="text-lg xl:text-xl font-semibold line-2">(?P<NAME>.*?)</a>',re.S)
-        searesp = session.get(url=f'https://acgs.one/search/{game}', headers=headers)
+        searesp = session.get(url=f'https://acgs.one/search/{game}', headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception
         count = 0
         gamelst = []
@@ -364,8 +367,8 @@ def jimengacg(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 def qingjiacg(game:str,mode=False) -> list:
     yinqin = '青桔ACG'
@@ -374,7 +377,7 @@ def qingjiacg(game:str,mode=False) -> list:
     sp = cloudscraper.create_scraper()
     try:
         searul = re.compile(r'class="thumb"></a><header><h2><a target="_blank" href="(?P<URL>.*?)" title=".+?">(?P<NAME>.*?)</a></h2></header><p class="note">',re.S)
-        searesp = sp.get(url='https://spare.qingju.org/', params={'s':game}, headers=headers)
+        searesp = sp.get(url='https://spare.qingju.org/', params={'s':game}, headers=headers,timeout=timeoutsec)
         # print(searesp.text)
         if searesp.status_code != 200: raise Exception
         count = 0
@@ -385,8 +388,8 @@ def qingjiacg(game:str,mode=False) -> list:
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
-    except:
-        return [[],-1,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
 
 # Cli命令行搜索平台
 search = [vika, touch, sakustar, tianyou, shinnku, KunGal, shenshi, acgyyg, loli, gallibrary, lzacg, fufugal, jimengacg, qingjiacg]
@@ -399,8 +402,8 @@ searchGUI = [
             (sakustar, "#1FD700", False),
             (shinnku, "#1FD700", False),
             (KunGal, "#1FD700", False),
-            (tianyou, "#FFD700", True),
-            (shenshi, "#FFFFFF", False),
+            (tianyou, "#FFFFFF", False),
+            (shenshi, "#FFD700", True),
             (acgyyg, "#FFFFFF", False),
             (loli, "#1FD700", False),
             (gallibrary, "#1FD700", False),
@@ -410,3 +413,13 @@ searchGUI = [
             (qingjiacg, "#1FD700", False),
         ]
 tmp = None
+color_map = {
+    "#FFD700": "gold",
+    "#1FD700": "lime",
+    "#FFFFFF": "white"
+}
+
+PLATFORMS = [
+    {"func": func, "color": color_map.get(color, "unknown"), "magic": magic}
+    for func, color, magic in searchGUI
+]
