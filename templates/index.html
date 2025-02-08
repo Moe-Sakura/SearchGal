@@ -176,6 +176,26 @@
         max-width: 70vw;
       }
     }
+
+    .container.mt-3 {
+      background: var(--main-bg);
+      backdrop-filter: blur(10px) saturate(180%);
+      border-radius: 15px;
+      padding: 1rem 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-top: 20px !important;
+    }
+
+    /* 折叠箭头动画 */
+    [data-bs-toggle="collapse"] i {
+      transition: transform 0.3s ease;
+    }
+    [data-bs-toggle="collapse"].collapsed i {
+      transform: rotate(0deg);
+    }
+    [data-bs-toggle="collapse"]:not(.collapsed) i {
+      transform: rotate(180deg);
+    }
   </style>
 </head>
 <body>
@@ -208,17 +228,22 @@
 
     <!-- 底部版权信息 -->
     <div class="footer">
-      2025/02/04 V2 | 
+      2025/02/08 V3 | 
       
         <i class="fab fa-github"></i> <a href="https://github.com/Jurangren/SearchGal" target="_blank" style="color: #fff;">GitHub项目首页
       </a>
     </div>
+    
   </div>
 
+  
+
   <!-- 引入 jQuery -->
-  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+  <script src="./jquery.min.js"></script>
   <!-- 引入 SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  
   <script>
     // 首次访问显示公告，带有动画效果
     $(document).ready(function() {
@@ -306,7 +331,12 @@ function doSearch() {
     </div>
   `);
 
-  $.post('/search', { game: game, magic: $('#magicCheck').prop('checked') })
+  // 修改搜索函数的post部分
+  $.post('/search', { 
+    game: game, 
+    magic: $('#magicCheck').prop('checked'),
+    ziyuan: $('#ziyuanPassword').val() // 添加新参数
+  })
   .done(data => {
     let navHtml = '';
     let resultsHtml = '';
@@ -318,35 +348,58 @@ function doSearch() {
       navHtml += `<a href="#${platformId}" style="border: 1px solid ${platform.color};">
                     ${platform.name}
                   </a>`;
-      resultsHtml += `
-        <div class="col-12">
-          <div id="${platformId}" class="platform-card" style="color: ${platform.color};">
-            <div class="card-header border-bottom-0" style="color: ${platform.color};">
-              <i class="fa-solid fa-diamond me-2"></i>${platform.name}
-              <span class="badge bg-dark float-end">${platform.items.length} 结果</span>
-            </div>
-            <div class="card-body py-2">
-              ${platform.items.map(item => `
+      // 检查是否有错误
+      if (platform.error) {
+        resultsHtml += `
+          <div class="col-12">
+            <div id="${platformId}" class="platform-card" style="color: ${platform.color};">
+              <div class="card-header border-bottom-0" style="color: ${platform.color};">
+                <i class="fa-solid fa-diamond me-2"></i>${platform.name}
+                <span class="badge bg-danger float-end">错误</span>
+              </div>
+              <div class="card-body py-2">
                 <div class="result-item">
                   <div class="d-flex justify-content-between align-items-center">
                     <div style="min-width: 0;">
-                      <h5 class="text-white mb-2">${item.name}</h5>
-                      <div class="url-box">
-                        <small class="text-muted">${item.url}</small>
-                      </div>
+                      <h5 class="text-white mb-2">${platform.error}</h5>
                     </div>
-                    <button class="btn btn-sm btn-outline-light ms-3" 
-                            onclick="window.open('${item.url}')"
-                            style="flex-shrink: 0;">
-                      <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    </button>
                   </div>
                 </div>
-              `).join('')}
+              </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        resultsHtml += `
+          <div class="col-12">
+            <div id="${platformId}" class="platform-card" style="color: ${platform.color};">
+              <div class="card-header border-bottom-0" style="color: ${platform.color};">
+                <i class="fa-solid fa-diamond me-2"></i>${platform.name}
+                <span class="badge bg-dark float-end">${platform.items.length} 结果</span>
+              </div>
+              <div class="card-body py-2">
+                ${platform.items.map(item => `
+                  <div class="result-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div style="min-width: 0;">
+                        <h5 class="text-white mb-2">${item.name}</h5>
+                        <div class="url-box">
+                          <small class="text-muted">${item.url}</small>
+                        </div>
+                      </div>
+                      <button class="btn btn-sm btn-outline-light ms-3" 
+                              onclick="window.open('${item.url}')"
+                              style="flex-shrink: 0;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
     });
 
     // 如果有平台数据，则显示快速定位导航栏
