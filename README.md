@@ -38,15 +38,15 @@
 [![青桔ACG](https://img.shields.io/badge/青桔ACG-00C853)](https://spare.qingju.org/)
 [![鲲Galgame](https://img.shields.io/badge/鲲Galgame-00C853)](https://www.kungal.com/zh-cn/)
 
-### 🟡 需魔法访问
-[![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/) 
-[![天游二次元](https://img.shields.io/badge/天游二次元-FFC107)](https://www.tiangal.com/)
-
 ### ⚪ 需登录/特殊条件
-[![绅仕天堂](https://img.shields.io/badge/绅仕天堂-FFFFFF)](https://www.gogalgame.com/) 
 [![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)  
 [![FuFugal](https://img.shields.io/badge/FuFuGal-FFFFFF)](https://www.fufugal.com/)
 [![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
+[![天游二次元](https://img.shields.io/badge/天游二次元-FFFFFF)](https://www.tiangal.com/)
+
+### 🟡 需魔法访问
+[![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/) 
+[![绅仕天堂](https://img.shields.io/badge/绅仕天堂-FFC107)](https://www.gogalgame.com/) 
 
 ---
 
@@ -76,6 +76,14 @@
 ---
 
 ## 📜 更新日志
+### V3 (2025/02/08)
+```
++ WEB现在可显示平台搜索错误日志
++ WEB本地调用jquery（解决手机点击搜索无反应问题）
++ 可设置搜索超时时间（解决某平台搜索卡住问题）
+- 弃用GUI图形化界面版本
+```
+> 待发布构建版本
 ### V2 (2025/02/04)
 ```
 + 新增WEB在线版，支持多终端访问
