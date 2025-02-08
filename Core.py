@@ -32,7 +32,7 @@ def PinTai_Name(game:str,mode=False) -> list:
         
         #设置平台的链接，搜索所使用的参数 (如果搜索页不使用GET传参s关键字，则需要另外写session规则)
         searesp = session.get(url='平台主链接', params={'s':game}, headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("自定义报错信息")
 
         count = 0
         gamelst = []
@@ -56,7 +56,7 @@ def loli(game:str,mode=False) -> list:
     try:
         searul = re.compile(r'<p style="text-align: center;"> <a href=".*?" target="_blank">.*?<p style="text-align: center;"> <a href="(?P<URL>.*?)" title="(?P<NAME>.*?)"> <img src=', re.S)
         searesp = session.get(url='https://www.ttloli.com/', params={'s':game}, headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
         for i in searul.finditer(searesp.text):
@@ -79,7 +79,7 @@ def vika(game:str,mode=False) -> list:
                                json={"paged":1,"post_paged":1,"post_count":24,"post_type":"post-1","post_cat":[6],"post_order":"modified","post_meta":["user","date","des","cats","like","comment","views","video","download","hide"],"metas":{},"search":f"{game}"},
                                headers={'Connection': 'close','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36','Content-Type': 'application/json'},
                                timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         searesp = searesp.text.replace('\\/','/').replace('\\\\','\\').encode("utf-8").decode('unicode_escape')
         count = 0
         gamelst = []
@@ -115,7 +115,7 @@ def tianyou(game:str,mode=False) -> list:
     try:
         searul = re.compile(r'</i></a><h2><a href="(?P<URL>.*?)" title="(?P<NAME>.*?)"',re.S)
         searesp = session.get(url=f'https://www.tiangal.com/search/{game}', headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
         for i in searul.finditer(searesp.text):
@@ -132,11 +132,39 @@ def acgyyg(game:str,mode=False) -> list:
     try:
         searul = re.compile(r'<a  target="_blank" href="(?P<URL>.*?)" title="(?P<NAME>.*?)"  class="post-overlay">')
         searesp = session.get(url=f'https://acgyyg.ru/', params={'s':game}, headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
         for i in searul.finditer(searesp.text):
             gamelst.append({'name':i.group('NAME').strip(),'url':i.group('URL')})
+            count += 1
+        searesp.close()
+        return [gamelst,count,yinqin]
+    except Exception as e:
+        return [[],-1,yinqin,e]
+    
+def zygal(game:str,mode=False,zypassword="") -> list:
+    yinqin = "紫缘Gal"
+    if mode: return yinqin
+    try:
+        data = {
+            "parent": "/",
+            "keywords": game,
+            "scope": 0,
+            "page": 1,
+            "per_page": 20,
+            "password":zypassword
+        }
+        searesp = session.post(url=f'https://galzy.eu.org/api/fs/search',json=data, headers=headers,timeout=timeoutsec)
+        resjson = json.loads(searesp.text)
+        if resjson['message'] != 'success': raise Exception(str(resjson))
+        count = 0
+        gamelst = []
+        mainurl = 'https://galzy.eu.org'
+        reslen = len(resjson['data']['content'])
+        if (reslen != resjson['data']['total']) and (reslen != 20): raise Exception("访问密码错误")
+        for i in resjson['data']['content']:
+            gamelst.append({'name':i['name'].strip(),'url':mainurl+i['parent']+"/"+i['name']})
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
@@ -174,7 +202,7 @@ def touch(game:str,mode=False) -> list:
         # searul = re.compile(r'.jpg" alt="(?P<NAME>.*?)" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">',re.S)
         # searesp = session.get(url='https://www.touchgal.com/', params={'s':game,'type':'post'}, headers=headers)
         searesp = session.post(url='https://www.touchgal.io/api/search', headers=headers, data='{"query":["'+game+'"],"page":1,"limit":24,"searchOption":{"searchInIntroduction":false,"searchInAlias":false,"searchInTag":false}}',timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         resjson = json.loads(searesp.text)
         count = 0
         gamelst = []
@@ -194,7 +222,7 @@ def sakustar(game:str,mode=False) -> list:
     try:
         searesp = session.get(url='https://api.aozoracafe.com/api/home/list?page=1&pageSize=100&search='+game, headers=headers,timeout=timeoutsec)
         resjson = json.loads(searesp.text)
-        if resjson['success'] != True: raise Exception
+        if resjson['success'] != True: raise Exception(str(resjson))
         count = 0
         gamelst = []
         mainurl = 'https://aozoracafe.com/detail/'
@@ -251,7 +279,7 @@ def gallibrary(game:str,mode=False) -> list:
     try:
         searesp = session.get(url='https://gallibrary.pw/galgame/game/manyGame?page=1&type=1&keyWord='+game, headers=headers,timeout=timeoutsec)
         resjson = json.loads(searesp.text)
-        if resjson['code'] != 200: raise Exception
+        if resjson['code'] != 200: raise Exception(str(resjson))
         count = 0
         gamelst = []
         mainurl = 'https://gallibrary.pw/game.html?id='
@@ -269,7 +297,7 @@ def shenshi(game:str,mode=False) -> list:
     try:
         searul = re.compile(r'-->\s*<h2 class="post-list-title">\s*<a  href="(?P<URL>.*?)">(?P<NAME>.*?)</a>\s*</h2>\s*<span class="category-meta">',re.S)
         searesp = session.get(url='https://www.gogalgame.com/', params={'s':game}, verify=False, headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
         for i in searul.finditer(searesp.text):
@@ -322,7 +350,7 @@ def lzacg(game:str,mode=False) -> list:
     try:
         searul = re.compile(r'><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h2><div', re.S)
         searesp = session.get(url='https://lzacg.org/', params={'s':game}, headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
         for i in searul.finditer(searesp.text):
@@ -359,7 +387,7 @@ def jimengacg(game:str,mode=False) -> list:
     try:
         searul = re.compile(r'<div class="flex-1">\s*?<a href="(?P<URL>.*?)" class="text-lg xl:text-xl font-semibold line-2">(?P<NAME>.*?)</a>',re.S)
         searesp = session.get(url=f'https://acgs.one/search/{game}', headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
         for i in searul.finditer(searesp.text):
@@ -379,7 +407,7 @@ def qingjiacg(game:str,mode=False) -> list:
         searul = re.compile(r'class="thumb"></a><header><h2><a target="_blank" href="(?P<URL>.*?)" title=".+?">(?P<NAME>.*?)</a></h2></header><p class="note">',re.S)
         searesp = sp.get(url='https://spare.qingju.org/', params={'s':game}, headers=headers,timeout=timeoutsec)
         # print(searesp.text)
-        if searesp.status_code != 200: raise Exception
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
         for i in searul.finditer(searesp.text):
@@ -399,6 +427,7 @@ search = [vika, touch, sakustar, tianyou, shinnku, KunGal, shenshi, acgyyg, loli
 searchGUI = [
             (vika, "#FFD700", True),
             (touch, "#1FD700", False),
+            (zygal, "#FFFFFF", False),
             (sakustar, "#1FD700", False),
             (shinnku, "#1FD700", False),
             (KunGal, "#1FD700", False),
@@ -420,6 +449,6 @@ color_map = {
 }
 
 PLATFORMS = [
-    {"func": func, "color": color_map.get(color, "unknown"), "magic": magic}
+    {"func": func, "color": color_map.get(color, "unknown"), "magic": magic, "name": func('',True)}
     for func, color, magic in searchGUI
 ]
