@@ -15,25 +15,7 @@ executor = ThreadPoolExecutor(max_workers=20)
 
 import logging
 log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
-
-# 平台配置列表
-PLATFORMS = [
-    {'func': vika, 'color': 'gold', 'magic': True},
-    {'func': touch, 'color': 'lime', 'magic': False},
-    {'func': sakustar, 'color': 'lime', 'magic': False},
-    {'func': shinnku, 'color': 'lime', 'magic': False},
-    {'func': KunGal, 'color': 'lime', 'magic': False},
-    {'func': tianyou, 'color': 'gold', 'magic': True},
-    {'func': shenshi, 'color': 'white', 'magic': False},
-    {'func': acgyyg, 'color': 'white', 'magic': False},
-    {'func': loli, 'color': 'lime', 'magic': False},
-    {'func': gallibrary, 'color': 'lime', 'magic': False},
-    {'func': lzacg, 'color': 'white', 'magic': False},
-    {'func': fufugal, 'color': 'white', 'magic': False},
-    {'func': jimengacg, 'color': 'lime', 'magic': False},
-    {'func': qingjiacg, 'color': 'lime', 'magic': False},
-]
+# log.setLevel(logging.ERROR)
 
 def search_log(ip:str, searchgame:str, ua:str='unknow'):
     now = datetime.now()
@@ -52,6 +34,10 @@ def request_log(ip:str, ua:str, method, url):
     with lock:  # 获取锁，确保只有一个线程能写
         with open("log.txt", "a", encoding="utf-8") as f:
             f.write(logstr + "\n")
+            
+@app.route('/jquery.min.js')
+def serve_jquery():
+    return app.send_static_file('jquery.min.js')
 
 @app.route('/')
 def index():
@@ -68,11 +54,17 @@ def search_platform(platform, game):
     """执行单个平台的搜索"""
     try:
         result = platform['func'](game)
-        if result[1] > 0:
+        try:
+            error = str(result[3])
+            if error == "": error = "Unknow Error 未知错误"
+            print(error)
+        except: error = ""
+        if (result[1] > 0) or error:
             return {
                 'name': result[2],
-                'color': platform['color'],
-                'items': [{'name': i['name'], 'url': i['url']} for i in result[0]]
+                'color': "red" if error else platform['color'],
+                'items': [{'name': i['name'], 'url': i['url']} for i in result[0]],
+                'error': error
             }
     except Exception as e:
         print(f"搜索失败：{platform['func'].__name__} - {traceback.format_exc()}")
