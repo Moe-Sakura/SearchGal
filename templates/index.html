@@ -10,6 +10,13 @@
   <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <!-- 引入 animate.css 用于弹窗动画 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- 引入 jQuery -->
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+  <script src="./jquery.min.js"></script>
+  <!-- 在jQuery之后添加Bootstrap JS -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+  <!-- 引入 SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
   <style>
     :root {
       --main-bg: rgba(30, 30, 30, 0.85);
@@ -29,7 +36,10 @@
       backdrop-filter: blur(10px) saturate(180%);
       border-radius: 15px;
       padding: 2rem;
+      width: 100%; /* 占据父容器全部宽度 */
+      margin: 0 !important; /* 覆盖原有margin */
       margin-top: 2rem;
+      margin-bottom: 40px; /* 新增下外边距 */
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       position: relative;
       margin-bottom: 40px; /* 下外边距 */
@@ -122,7 +132,25 @@
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
+    .url-box:hover {
+      background: rgba(0,0,0,0.4) !important;
+      transform: scale(1.02);
+    }
+    .url-box-active {
+      background: rgba(0,0,0,0.5) !important;
+      transform: scale(0.98);
+    }
+
+    kbd {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      padding: 2px 5px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
     .search-btn {
       background: linear-gradient(45deg, #ff7eb9, #ff758c);
       border: none;
@@ -177,72 +205,239 @@
       }
     }
 
-    .container.mt-3 {
+    .config-box {
       background: var(--main-bg);
       backdrop-filter: blur(10px) saturate(180%);
       border-radius: 15px;
       padding: 1rem 2rem;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      margin-top: 20px !important;
+      margin-top: 0 !important;
+      order: 2; /* 确保在主容器下方 */
+      transition: all 0.3s ease;
+    }
+
+    .config-input {
+      background: rgba(255,255,255,0.1) !important;
+      color: white !important;
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     /* 折叠箭头动画 */
     [data-bs-toggle="collapse"] i {
       transition: transform 0.3s ease;
     }
-    [data-bs-toggle="collapse"].collapsed i {
-      transform: rotate(0deg);
+    [aria-expanded="true"] i {
+      transform: rotate(90deg);
     }
-    [data-bs-toggle="collapse"]:not(.collapsed) i {
-      transform: rotate(180deg);
+
+    @media (max-width: 768px) {
+      .config-box {
+        margin: 1rem;
+        padding: 1rem;
+      }
     }
+
+    .main-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120%;
+  max-width: 1200px; /* 控制最大宽度 */
+  padding: 20px;
+  gap: 20px; /* 容器间距 */
+}
+
+@media (max-width: 768px) {
+  /* 主容器宽度优化 */
+  .main-wrapper {
+    width: 95%;
+    max-width: 100% !important; /* 覆盖桌面端限制 */
+    padding: 10px 0; /* 减少垂直间距 */
+  }
+
+  /* 内容容器扩展 */
+  .container, .config-box {
+    width: 95% !important;
+    margin: 0 !important;
+    padding: 1.5rem !important; /* 增加内边距 */
+    border-radius: 12px; /* 更圆润的角 */
+  }
+
+  /* 输入框优化 */
+  #gameInput, #zyPassword {
+    font-size: 16px !important; /* 增大字体 */
+    padding: 14px 16px !important; /* 增加内边距 */
+    width: 100% !important;
+  }
+
+  /* 按钮优化 */
+  .search-btn {
+    padding: 14px 20px !important;
+    font-size: 16px;
+  }
+
+  /* 结果区域优化 */
+  #results {
+    max-height: 60vh !important; /* 增加显示高度 */
+    margin: 0.5rem -0.5rem !important; /* 扩展边距 */
+  }
+
+  /* 平台导航栏优化 */
+  .platform-nav {
+    padding: 0 0.5rem 0.5rem !important;
+  }
+
+  /* 结果项优化 */
+  .result-item {
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+
+  /* 折叠面板优化 */
+  #configCollapse {
+    padding-top: 1rem;
+  }
+}
+
+/* 添加过渡动画 */
+.container, .config-box {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 横向尺寸优化 */
+@media (max-width: 480px) {
+  /* 超小屏幕优化 */
+  .main-wrapper {
+    width: 98%;
+  }
+  
+  .result-item h5 {
+    font-size: 1.1rem !important; /* 增大标题 */
+    line-height: 1.4;
+  }
+  
+  .url-box small {
+    font-size: 0.9rem !important; /* 增大链接文字 */
+  }
+  
+  /* 输入框组优化 */
+  .input-group {
+    gap: 12px; /* 增加元素间距 */
+  }
+
+  /* 添加进度文本样式 */
+.progress-text {
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* 优化结果项动画 */
+.result-item {
+  transition: transform 0.3s ease;
+}
+.result-item:hover {
+  transform: translateX(5px);
+}
+}
+
+/* 移动端输入框组优化 */
+@media (max-width: 768px) {
+  .input-group-text {
+    width: 100%;
+    justify-content: space-between;
+    margin: 5px 0;
+  }
+  
+  .form-switch {
+    padding-left: 3em; /* 增大触控区域 */
+  }
+  
+  .form-check-label {
+    font-size: 14px; /* 适当缩小文字 */
+  }
+}
+
+/* 开关组间距调整 */
+.input-group-text + .input-group-text {
+  margin-left: 8px;
+  
+  /* 当流式搜索开关被选中时，设置背景和边框为红色 */
+#streamCheck:checked {
+  background-color: red !important;
+  border-color: red !important;
+}
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="text-center mb-4 text-white fw-bold">
-      <i class="fa-solid fa-gamepad me-2"></i>Galgame聚合搜索
-    </h1>
+  <div class="main-wrapper">
+    
+    <div class="container">
+      <h1 class="text-center mb-4 text-white fw-bold">
+        <i class="fa-solid fa-gamepad me-2"></i>Galgame聚合搜索
+      </h1>
 
-    <div class="search-box mb-4">
-      <div class="input-group">
-        <input type="text" id="gameInput" class="form-control" 
-               placeholder="输入游戏名称..." style="background: rgba(255,255,255,0.1); color: white;">
-        <div class="input-group-text bg-transparent border-secondary">
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="magicCheck" checked>
-            <label class="form-check-label text-white" for="magicCheck" >魔法模式</label>
+      <div class="search-box mb-4">
+        <div class="input-group">
+          <input type="text" id="gameInput" class="form-control" 
+                placeholder="输入游戏名称..." style="background: rgba(255,255,255,0.1); color: white;">
+          
+          <!-- 魔法模式 -->
+          <div class="input-group-text bg-transparent border-secondary">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="magicCheck" checked>
+              <label class="form-check-label text-white" for="magicCheck">魔法模式</label>
+            </div>
           </div>
+          
+          <!-- 新增流式搜索开关 -->
+          <div class="input-group-text bg-transparent border-secondary">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="streamCheck" checked>
+              <label class="form-check-label text-white" for="streamCheck">流式搜索</label>
+            </div>
+          </div>
+          
+          <button class="btn search-btn text-white" onclick="doSearch()">
+            <i class="fa-solid fa-magnifying-glass me-2"></i>搜索
+          </button>
         </div>
-        <button class="btn search-btn text-white" onclick="doSearch()">
-          <i class="fa-solid fa-magnifying-glass me-2"></i>搜索
-        </button>
+      </div>
+
+      <!-- 快速定位导航栏，默认隐藏 -->
+      <div id="platformNav" class="platform-nav d-none"><br></div>
+
+      <!-- 搜索结果区域 -->
+      <div id="results" class="row g-3"></div>
+
+      <!-- 底部版权信息 -->
+      <div class="footer">
+        2025/02/09 V4 | 
+        
+          <i class="fab fa-github"></i> <a href="https://github.com/Jurangren/SearchGal" target="_blank" style="color: #fff;">GitHub项目首页
+        </a>
+      </div>
+      
+    </div>
+
+    <!-- 新增特殊配置栏 -->
+    <div class="container config-box mt-3">
+      <div class="d-flex align-items-center" data-bs-toggle="collapse" href="#configCollapse" role="button">
+        <i class="fa-solid fa-chevron-down me-2 text-white"></i>
+        <h5 class="text-white mb-0">特殊平台配置</h5>
+      </div>
+      <div class="collapse" id="configCollapse">
+        <div class="mt-3">
+          <input type="text" 
+                id="zyPassword"
+                class="form-control config-input" 
+                placeholder="输入紫缘社访问密码"
+                autocomplete="new-password">
+        </div>
       </div>
     </div>
-
-    <!-- 快速定位导航栏，默认隐藏 -->
-    <div id="platformNav" class="platform-nav d-none"><br></div>
-
-    <!-- 搜索结果区域 -->
-    <div id="results" class="row g-3"></div>
-
-    <!-- 底部版权信息 -->
-    <div class="footer">
-      2025/02/08 V3 | 
-      
-        <i class="fab fa-github"></i> <a href="https://github.com/Jurangren/SearchGal" target="_blank" style="color: #fff;">GitHub项目首页
-      </a>
-    </div>
-    
-  </div>
-
   
-
-  <!-- 引入 jQuery -->
-  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-  <script src="./jquery.min.js"></script>
-  <!-- 引入 SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  </div>
   
   <script>
     // 首次访问显示公告，带有动画效果
@@ -261,6 +456,7 @@
         <p style='color:#FF6969'>请关闭浏览器的广告拦截插件, 或将各gal网站添加到白名单, 各网站建站不易, 这是对这些网站最基本支持</p>
         <center><p style='color:#FF6969'>有能力者请支持Galgame正版！</p></center>
         <center><small>觉得好用请前往<a href="https://github.com/Jurangren/SearchGal" target="_blank">Github项目</a>点一个免费的Star支持一下, 秋梨膏~!</small></center>
+        <br><small style='color:#FF6969'>流式搜索beta测试中，可能会导致浏览器性能过载，谨慎开启</small>
                </div>`,
         icon: 'info',
         confirmButtonText: '我已了解并认同上述观点',
@@ -309,134 +505,222 @@
       subtree: true 
     });
 
-    // 搜索函数
+    function copyUrl(url) {
+      const fallbackCopy = () => {
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showCopySuccess();
+        } catch (err) {
+          showCopyError();
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      };
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+          showCopySuccess();
+        }).catch(() => {
+          fallbackCopy();
+        });
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    // 独立提示函数
+    function showCopySuccess() {
+      Swal.fire({
+        icon: 'success',
+        title: '复制成功',
+        text: '链接已存入剪贴板',
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 1500,
+        background: 'rgba(0,255,0,0.9)',
+        customClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        }
+      });
+    }
+
+    function showCopyError() {
+      Swal.fire({
+        icon: 'error',
+        title: '复制失败',
+        html: '请手动选择链接后按<kbd>Ctrl+C</kbd>复制',
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000,
+        background: 'rgba(255,0,0,0.9)'
+      });
+    }
+
+
+
 // 搜索函数
 function doSearch() {
   const game = $('#gameInput').val().trim();
   if (!game) return;
 
-  // 清空上次生成的快速定位导航栏
+  // 清空结果
   $('#platformNav').empty().addClass('d-none');
-
-  // 搜索中容器微小上拉，保持可视
-  $('.container').css({
-    'transform': 'translateY(-10%)', // 向上拉一点
-    'margin-top': '0'
-  });
-
   $('#results').html(`
     <div class="col-12 text-center text-white py-4">
       <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-      <div class="mt-2">正在搜索中...</div>
+      <div class="mt-2 progress-text">正在搜索中...</div>
     </div>
   `);
 
-  // 修改搜索函数的post部分
-  $.post('/search', { 
-    game: game, 
-    magic: $('#magicCheck').prop('checked'),
-    ziyuan: $('#ziyuanPassword').val() // 添加新参数
+  const formData = new FormData();
+  formData.append('game', game);
+  formData.append('magic', $('#magicCheck').prop('checked'));
+  formData.append('stream', $('#streamCheck').prop('checked')); // 新增流式模式参数
+  formData.append('zypassword', $('#zyPassword').val());
+
+  // 根据流式模式选择请求方式
+  if ($('#streamCheck').prop('checked')) {
+    streamSearch(formData);
+  } else {
+    classicSearch(formData);
+  }
+}
+
+// 流式搜索模式
+function streamSearch(formData) {
+  fetch('/search', {
+    method: 'POST',
+    body: formData
+  }).then(response => {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let totalPlatforms = 0;
+
+    const processChunk = ({ done, value }) => {
+      if (done) {
+        // 完成时隐藏进度条
+        $('.progress-text').parent().hide();
+        return;
+      }
+
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split('\n');
+      buffer = parts.pop();
+
+      parts.forEach(part => {
+        if (!part.trim()) return;
+        try {
+          const data = JSON.parse(part);
+          
+          if (data.total) {
+            totalPlatforms = data.total;
+            $('.progress-text').text(`正在搜索中... (0/${totalPlatforms})`);
+          } 
+          else if (data.progress) {
+            $('.progress-text').text(`正在搜索中... (${data.progress.completed}/${data.progress.total})`);
+            if (data.result) addResult(data.result);
+          }
+          else if (data.done) {
+            $('.progress-text').parent().hide();
+          }
+        } catch (e) {
+          console.error('解析错误:', e);
+        }
+      });
+
+      return reader.read().then(processChunk);
+    };
+
+    return reader.read().then(processChunk);
+  }).catch(error => {
+    Swal.fire('错误', '搜索失败，请稍后重试', 'error');
+  });
+}
+
+// 传统搜索模式
+function classicSearch(formData) {
+  fetch('/search-classic', { 
+    method: 'POST',
+    body: formData
   })
-  .done(data => {
-    let navHtml = '';
-    let resultsHtml = '';
-    // 遍历每个平台的结果
-    data.results.forEach((platform, index) => {
-      // 给每个平台设置一个锚点 id
-      const platformId = 'platform-' + index;
-      // 构造快速定位导航项（使用平台传递的颜色）
-      navHtml += `<a href="#${platformId}" style="border: 1px solid ${platform.color};">
-                    ${platform.name}
-                  </a>`;
-      // 检查是否有错误
-      if (platform.error) {
-        resultsHtml += `
-          <div class="col-12">
-            <div id="${platformId}" class="platform-card" style="color: ${platform.color};">
-              <div class="card-header border-bottom-0" style="color: ${platform.color};">
-                <i class="fa-solid fa-diamond me-2"></i>${platform.name}
-                <span class="badge bg-danger float-end">错误</span>
-              </div>
-              <div class="card-body py-2">
-                <div class="result-item">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div style="min-width: 0;">
-                      <h5 class="text-white mb-2">${platform.error}</h5>
-                    </div>
-                  </div>
+  .then(response => response.json())
+  .then(data => {
+    $('#results').empty();
+    if(data.error) {
+      Swal.fire('错误', data.error, 'error');
+      return;
+    }
+    data.results.forEach(result => addResult(result));
+    $('.progress-text').parent().hide();
+  })
+  .catch(error => {
+    Swal.fire('错误', '搜索失败，请稍后重试', 'error');
+  });
+}
+
+function addResult(result) {
+  const platformId = `platform-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  
+  // 构建平台卡片
+  const cardHtml = `
+    <div class="col-12">
+      <div id="${platformId}" class="platform-card" style="color: ${result.color};">
+        <div class="card-header border-bottom-0" style="color: ${result.color};">
+          <i class="fa-solid fa-diamond me-2"></i>${result.name}
+          ${result.error ? 
+            '<span class="badge bg-danger float-end">错误</span>' : 
+            `<span class="badge bg-dark float-end">${result.items.length} 结果</span>`}
+        </div>
+        <div class="card-body py-2">
+          ${result.error ? `
+            <div class="result-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div style="min-width: 0;">
+                  <h5 class="text-white mb-2">${result.error}</h5>
                 </div>
               </div>
             </div>
-          </div>
-        `;
-      } else {
-        resultsHtml += `
-          <div class="col-12">
-            <div id="${platformId}" class="platform-card" style="color: ${platform.color};">
-              <div class="card-header border-bottom-0" style="color: ${platform.color};">
-                <i class="fa-solid fa-diamond me-2"></i>${platform.name}
-                <span class="badge bg-dark float-end">${platform.items.length} 结果</span>
-              </div>
-              <div class="card-body py-2">
-                ${platform.items.map(item => `
-                  <div class="result-item">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div style="min-width: 0;">
-                        <h5 class="text-white mb-2">${item.name}</h5>
-                        <div class="url-box">
-                          <small class="text-muted">${item.url}</small>
-                        </div>
-                      </div>
-                      <button class="btn btn-sm btn-outline-light ms-3" 
-                              onclick="window.open('${item.url}')"
-                              style="flex-shrink: 0;">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                      </button>
-                    </div>
+          ` : result.items.map(item => `
+            <div class="result-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div style="min-width: 0;">
+                  <h5 class="text-white mb-2">${item.name}</h5>
+                  <div class="url-box" onclick="copyUrl('${item.url}')" 
+                        onmousedown="this.classList.add('url-box-active')"
+                        onmouseup="this.classList.remove('url-box-active')"
+                        style="cursor: pointer;">
+                    <small class="text-muted">${item.url}</small>
                   </div>
-                `).join('')}
+                </div>
+                <button class="btn btn-sm btn-outline-light ms-3" 
+                        onclick="window.open('${item.url}')"
+                        style="flex-shrink: 0;">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
               </div>
             </div>
-          </div>
-        `;
-      }
-    });
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
 
-    // 如果有平台数据，则显示快速定位导航栏
-    if (navHtml) {
-      $('#platformNav').html(navHtml).removeClass('d-none');
-    }
-    $('#results').html(resultsHtml || '<div class="col-12 text-center text-white py-4">没有找到相关结果</div>');
-    
-    // 搜索完成后，容器自适应，恢复到原始位置
-    $('.container').css({
-        'transform': 'translateY(-5%)', // 减少上移幅度
-        'margin-top': '2rem'
-      });
-
-      // 结果加载完成后
-      $('#results').html(resultsHtml || '<div class="col-12 text-center text-white py-4">没有找到相关结果</div>');
-      
-      // 添加结果容器边距
-      $('#results').css({
-        'margin-top': '1rem',
-        'margin-bottom': '1rem'
-      });
-
-      // 恢复容器位置时添加过渡
-      $('.container').css({
-        'transform': 'translateY(0)',
-        'margin-top': '2rem'
-      });
-  })
-  .fail(() => {
-    Swal.fire('错误', '搜索失败，请稍后重试', 'error');
-    // 搜索失败时，恢复容器位置
-    $('.container').css({
-      'transform': 'translateY(0)',
-      'margin-top': '20'
-    });
-  });
+  // 插入结果
+  $('#results').append(cardHtml);
+  
+  // 更新导航栏
+  const navLink = `<a href="#${platformId}" style="border: 1px solid ${result.color} !important;">${result.name}</a>`;
+  $('#platformNav').append(navLink).removeClass('d-none');
+  
+  // 调整布局
+  adjustUrlBox();
 }
   // 监听输入框的回车键事件
   $('#gameInput').on('keypress', function(event) {
