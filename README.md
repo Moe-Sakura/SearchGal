@@ -1,6 +1,6 @@
 # 🔍 SearchGal · Gal资源聚合搜索工具
 <p align="center">
-  <strong>跨平台丨多源聚合丨快速响应</strong>
+  <strong>WEB丨多源聚合丨快速响应</strong>
 </p>
 
 ---
@@ -10,11 +10,11 @@
 > <strong>🖥️预览地址: http://SearchGal.homes / https://searchgal.cpolar.top / http://www.SearchGal.homes</strong>
  
 ✅ **双端适配**  
-▸ 提供 **EXE桌面程序** 与 **WEB在线版** 双版本 <br>
-▸ 移动端完美适配，随时随地畅快搜索  
+▸ 提供 **EXE桌面程序**~~*(已废弃)*~~ 与 **WEB在线版** 双版本 <br>
+▸ WEB移动端完美适配，随时随地畅快搜索  
 
 💡 **核心功能**  
-▸ 实时聚合 **12+** 主流Gal资源平台  
+▸ 实时聚合 **15+** 主流Gal资源平台  
 ▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件  
 ▸ 多线程加速搜索，快速响应
 
@@ -33,16 +33,17 @@
 [![失落的小站](https://img.shields.io/badge/失落的小站-00C853)](https://shinnku.com) 
 [![TouchACG](https://img.shields.io/badge/TouchACG-00C853)](https://www.touchgal.io/)  
 [![忧郁的loli](https://img.shields.io/badge/忧郁的loli-00C853)](https://www.ttloli.com/) 
-[![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)  
+[![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)
 [![绮梦ACG](https://img.shields.io/badge/绮梦ACG-00C853)](https://acgs.one/) 
 [![青桔ACG](https://img.shields.io/badge/青桔ACG-00C853)](https://spare.qingju.org/)
 [![鲲Galgame](https://img.shields.io/badge/鲲Galgame-00C853)](https://www.kungal.com/zh-cn/)
 
 ### ⚪ 需登录/特殊条件
-[![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)  
-[![FuFugal](https://img.shields.io/badge/FuFuGal-FFFFFF)](https://www.fufugal.com/)
-[![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
+[![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)
+[![FuFuGal](https://img.shields.io/badge/FuFuGal-FFFFFF)](https://www.fufugal.com/)
+[![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)  
 [![天游二次元](https://img.shields.io/badge/天游二次元-FFFFFF)](https://www.tiangal.com/)
+[![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
 
 ### 🟡 需魔法访问
 [![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/) 
@@ -76,6 +77,12 @@
 ---
 
 ## 📜 更新日志
+### V4 (2025/02/09)
+```
++ WEB新增流式搜索 (beta测试中，可能占用过多浏览器性能)
++ WEB新增「特殊平台配置」选项，可供用户配置特殊平台的认证口令进行搜索
++ 新增「紫缘Gal」平台 (需输入在「特殊平台配置」输入密码)
+```
 ### V3 (2025/02/08)
 ```
 + WEB现在可显示平台搜索错误日志
