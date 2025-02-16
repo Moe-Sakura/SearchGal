@@ -195,13 +195,13 @@ def zygal(game:str,mode=False,zypassword="") -> list:
 
 #zg
 def touch(game:str,mode=False) -> list:
-    yinqin = "TouchACG"
+    yinqin = "TouchGal"
     color = "#1FD700"
     if mode: return yinqin
     try:
         # searul = re.compile(r'.jpg" alt="(?P<NAME>.*?)" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">',re.S)
         # searesp = session.get(url='https://www.touchgal.com/', params={'s':game,'type':'post'}, headers=headers)
-        searesp = session.post(url='https://www.touchgal.io/api/search', headers=headers, data='{"query":["'+game+'"],"page":1,"limit":24,"searchOption":{"searchInIntroduction":false,"searchInAlias":false,"searchInTag":false}}',timeout=timeoutsec)
+        searesp = session.post(url='https://www.touchgal.io/api/search', headers=headers, data='{"query":["'+game+'"],"page":1,"limit":24,"searchOption":{"searchInIntroduction":false,"searchInAlias":true,"searchInTag":false}}',timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         resjson = json.loads(searesp.text)
         count = 0
