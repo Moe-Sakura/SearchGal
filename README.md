@@ -31,7 +31,7 @@
 ### 🟢 免登录直链下载
 [![晴空咖啡馆](https://img.shields.io/badge/晴空咖啡馆-00C853)](https://aozoracafe.com/) 
 [![失落的小站](https://img.shields.io/badge/失落的小站-00C853)](https://shinnku.com) 
-[![TouchACG](https://img.shields.io/badge/TouchACG-00C853)](https://www.touchgal.io/)  
+[![TouchGal](https://img.shields.io/badge/TouchGal-00C853)](https://www.touchgal.io/)  
 [![忧郁的loli](https://img.shields.io/badge/忧郁的loli-00C853)](https://www.ttloli.com/) 
 [![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)
 [![绮梦ACG](https://img.shields.io/badge/绮梦ACG-00C853)](https://acgs.one/) 
