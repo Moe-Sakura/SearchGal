@@ -404,8 +404,8 @@ def qingjiacg(game:str,mode=False) -> list:
     if mode: return yinqin
     sp = cloudscraper.create_scraper()
     try:
-        searul = re.compile(r'class="thumb"></a><header><h2><a target="_blank" href="(?P<URL>.*?)" title=".+?">(?P<NAME>.*?)</a></h2></header><p class="note">',re.S)
-        searesp = sp.get(url='https://spare.qingju.org/', params={'s':game}, headers=headers,timeout=timeoutsec)
+        searul = re.compile(r'" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h2>',re.S)
+        searesp = sp.get(url='https://www.qingju.org/', params={'s':game,'type':'post'}, headers=headers,timeout=timeoutsec)
         # print(searesp.text)
         if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
