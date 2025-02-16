@@ -86,7 +86,7 @@
 ### V5 (2025/02/17)
 ```
 青桔ACG 正则修正
-修正 Issue #1 （感谢@Palentum）
+修正 Issue #1: TouchGal搜索建议（感谢@Palentum）
 ```
 ### V4 (2025/02/09)
 ```
