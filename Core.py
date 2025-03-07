@@ -235,17 +235,19 @@ def sakustar(game:str,mode=False) -> list:
         return [[],-1,yinqin,e]
     
 def shinnku(game:str,mode=False) -> list:
-    yinqin = "失落的小站"
+    yinqin = "真红小站"
     color = "#1FD700"
     if mode: return yinqin
     try:
+        # searul = re.compile(r'<div class="flex flex-col"><p class="text-lg">(?P<NAME>.*?)</p></div></div><hr class="shrink-0 bg-divider border-none w-full h-divider" role="separator"/><div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"><p>路径：<!-- -->(?P<URL>.*?)</p>')
         searesp = session.get(url='https://www.shinnku.com/api/search?q='+game, headers=headers,timeout=timeoutsec)
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         resjson = json.loads(searesp.text)
         count = 0
         gamelst = []
-        mainurl = 'https://www.shinnku.com/api/download'
+        mainurl = 'https://dl.oo0o.ooo/file/shinnku/'
         for i in resjson[:20]:
-            gamelst.append({'name':i['name'].split('/')[-1].strip(),'url':mainurl+i['name']})
+            gamelst.append({'name':i['id'].split('/')[-1].strip(),'url':mainurl+i['id']})
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]

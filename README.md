@@ -30,7 +30,7 @@
 ## 🚀 已收录平台
 ### 🟢 免登录直链下载
 [![晴空咖啡馆](https://img.shields.io/badge/晴空咖啡馆-00C853)](https://aozoracafe.com/) 
-[![失落的小站](https://img.shields.io/badge/失落的小站-00C853)](https://shinnku.com) 
+[![真红小站](https://img.shields.io/badge/真红小站-00C853)](https://shinnku.com) 
 [![TouchGal](https://img.shields.io/badge/TouchGal-00C853)](https://www.touchgal.io/)  
 [![忧郁的loli](https://img.shields.io/badge/忧郁的loli-00C853)](https://www.ttloli.com/) 
 [![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)
@@ -83,6 +83,11 @@
 ---
 
 ## 📜 更新日志
+### V6 (2025/03/07)
+```
+* 失落的小站 站点更新 -> 真红小站
+* 真红小站 正则修正
+```
 ### V5 (2025/02/17)
 ```
 * 青桔ACG 正则修正

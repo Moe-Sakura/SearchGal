@@ -1,5 +1,4 @@
 requests
-webbrowser
 urllib3
 tqdm
 colorama
