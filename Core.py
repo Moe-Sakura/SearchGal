@@ -238,21 +238,17 @@ def shinnku(game:str,mode=False) -> list:
     yinqin = "真红小站"
     color = "#1FD700"
     if mode: return yinqin
-    try:
-        # searul = re.compile(r'<div class="flex flex-col"><p class="text-lg">(?P<NAME>.*?)</p></div></div><hr class="shrink-0 bg-divider border-none w-full h-divider" role="separator"/><div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"><p>路径：<!-- -->(?P<URL>.*?)</p>')
-        searesp = session.get(url='https://www.shinnku.com/api/search?q='+game, headers=headers,timeout=timeoutsec)
-        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
-        resjson = json.loads(searesp.text)
-        count = 0
-        gamelst = []
-        mainurl = 'https://dl.oo0o.ooo/file/shinnku/'
-        for i in resjson[:20]:
-            gamelst.append({'name':i['id'].split('/')[-1].strip(),'url':mainurl+i['id']})
-            count += 1
-        searesp.close()
-        return [gamelst,count,yinqin]
-    except Exception as e:
-        return [[],-1,yinqin,e]
+    searul = re.compile(r'<div class="flex flex-col">\s*<p class="text-lg">(?P<NAME>.*?)</p>\s*</div>\s*</div>\s*<hr class="shrink-0 bg-divider border-none w-full h-divider" role="separator"/>\s*<div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased">\s*<p>路径：\s*<!-- -->\s*(?P<URL>.*?)</p>')
+    searesp = session.get(url='https://www.shinnku.com/search?q='+game, headers=headers,timeout=timeoutsec)
+    if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
+    count = 0
+    gamelst = []
+    mainurl = 'https://dl.oo0o.ooo/file/shinnku/'
+    for i in list(searul.finditer(searesp.text))[:20]:
+        gamelst.append({'name':i.group('NAME').strip(),'url':mainurl+i.group('URL')})
+        count += 1
+    searesp.close()
+    return [gamelst,count,yinqin]
     
 def KunGal(game:str,mode=False) -> list:
     yinqin = "鲲Galgame"
