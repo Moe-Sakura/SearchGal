@@ -12,7 +12,7 @@ session = requests.Session()
 timeoutsec = 15
 
 # 如果需要设置代理请取消注释
-# proxy = "http://127.0.0.1:7890"
+proxy = "http://127.0.0.1:7890"
 # session.proxies = {
 #     "http": proxy,
 #     "https": proxy,
@@ -201,7 +201,7 @@ def touch(game:str,mode=False) -> list:
     try:
         # searul = re.compile(r'.jpg" alt="(?P<NAME>.*?)" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">',re.S)
         # searesp = session.get(url='https://www.touchgal.com/', params={'s':game,'type':'post'}, headers=headers)
-        searesp = session.post(url='https://www.touchgal.io/api/search', headers=headers, data='{"query":["'+game+'"],"page":1,"limit":24,"searchOption":{"searchInIntroduction":false,"searchInAlias":true,"searchInTag":false}}',timeout=timeoutsec)
+        searesp = session.post(url='https://www.touchgal.io/api/search', headers=headers, data='{"queryString":"[{\\"type\\":\\"keyword\\",\\"name\\":\\"'+game+'\\"}]","limit":20,"searchOption":{"searchInIntroduction":false,"searchInAlias":true,"searchInTag":false},"page":1,"selectedType":"all","selectedLanguage":"all","selectedPlatform":"all","sortField":"resource_update_time","sortOrder":"desc","selectedYears":["all"],"selectedMonths":["all"]}',timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         resjson = json.loads(searesp.text)
         count = 0
@@ -255,7 +255,7 @@ def KunGal(game:str,mode=False) -> list:
     color = "#1FD700"
     if mode: return yinqin
     try:
-        searesp = session.get(url=f'https://www.kungal.com/api/search?keywords={game}&type=galgame&page=1&limit=10', headers=headers,timeout=timeoutsec)
+        searesp = session.get(url=f'https://www.kungal.com/api/search?keywords={game}&type=galgame&page=1&limit=12', headers=headers,timeout=timeoutsec,verify=False)
         resjson = json.loads(searesp.text)
         count = 0
         gamelst = []
