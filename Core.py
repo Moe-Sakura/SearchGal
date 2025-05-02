@@ -12,10 +12,10 @@ session = requests.Session()
 timeoutsec = 15
 
 # 如果需要设置代理请取消注释
-proxy = "http://127.0.0.1:7890"
+# proxy = "http://127.0.0.1:7890"
 # session.proxies = {
-#     "http": proxy,
-#     "https": proxy,
+#      "http": proxy,
+#      "https": proxy,
 # }
 
 headers = {'Connection': 'close', \
@@ -66,6 +66,7 @@ def loli(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 def vika(game:str,mode=False) -> list:
@@ -86,8 +87,10 @@ def vika(game:str,mode=False) -> list:
         for i in searul.finditer(searesp):
             gamelst.append({'name':i.group('NAME').strip(),'url':i.group('URL')})
             count += 1
+        searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 # 倒了
@@ -124,6 +127,7 @@ def tianyou(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
     
 def acgyyg(game:str,mode=False) -> list:
@@ -141,6 +145,7 @@ def acgyyg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
     
 def zygal(game:str,mode=False,zypassword="") -> list:
@@ -169,6 +174,7 @@ def zygal(game:str,mode=False,zypassword="") -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 # 倒了
@@ -213,6 +219,7 @@ def touch(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
     
 def sakustar(game:str,mode=False) -> list:
@@ -232,23 +239,28 @@ def sakustar(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
     
 def shinnku(game:str,mode=False) -> list:
     yinqin = "真红小站"
     color = "#1FD700"
     if mode: return yinqin
-    searul = re.compile(r'<div class="flex flex-col">\s*<p class="text-lg">(?P<NAME>.*?)</p>\s*</div>\s*</div>\s*<hr class="shrink-0 bg-divider border-none w-full h-divider" role="separator"/>\s*<div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased">\s*<p>路径：\s*<!-- -->\s*(?P<URL>.*?)</p>')
-    searesp = session.get(url='https://www.shinnku.com/search?q='+game, headers=headers,timeout=timeoutsec)
-    if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
-    count = 0
-    gamelst = []
-    mainurl = 'https://dl.oo0o.ooo/file/shinnku/'
-    for i in list(searul.finditer(searesp.text))[:20]:
-        gamelst.append({'name':i.group('NAME').strip(),'url':mainurl+i.group('URL')})
-        count += 1
-    searesp.close()
-    return [gamelst,count,yinqin]
+    try:
+        searul = re.compile(r'<div class="flex flex-col">\s*<p class="text-lg">(?P<NAME>.*?)</p>\s*</div>\s*</div>\s*<hr class="shrink-0 bg-divider border-none w-full h-divider" role="separator"/>\s*<div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased">\s*<p>路径：\s*<!-- -->\s*(?P<URL>.*?)</p>')
+        searesp = session.get(url='https://www.shinnku.com/search?q='+game, headers=headers,timeout=timeoutsec)
+        if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
+        count = 0
+        gamelst = []
+        mainurl = 'https://dl.oo0o.ooo/file/shinnku/'
+        for i in list(searul.finditer(searesp.text))[:20]:
+            gamelst.append({'name':i.group('NAME').strip(),'url':mainurl+i.group('URL')})
+            count += 1
+        searesp.close()
+        return [gamelst,count,yinqin]
+    except Exception as e:
+        searesp.close()
+        return [[],-1,yinqin,e]
     
 def KunGal(game:str,mode=False) -> list:
     yinqin = "鲲Galgame"
@@ -268,6 +280,7 @@ def KunGal(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
     
 def gallibrary(game:str,mode=False) -> list:
@@ -287,6 +300,7 @@ def gallibrary(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 def shenshi(game:str,mode=False) -> list:
@@ -304,6 +318,7 @@ def shenshi(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 # 倒了
@@ -357,6 +372,7 @@ def lzacg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
     
 def fufugal(game:str,mode=False) -> list:
@@ -376,6 +392,7 @@ def fufugal(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 def jimengacg(game:str,mode=False) -> list:
@@ -394,6 +411,7 @@ def jimengacg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 def qingjiacg(game:str,mode=False) -> list:
@@ -415,6 +433,7 @@ def qingjiacg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
+        searesp.close()
         return [[],-1,yinqin,e]
 
 # Cli命令行搜索平台
