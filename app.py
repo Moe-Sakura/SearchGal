@@ -1,12 +1,14 @@
 # WEB页面启动
 # 访问 http://127.0.0.1:8898
 # 打包: 将Core.py内容全部复制到此处并删除第八行import
-# pyinstaller --add-data "templates:templates" --add-data "static:static" -F app.py
+# pyinstaller --add-data "templates:templates" -F app.py
 from flask import Flask, render_template, request, make_response, jsonify, Response, stream_with_context
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import traceback
+import tracemalloc
 from Core import *
 from datetime import datetime
+import gc
 import threading
 lock = threading.Lock()
 app = Flask(__name__)
@@ -16,6 +18,8 @@ executor = ThreadPoolExecutor(max_workers=20)
 import logging
 log = logging.getLogger('werkzeug')
 # log.setLevel(logging.ERROR)
+
+MAX_RESULTS = 50
 
 def search_log(ip:str, searchgame:str, ua:str='unknow'):
     now = datetime.now()
@@ -64,7 +68,7 @@ def search_platform(platform, game, zypassword):
             return {
                 'name': result[2],
                 'color': "red" if error else platform['color'],
-                'items': [{'name': i['name'], 'url': i['url']} for i in result[0]],
+                'items': [{'name': i['name'], 'url': i['url']} for i in result[0][:MAX_RESULTS]],
                 'error': error
             }
     except Exception as e:
@@ -108,6 +112,14 @@ def search():
                 yield json.dumps({
                     'progress': {'completed': completed, 'total': total}
                 }) + '\n'
+                    
+            # 显式释放已完成的 future
+            del future
+            gc.collect()
+            
+        # 清理 future 列表
+        futures.clear()
+        gc.collect()
 
         # 发送完成信号
         yield json.dumps({'done': True}) + '\n'
@@ -141,9 +153,13 @@ def search_classic():
         result = future.result()
         if result:
             results.append(result)
+        del future  # 显式删除
+    gc.collect()
+    futures.clear()
     
     return jsonify({'results': results})
 
 if __name__ == '__main__':
     print('搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入WEB搜索')
+    tracemalloc.start()
     app.run(host='0.0.0.0', port=8898, threaded=True, debug=False)
