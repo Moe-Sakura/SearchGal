@@ -66,7 +66,10 @@ def loli(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 def vika(game:str,mode=False) -> list:
@@ -81,16 +84,19 @@ def vika(game:str,mode=False) -> list:
                                headers={'Connection': 'close','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36','Content-Type': 'application/json'},
                                timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
-        searesp = searesp.text.replace('\\/','/').replace('\\\\','\\').encode("utf-8").decode('unicode_escape')
+        restxt = searesp.text.replace('\\/','/').replace('\\\\','\\').encode("utf-8").decode('unicode_escape')
         count = 0
         gamelst = []
-        for i in searul.finditer(searesp):
+        for i in searul.finditer(restxt):
             gamelst.append({'name':i.group('NAME').strip(),'url':i.group('URL')})
             count += 1
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 # 倒了
@@ -127,7 +133,10 @@ def tianyou(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
     
 def acgyyg(game:str,mode=False) -> list:
@@ -145,7 +154,10 @@ def acgyyg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
     
 def zygal(game:str,mode=False,zypassword="") -> list:
@@ -174,7 +186,10 @@ def zygal(game:str,mode=False,zypassword="") -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 # 倒了
@@ -219,7 +234,10 @@ def touch(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
     
 def sakustar(game:str,mode=False) -> list:
@@ -239,7 +257,10 @@ def sakustar(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
     
 def shinnku(game:str,mode=False) -> list:
@@ -259,7 +280,10 @@ def shinnku(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
     
 def KunGal(game:str,mode=False) -> list:
@@ -280,7 +304,10 @@ def KunGal(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
     
 def gallibrary(game:str,mode=False) -> list:
@@ -300,7 +327,10 @@ def gallibrary(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 def shenshi(game:str,mode=False) -> list:
@@ -318,7 +348,10 @@ def shenshi(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 # 倒了
@@ -372,7 +405,10 @@ def lzacg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
     
 def fufugal(game:str,mode=False) -> list:
@@ -392,7 +428,10 @@ def fufugal(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 def jimengacg(game:str,mode=False) -> list:
@@ -400,8 +439,9 @@ def jimengacg(game:str,mode=False) -> list:
     color = "#1FD700"
     if mode: return yinqin
     try:
-        searul = re.compile(r'<div class="flex-1">\s*?<a href="(?P<URL>.*?)" class="text-lg xl:text-xl font-semibold line-2">(?P<NAME>.*?)</a>',re.S)
-        searesp = session.get(url=f'https://acgs.one/search/{game}', headers=headers,timeout=timeoutsec)
+        # searul = re.compile(r'<div class="flex-1">\s*?<a href="(?P<URL>.*?)" class="text-lg xl:text-xl font-semibold line-2">(?P<NAME>.*?)</a>',re.S)
+        searul = re.compile(r'<div class="p-2 sm:p-3">.+?<a href="(?P<URL>.*?)" class="dark:hover:text-\[var\(--primary\)\] hover:text-\[var\(--primary\)\] duration-300 text-sm sm:text-base font-bold line-clamp-10">(?P<NAME>.*?)</a>',re.S)
+        searesp = session.get(url=f'https://game.acgs.one/search/{game}', headers=headers,timeout=timeoutsec)
         if searesp.status_code != 200: raise Exception("Search API 响应状态码为 "+str(searesp.status_code))
         count = 0
         gamelst = []
@@ -411,7 +451,10 @@ def jimengacg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 def qingjiacg(game:str,mode=False) -> list:
@@ -433,7 +476,10 @@ def qingjiacg(game:str,mode=False) -> list:
         searesp.close()
         return [gamelst,count,yinqin]
     except Exception as e:
-        searesp.close()
+        try:
+            searesp.close()
+        except Exception:
+            pass
         return [[],-1,yinqin,e]
 
 # Cli命令行搜索平台
