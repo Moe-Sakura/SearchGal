@@ -7,7 +7,7 @@
 
 
 ## 🌟 项目亮点
-> <strong>🖥️预览地址: http://SearchGal.homes / https://searchgal.cpolar.top / http://www.SearchGal.homes</strong>
+> <strong>🖥️预览地址: http://SearchGal.homes / https://searchgal.cpolar.top / http://www.SearchGal.homes sg.saop.cc</strong>
  
 ✅ **双端适配**  
 ▸ 提供 **EXE桌面程序**~~*(已废弃)*~~ 与 **WEB在线版** 双版本 <br>
