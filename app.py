@@ -38,30 +38,10 @@ def request_log(ip:str, ua:str, method, url):
     with lock:  # 获取锁，确保只有一个线程能写
         with open("log.txt", "a", encoding="utf-8") as f:
             f.write(logstr + "\n")
-            
-@app.route('/all.min.js')
-def serve_font_awesome():
-    return app.send_static_file('all.min.js')
-
-@app.route('/animate.min.css')
-def serve_animate():
-    return app.send_static_file('animate.min.css')
-
-@app.route('/bootstrap.bundle.min.js')
-def serve_bootstrap_bundle():
-    return app.send_static_file('bootstrap.bundle.min.js')
-
-@app.route('/bootstrap.min.css')
-def serve_bootstrap():
-    return app.send_static_file('bootstrap.min.css')
 
 @app.route('/gamepad-solid.svg')
 def serve_gamepad_solid():
     return app.send_static_file('gamepad-solid.svg')
-
-@app.route('/jquery.min.js')
-def serve_jquery():
-    return app.send_static_file('jquery.min.js')
 
 @app.route('/main.js')
 def serve_main():
@@ -70,10 +50,6 @@ def serve_main():
 @app.route('/style.css')
 def serve_style():
     return app.send_static_file('style.css')
-
-@app.route('/sweetalert2@8.js')
-def serve_sweetalert2():
-    return app.send_static_file('sweetalert2@8.js')
 
 @app.route('/')
 def index():

@@ -19,6 +19,8 @@ $(document).ready(function () {
         confirmButtonText: '我已了解并认同上述观点',
         background: 'rgba(40,40,40,0.95)',
         confirmButtonColor: '#ff7eb9',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
         customClass: {
             popup: 'animate__animated animate__zoomIn'
         }
@@ -313,3 +315,14 @@ if (isMobile) {
         }
     });
 }
+
+// 初始化评论区
+Artalk.init({
+    el: '#Comments',
+    pageKey: 'https://searchgal.homes',
+    server: 'https://artalk.saop.cc',
+    site: 'Galgame 聚合搜索',
+}, () => {
+    // Artalk 初始化完成后触发评论区折叠
+    $('#commentsCollapse').collapse('hide');
+})
