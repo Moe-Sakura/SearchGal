@@ -31,6 +31,10 @@
   <!-- 引入 SweetAlert2 -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script> -->
   <script async src="./sweetalert2@8.js" fetchpriority="high"></script>
+  <!-- 引入评论样式 -->
+  <link rel="stylesheet" href="https://registry.npmmirror.com/artalk/latest/files/dist/Artalk.css" fetchpriority="low">
+  <link rel="stylesheet" href="https://registry.npmmirror.com/lightgallery/2.8.2/files/css/lightgallery.css"
+    fetchpriority="low">
   <!-- 引入主样式 -->
   <link rel="stylesheet" href="./style.css" fetchpriority="high">
 </head>
@@ -78,11 +82,13 @@
 
       <!-- 底部版权信息 -->
       <div class="footer">
-        2025/05/13 V10 |
-
-        <i class="fab fa-github"></i> <a href="https://github.com/Jurangren/SearchGal" target="_blank"
-          style="color: #fff;">GitHub项目首页
-        </a>
+        <p>
+          访问：<span id="busuanzi_value_site_pv">null</span>，访客：<span id="busuanzi_value_site_uv">null</span>
+        </p>
+        <p>2025/05/13 V10 | <i class="fab fa-github"></i> <a href="https://github.com/Jurangren/SearchGal"
+            target="_blank" style="color: #fff;">GitHub 项目首页
+          </a>
+        </p>
       </div>
 
     </div>
@@ -101,9 +107,35 @@
       </div>
     </div>
 
+    <!-- 评论系统 -->
+    <div class="container mt-5">
+      <h2 class="text-center mb-4 text-white fw-bold">
+        <i class="fa-regular fa-comments me-2"></i>评论区
+      </h2>
+      <div class="p-4 rounded-4 shadow-lg border-0" style="background: rgba(255,255,255,0.7); min-height: 200px;"
+        id="Comments"></div>
+    </div>
   </div>
+
+  </div>
+
   <script src="https://registry.npmmirror.com/instant.page/latest/files/instantpage.js" type="module"></script>
   <script async src="./main.js" fetchpriority="high"></script>
+  <script async src="https://registry.npmmirror.com/js-asuna/latest/files/js/bsz.pure.mini.js"
+    fetchpriority="low"></script>
+  <script src="https://registry.npmmirror.com/lightgallery/latest/files/lightgallery.min.js"
+    fetchpriority="low"></script>
+  <script src="https://registry.npmmirror.com/artalk/latest/files/dist/Artalk.js" fetchpriority="low"></script>
+  <script src="https://registry.npmmirror.com/@artalk/plugin-lightbox/latest/files/dist/artalk-plugin-lightbox.js"
+    fetchpriority="low"></script>
+  <script>
+    Artalk.init({
+      el: '#Comments',
+      pageKey: 'https://searchgal.homes/',
+      server: 'https://artalk.saop.cc',
+      site: 'Galgame 聚合搜索',
+    })
+  </script>
 </body>
 
 </html>
