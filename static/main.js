@@ -14,7 +14,6 @@ $(document).ready(function () {
         <p style='color:#FF6969'>请关闭浏览器的广告拦截插件, 或将各gal网站添加到白名单, 各网站建站不易, 这是对这些网站最基本支持</p>
         <center><p style='color:#FF6969'>有能力者请支持Galgame正版！</p></center>
         <center><small>觉得好用请前往<a href="https://github.com/Jurangren/SearchGal" target="_blank">Github项目</a>点一个免费的Star支持一下, 秋梨膏~!</small></center>
-        <br><small style='color:#FF6969'>流式搜索beta测试中，可能会导致浏览器性能过载，谨慎开启</small>
                </div>`,
         icon: 'info',
         confirmButtonText: '我已了解并认同上述观点',
@@ -54,14 +53,14 @@ $(window).on('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(adjustUrlBox, 100);
 });
-const observer = new MutationObserver(mutations => {
-    adjustUrlBox();
-    setTimeout(adjustUrlBox, 50);
-});
-observer.observe(document.getElementById('results'), {
-    childList: true,
-    subtree: true
-});
+// const observer = new MutationObserver(mutations => {
+//     adjustUrlBox();
+//     setTimeout(adjustUrlBox, 50);
+// });
+// observer.observe(document.getElementById('results'), {
+//     childList: true,
+//     subtree: true
+// });
 
 function copyUrl(url) {
     const fallbackCopy = () => {
@@ -278,7 +277,7 @@ function addResult(result) {
     $('#platformNav').append(navLink).removeClass('d-none');
 
     // 调整布局
-    adjustUrlBox();
+    // adjustUrlBox();
 }
 // 监听输入框的回车键事件
 $('#gameInput').on('keypress', function (event) {
@@ -286,6 +285,23 @@ $('#gameInput').on('keypress', function (event) {
         event.preventDefault();  // 防止回车键引发默认行为（如表单提交）
         $('.search-btn').click();  // 模拟点击搜索按钮
     }
+});
+
+// Handle collapse icon toggling
+$('#configCollapse').on('show.bs.collapse', function () {
+    $(this).prev('.d-flex').find('i.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+});
+
+$('#configCollapse').on('hide.bs.collapse', function () {
+    $(this).prev('.d-flex').find('i.fa-chevron-up').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+});
+
+$('#commentsCollapse').on('show.bs.collapse', function () {
+    $(this).prev('.d-flex').find('i.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+});
+
+$('#commentsCollapse').on('hide.bs.collapse', function () {
+    $(this).prev('.d-flex').find('i.fa-chevron-up').removeClass('fa-chevron-up').addClass('fa-chevron-down');
 });
 
 let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);

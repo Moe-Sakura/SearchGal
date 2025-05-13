@@ -182,7 +182,7 @@ kbd {
 /* 底部版权信息 */
 .footer {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     color: #ccc;
     font-size: 0.9rem;
 }
@@ -207,7 +207,8 @@ kbd {
     }
 }
 
-.config-box {
+.config-box,
+.mt-5 {
     background: var(--main-bg);
     backdrop-filter: blur(10px) saturate(180%);
     border-radius: 15px;
@@ -218,6 +219,7 @@ kbd {
     /* 确保在主容器下方 */
     transition: all 0.3s ease;
 }
+
 
 .config-input {
     background: rgba(255, 255, 255, 0.1) !important;
@@ -253,6 +255,14 @@ kbd {
     /* 容器间距 */
 }
 
+.config-box {
+    order: 2;
+}
+
+.container.mt-5 { /* 评论区容器 */
+    order: 3;
+}
+
 @media (max-width: 768px) {
 
     /* 主容器宽度优化 */
@@ -266,7 +276,8 @@ kbd {
 
     /* 内容容器扩展 */
     .container,
-    .config-box {
+    .config-box,
+    .mt-5 {
         width: 95% !important;
         margin: 0 !important;
         padding: 1.5rem !important;
@@ -318,7 +329,8 @@ kbd {
 
 /* 添加过渡动画 */
 .container,
-.config-box {
+.config-box,
+.mt-5 {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
