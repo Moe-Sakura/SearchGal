@@ -3,16 +3,32 @@
 # pyinstaller --onefile --windowed --hidden-import PyQt5.sip GUI.py
 from Core import *
 import webbrowser
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                            QLineEdit, QPushButton, QCheckBox, QTabWidget, QListWidget,
-                            QListWidgetItem, QLabel, QProgressBar, QMessageBox, QTextBrowser)
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLineEdit,
+    QPushButton,
+    QCheckBox,
+    QTabWidget,
+    QListWidget,
+    QListWidgetItem,
+    QLabel,
+    QProgressBar,
+    QMessageBox,
+    QTextBrowser,
+)
 from PyQt5.QtCore import Qt, pyqtSignal, QObject, QTimer
 from PyQt5.QtGui import QFont, QColor, QFontDatabase
+
 
 class SearchSignal(QObject):
     update_tab = pyqtSignal(str, str, list)  # 平台名称，颜色，结果列表
     complete = pyqtSignal()
     progress = pyqtSignal(int)
+
 
 class GalSearchGUI(QMainWindow):
     def __init__(self):
@@ -137,7 +153,7 @@ class GalSearchGUI(QMainWindow):
         # 清除旧结果
         self.tabs.clear()
         self.progress_bar.setFormat("搜索进行中...")
-        
+
         # 过滤平台
         use_magic = self.magic_check.isChecked()
         active_platforms = [p for p in self.platforms if p[2] <= use_magic]
@@ -165,9 +181,11 @@ class GalSearchGUI(QMainWindow):
     def update_result_tab(self, platform_name, color, items):
         tab = QWidget()
         layout = QVBoxLayout(tab)
-        
+
         # 平台标题
-        title = QLabel(f"「<span style='color:{color}'>{platform_name}</span>」找到 {len(items)} 个结果")
+        title = QLabel(
+            f"「<span style='color:{color}'>{platform_name}</span>」找到 {len(items)} 个结果"
+        )
         title.setStyleSheet("font-size: 16px;")
         title.setTextFormat(Qt.RichText)
         layout.addWidget(title)
@@ -178,12 +196,12 @@ class GalSearchGUI(QMainWindow):
             list_item = QListWidgetItem()
             widget = QWidget()
             main_layout = QHBoxLayout(widget)
-            
+
             # 文本区域
             text_widget = QWidget()
             text_layout = QVBoxLayout(text_widget)
             text_layout.setContentsMargins(0, 0, 0, 0)
-            
+
             # 游戏名称（可选中）
             name, url = item.split("||")
             name_edit = QTextBrowser()
@@ -200,7 +218,7 @@ class GalSearchGUI(QMainWindow):
             name_edit.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
             name_edit.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
             name_edit.setFixedHeight(30)
-            
+
             # URL显示（可选中）
             url_edit = QTextBrowser()
             url_edit.setPlainText(url)
@@ -216,10 +234,10 @@ class GalSearchGUI(QMainWindow):
             url_edit.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
             url_edit.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
             url_edit.setFixedHeight(20)
-            
+
             text_layout.addWidget(name_edit)
             text_layout.addWidget(url_edit)
-            
+
             # 打开按钮
             btn = QPushButton("🌐 打开")
             btn.setStyleSheet("""
@@ -235,20 +253,20 @@ class GalSearchGUI(QMainWindow):
                 }
             """)
             btn.clicked.connect(lambda _, u=url: webbrowser.open(u))
-            
+
             main_layout.addWidget(text_widget, 4)
             main_layout.addWidget(btn, 1)
-            
+
             list_item.setSizeHint(widget.sizeHint())
             list_widget.addItem(list_item)
             list_widget.setItemWidget(list_item, widget)
 
         layout.addWidget(list_widget)
-        
+
         # 添加标签页并设置颜色
         tab_index = self.tabs.addTab(tab, platform_name)
         tab_bar = self.tabs.tabBar()
-        
+
         # 设置标签颜色（选中和未选中状态）
         tab_bar.setStyleSheet(f"""
             QTabBar::tab:selected {{
@@ -262,7 +280,7 @@ class GalSearchGUI(QMainWindow):
                 background: #404040;
             }}
         """)
-        
+
         # 强制刷新样式
         tab_bar.update()
 
@@ -272,10 +290,13 @@ class GalSearchGUI(QMainWindow):
         if current >= self.progress_bar.maximum():
             self.progress_bar.setFormat("搜索完成！")
         else:
-            self.progress_bar.setFormat(f"进度：{current}/{self.progress_bar.maximum()}")
+            self.progress_bar.setFormat(
+                f"进度：{current}/{self.progress_bar.maximum()}"
+            )
 
     def search_complete(self):
         self.search_btn.setEnabled(True)
+
 
 class SplashScreen(QMessageBox):
     def __init__(self):
@@ -283,7 +304,7 @@ class SplashScreen(QMessageBox):
         self.setWindowTitle("欢迎使用聚合搜索工具")
         self.setIcon(QMessageBox.Information)
         self.setTextFormat(Qt.RichText)
-        
+
         splash_text = """
         <html><body style='color:#E0E0E0; font-size:14px'>
         <h2 style='color:#4A9C82; text-align:center'>使用须知</h2>
@@ -300,7 +321,7 @@ class SplashScreen(QMessageBox):
         <center><p style='color:#FF6969'>有能力者请支持Galgame正版！</p></center>
         </body></html>
         """
-        
+
         self.setText(splash_text)
         self.setStandardButtons(QMessageBox.Ok)
         self.setStyleSheet("""
@@ -326,8 +347,8 @@ class SplashScreen(QMessageBox):
             }
         """)
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     print("Galgame聚合搜索工具 - 支持多平台并发搜索")
 
     app = QApplication(sys.argv)
@@ -335,11 +356,11 @@ if __name__ == "__main__":
 
     print("已经启动新的窗口用于显示搜索器的图形化界面")
     print("运行过程中请勿关闭该黑框窗口")
-    
+
     # 先显示公告窗口
     splash = SplashScreen()
     splash.exec_()
-    
+
     # 公告关闭后显示主窗口
     window = GalSearchGUI()
     window.show()
