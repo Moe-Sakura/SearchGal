@@ -7,7 +7,7 @@
 
 
 ## 🌟 项目亮点
-> <strong>🖥️预览地址: [SearchGal.homes](https://searchgal.homes)</strong> <br>(感谢<a href="https://github.com/AdingApkgg">@Palentum</a>大佬的服务器支撑与技术支持)
+> <strong>🖥️预览地址: [SearchGal.homes](https://searchgal.homes)</strong> <br>(感谢<a href="https://github.com/AdingApkgg">@Asuna</a>大佬的服务器支撑与技术支持)
  
 ✅ **双端适配**  
 ▸ 提供 **EXE桌面程序**~~*(已废弃)*~~ 与 **WEB在线版** 双版本 <br>
