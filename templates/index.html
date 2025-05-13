@@ -1,388 +1,53 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Galgame聚合搜索</title>
+  <title>Galgame 聚合搜索</title>
+  <meta name="description" content="一个聚合搜索 Galgame 的网站，支持多平台搜索">
+  <meta name="keywords" content="Galgame, 搜索, 聚合搜索, 游戏">
+  <meta name="author" content="Jurangren">
+  <meta property="og:title" content="Galgame 聚合搜索">
+  <meta property="og:description" content="一个聚合搜索 Galgame 的网站，支持多平台搜索">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Galgame 聚合搜索">
+  <link rel="shortcut icon" href="./gamepad-solid.svg" type="image/svg+xml">
   <!-- 引入 Bootstrap -->
-  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-  <!-- 引入 Font Awesome -->
-  <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="./bootstrap.min.css" fetchpriority="high">
   <!-- 引入 animate.css 用于弹窗动画 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> -->
+  <link rel="stylesheet" href="./animate.min.css" fetchpriority="high">
+  <!-- 引入 Font Awesome -->
+  <!-- <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> -->
+  <script async src="./all.min.js" fetchpriority="high"></script>
   <!-- 引入 jQuery -->
   <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-  <script src="./jquery.min.js"></script>
+  <script async src="./jquery.min.js" fetchpriority="high"></script>
   <!-- 在jQuery之后添加Bootstrap JS -->
-  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.1.3/bootstrap.bundle.min.js"></script> -->
+  <script async src="./bootstrap.bundle.min.js" fetchpriority="high"></script>
   <!-- 引入 SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-  <style>
-    :root {
-      --main-bg: rgba(30, 30, 30, 0.85);
-      --accent-color: #ff7eb9;
-    }
-    body {
-      background: url('https://api.suyanw.cn/api/comic/api.php') no-repeat center fixed;
-      background-size: cover;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      color: rgb(255, 255, 255);
-    }
-    .container {
-      background: var(--main-bg);
-      backdrop-filter: blur(10px) saturate(180%);
-      border-radius: 15px;
-      padding: 2rem;
-      width: 100%; /* 占据父容器全部宽度 */
-      margin: 0 !important; /* 覆盖原有margin */
-      margin-top: 2rem;
-      margin-bottom: 40px; /* 新增下外边距 */
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      position: relative;
-      margin-bottom: 40px; /* 下外边距 */
-    }
-
-    /* 移动端优化 */
-    @media (max-width: 768px) {
-      .container {
-        width: 95%;
-        margin: 1rem auto;
-        padding: 1rem;
-      }
-      
-      /* 输入框组垂直排列 */
-      .input-group {
-        flex-direction: column;
-      }
-      
-      /* 输入框全宽 */
-      #gameInput {
-        width: 100% !important;
-        font-size: 16px; /* 增大移动端字体 */
-        padding: 12px;
-      }
-      
-      /* 按钮全宽 */
-      .search-btn {
-        width: 100%;
-        padding: 12px;
-        margin-top: 8px;
-      }
-      
-      /* 魔法模式调整 */
-      .input-group-text {
-        justify-content: center;
-        padding: 8px;
-      }
-      
-      /* 结果项文字大小 */
-      .result-item h5 {
-        font-size: 1rem;
-      }
-      
-      /* 底部版权信息 */
-      .footer {
-        font-size: 0.8rem;
-      }
-      
-      /* 平台导航栏 */
-      .platform-nav {
-        padding: 0 1rem 0.5rem;
-      }
-    }
-    
-    /* 添加移动端底部安全区域 */
-    @supports (padding-bottom: env(safe-area-inset-bottom)) {
-      body {
-        padding-bottom: env(safe-area-inset-bottom);
-      }
-    }
-
-    /* 调整结果容器最大高度 */
-    #results {
-      max-height: 70vh;
-      overflow-y: auto;
-      margin: 1rem 0;
-      padding: 0 8px;
-    }
-
-    /* 添加平台卡片内边距 */
-    .platform-card {
-      padding: 12px;
-    }
-    .platform-card:hover {
-      transform: translateY(-3px);
-    }
-    .result-item {
-      background: linear-gradient(45deg, rgba(50, 50, 50, 0.8), rgba(60, 60, 60, 0.8));
-      border-radius: 8px;
-      margin: 0.5rem 0;
-      padding: 1rem;
-      position: relative;
-    }
-    .url-box {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.3);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-    .url-box:hover {
-      background: rgba(0,0,0,0.4) !important;
-      transform: scale(1.02);
-    }
-    .url-box-active {
-      background: rgba(0,0,0,0.5) !important;
-      transform: scale(0.98);
-    }
-
-    kbd {
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-      padding: 2px 5px;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .search-btn {
-      background: linear-gradient(45deg, #ff7eb9, #ff758c);
-      border: none;
-      transition: all 0.3s ease;
-    }
-    .search-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 15px rgba(255, 126, 185, 0.4);
-    }
-    /* 快速定位标签 */
-    .platform-nav {
-      overflow-x: auto;
-      white-space: nowrap;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-    }
-    .platform-nav a {
-      display: inline-block;
-      margin-right: 1rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      background: rgba(0,0,0,0.3);
-      color: #fff;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-    .platform-nav a:hover {
-      background: rgba(0,0,0,0.5);
-    }
-    /* 底部版权信息 */
-    .footer {
-      text-align: center;
-      margin-top: 2rem;
-      color: #ccc;
-      font-size: 0.9rem;
-    }
-    @media (max-width: 768px) {
-      .container {
-        margin: 1rem;
-        padding: 1rem;
-      }
-      .input-group {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      .input-group-text {
-        justify-content: center;
-      }
-      .url-box {
-        max-width: 70vw;
-      }
-    }
-
-    .config-box {
-      background: var(--main-bg);
-      backdrop-filter: blur(10px) saturate(180%);
-      border-radius: 15px;
-      padding: 1rem 2rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      margin-top: 0 !important;
-      order: 2; /* 确保在主容器下方 */
-      transition: all 0.3s ease;
-    }
-
-    .config-input {
-      background: rgba(255,255,255,0.1) !important;
-      color: white !important;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    /* 折叠箭头动画 */
-    [data-bs-toggle="collapse"] i {
-      transition: transform 0.3s ease;
-    }
-    [aria-expanded="true"] i {
-      transform: rotate(90deg);
-    }
-
-    @media (max-width: 768px) {
-      .config-box {
-        margin: 1rem;
-        padding: 1rem;
-      }
-    }
-
-    .main-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 120%;
-  max-width: 1200px; /* 控制最大宽度 */
-  padding: 20px;
-  gap: 20px; /* 容器间距 */
-}
-
-@media (max-width: 768px) {
-  /* 主容器宽度优化 */
-  .main-wrapper {
-    width: 95%;
-    max-width: 100% !important; /* 覆盖桌面端限制 */
-    padding: 10px 0; /* 减少垂直间距 */
-  }
-
-  /* 内容容器扩展 */
-  .container, .config-box {
-    width: 95% !important;
-    margin: 0 !important;
-    padding: 1.5rem !important; /* 增加内边距 */
-    border-radius: 12px; /* 更圆润的角 */
-  }
-
-  /* 输入框优化 */
-  #gameInput, #zyPassword {
-    font-size: 16px !important; /* 增大字体 */
-    padding: 14px 16px !important; /* 增加内边距 */
-    width: 100% !important;
-  }
-
-  /* 按钮优化 */
-  .search-btn {
-    padding: 14px 20px !important;
-    font-size: 16px;
-  }
-
-  /* 结果区域优化 */
-  #results {
-    max-height: 60vh !important; /* 增加显示高度 */
-    margin: 0.5rem -0.5rem !important; /* 扩展边距 */
-  }
-
-  /* 平台导航栏优化 */
-  .platform-nav {
-    padding: 0 0.5rem 0.5rem !important;
-  }
-
-  /* 结果项优化 */
-  .result-item {
-    padding: 1rem;
-    margin: 0.75rem 0;
-  }
-
-  /* 折叠面板优化 */
-  #configCollapse {
-    padding-top: 1rem;
-  }
-}
-
-/* 添加过渡动画 */
-.container, .config-box {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* 横向尺寸优化 */
-@media (max-width: 480px) {
-  /* 超小屏幕优化 */
-  .main-wrapper {
-    width: 98%;
-  }
-  
-  .result-item h5 {
-    font-size: 1.1rem !important; /* 增大标题 */
-    line-height: 1.4;
-  }
-  
-  .url-box small {
-    font-size: 0.9rem !important; /* 增大链接文字 */
-  }
-  
-  /* 输入框组优化 */
-  .input-group {
-    gap: 12px; /* 增加元素间距 */
-  }
-
-  /* 添加进度文本样式 */
-.progress-text {
-  font-size: 1.1rem;
-  margin-top: 0.5rem;
-}
-
-/* 优化结果项动画 */
-.result-item {
-  transition: transform 0.3s ease;
-}
-.result-item:hover {
-  transform: translateX(5px);
-}
-}
-
-/* 移动端输入框组优化 */
-@media (max-width: 768px) {
-  .input-group-text {
-    width: 100%;
-    justify-content: space-between;
-    margin: 5px 0;
-  }
-  
-  .form-switch {
-    padding-left: 3em; /* 增大触控区域 */
-  }
-  
-  .form-check-label {
-    font-size: 14px; /* 适当缩小文字 */
-  }
-}
-
-/* 开关组间距调整 */
-.input-group-text + .input-group-text {
-  margin-left: 8px;
-  
-  /* 当流式搜索开关被选中时，设置背景和边框为红色 */
-#streamCheck:checked {
-  background-color: red !important;
-  border-color: red !important;
-}
-
-  </style>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script> -->
+  <script async src="./sweetalert2@8.js" fetchpriority="high"></script>
+  <!-- 引入主样式 -->
+  <link rel="stylesheet" href="./style.css" fetchpriority="high">
 </head>
+
 <body>
   <div class="main-wrapper">
-    
+
     <div class="container">
       <h1 class="text-center mb-4 text-white fw-bold">
-        <i class="fa-solid fa-gamepad me-2"></i>Galgame聚合搜索
+        <i class="fa-solid fa-gamepad me-2"></i>Galgame 聚合搜索
       </h1>
 
       <div class="search-box mb-4">
         <div class="input-group">
-          <input type="text" id="gameInput" class="form-control" 
-                placeholder="输入游戏名称..." style="background: rgba(255,255,255,0.1); color: white;">
-          
+          <input type="text" id="gameInput" class="form-control" placeholder="输入游戏名称..."
+            style="background: rgba(255,255,255,0.1); color: white;">
+
           <!-- 魔法模式 -->
           <div class="input-group-text bg-transparent border-secondary">
             <div class="form-check form-switch">
@@ -390,7 +55,7 @@
               <label class="form-check-label text-white" for="magicCheck">魔法模式</label>
             </div>
           </div>
-          
+
           <!-- 新增流式搜索开关 -->
           <div class="input-group-text bg-transparent border-secondary">
             <div class="form-check form-switch">
@@ -398,7 +63,7 @@
               <label class="form-check-label text-white" for="streamCheck">流式搜索</label>
             </div>
           </div>
-          
+
           <button class="btn search-btn text-white" onclick="doSearch()">
             <i class="fa-solid fa-magnifying-glass me-2"></i>搜索
           </button>
@@ -413,12 +78,13 @@
 
       <!-- 底部版权信息 -->
       <div class="footer">
-        2025/05/02 V9 | 
-        
-          <i class="fab fa-github"></i> <a href="https://github.com/Jurangren/SearchGal" target="_blank" style="color: #fff;">GitHub项目首页
+        2025/05/02 V9 |
+
+        <i class="fab fa-github"></i> <a href="https://github.com/Jurangren/SearchGal" target="_blank"
+          style="color: #fff;">GitHub项目首页
         </a>
       </div>
-      
+
     </div>
 
     <!-- 新增特殊配置栏 -->
@@ -429,317 +95,15 @@
       </div>
       <div class="collapse" id="configCollapse">
         <div class="mt-3">
-          <input type="text" 
-                id="zyPassword"
-                class="form-control config-input" 
-                placeholder="输入紫缘社访问密码"
-                autocomplete="new-password">
+          <input type="text" id="zyPassword" class="form-control config-input" placeholder="输入紫缘社访问密码"
+            autocomplete="new-password">
         </div>
       </div>
     </div>
-  
+
   </div>
-  
-  <script>
-    // 首次访问显示公告，带有动画效果
-    $(document).ready(function() {
-      Swal.fire({
-        title: '✨ 使用须知 ✨',
-        html: `<div style="text-align: left; color: #eee;">
-                  <p>1. 本程序仅供学习交流使用，请支持正版游戏</p>
-        <p>2. 本程序只用于搜索互联网平台上的内容，搜索结果来自第三方平台，请自行判断内容安全性</p>
-        <p>3. 访问海外站点需要启用魔法搜索功能，请在服务端设置魔法(访客无需关注)</p>
-        <p>4. 如果搜索词过短，部分平台的结果可能搜索不全(截取第一页结果)，因此尽量精确游戏名搜索</p>
-        <p>5. 本程序每获取到请求后都会关闭与服务器的连接，本程序不提倡爆破/恶意爬取数据</p>
-        <p>6. 如果遇到某个平台搜索失败, 检查你是否开了魔法, 也可能是平台炸了或者正则失效了</p>
-        <p style='color:#1FD700'>平台标签绿色免登录可下载，金色需要魔法，白色需一定条件才能下载(例如登录/回复等)</p>
-        <p style='color:#FFD700'>收录的大多是提供PC平台资源的网站，大部分平台都提供Onedrive或直链，两种方式比国内网盘下载速度更快</p>
-        <p style='color:#FF6969'>请关闭浏览器的广告拦截插件, 或将各gal网站添加到白名单, 各网站建站不易, 这是对这些网站最基本支持</p>
-        <center><p style='color:#FF6969'>有能力者请支持Galgame正版！</p></center>
-        <center><small>觉得好用请前往<a href="https://github.com/Jurangren/SearchGal" target="_blank">Github项目</a>点一个免费的Star支持一下, 秋梨膏~!</small></center>
-        <br><small style='color:#FF6969'>流式搜索beta测试中，可能会导致浏览器性能过载，谨慎开启</small>
-               </div>`,
-        icon: 'info',
-        confirmButtonText: '我已了解并认同上述观点',
-        background: 'rgba(40,40,40,0.95)',
-        confirmButtonColor: '#ff7eb9',
-        customClass: {
-          popup: 'animate__animated animate__zoomIn'
-        }
-      });
-    });
-
-    // 调整 url-box 的宽度（防止超出或折叠）
-    function adjustUrlBox() {
-      $('.url-box').each(function() {
-        const $this = $(this);
-        const parent = $this.closest('div[style*="min-width: 0"]');
-        if (!parent.length) return;
-        const tempSpan = $('<span>')
-          .text($this.text())
-          .css({
-            'position': 'absolute',
-            'visibility': 'hidden',
-            'white-space': 'nowrap',
-            'font': $this.css('font'),
-            'padding': $this.css('padding'),
-            'letter-spacing': $this.css('letter-spacing')
-          })
-          .appendTo('body');
-        const textWidth = tempSpan.outerWidth();
-        const parentWidth = parent.width();
-        tempSpan.remove();
-        $this.css('max-width', textWidth < parentWidth ? textWidth : parentWidth);
-      });
-    }
-    let resizeTimer;
-    $(window).on('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(adjustUrlBox, 100);
-    });
-    const observer = new MutationObserver(mutations => {
-      adjustUrlBox();
-      setTimeout(adjustUrlBox, 50);
-    });
-    observer.observe(document.getElementById('results'), { 
-      childList: true, 
-      subtree: true 
-    });
-
-    function copyUrl(url) {
-      const fallbackCopy = () => {
-        const textarea = document.createElement('textarea');
-        textarea.value = url;
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-          document.execCommand('copy');
-          showCopySuccess();
-        } catch (err) {
-          showCopyError();
-        } finally {
-          document.body.removeChild(textarea);
-        }
-      };
-
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() => {
-          showCopySuccess();
-        }).catch(() => {
-          fallbackCopy();
-        });
-      } else {
-        fallbackCopy();
-      }
-    }
-
-    // 独立提示函数
-    function showCopySuccess() {
-      Swal.fire({
-        icon: 'success',
-        title: '复制成功',
-        text: '链接已存入剪贴板',
-        toast: true,
-        position: 'top',
-        showConfirmButton: false,
-        timer: 1500,
-        background: 'rgba(0,255,0,0.9)',
-        customClass: {
-          popup: 'animate__animated animate__fadeInDown'
-        }
-      });
-    }
-
-    function showCopyError() {
-      Swal.fire({
-        icon: 'error',
-        title: '复制失败',
-        html: '请手动选择链接后按<kbd>Ctrl+C</kbd>复制',
-        toast: true,
-        position: 'top',
-        showConfirmButton: false,
-        timer: 3000,
-        background: 'rgba(255,0,0,0.9)'
-      });
-    }
-
-
-
-// 搜索函数
-function doSearch() {
-  const game = $('#gameInput').val().trim();
-  if (!game) return;
-
-  // 清空结果
-  $('#platformNav').empty().addClass('d-none');
-  $('#results').html(`
-    <div class="col-12 text-center text-white py-4">
-      <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-      <div class="mt-2 progress-text">正在搜索中...</div>
-    </div>
-  `);
-
-  const formData = new FormData();
-  formData.append('game', game);
-  formData.append('magic', $('#magicCheck').prop('checked'));
-  formData.append('stream', $('#streamCheck').prop('checked')); // 新增流式模式参数
-  formData.append('zypassword', $('#zyPassword').val());
-
-  // 根据流式模式选择请求方式
-  if ($('#streamCheck').prop('checked')) {
-    streamSearch(formData);
-  } else {
-    classicSearch(formData);
-  }
-}
-
-// 流式搜索模式
-function streamSearch(formData) {
-  fetch('/search', {
-    method: 'POST',
-    body: formData
-  }).then(response => {
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let totalPlatforms = 0;
-
-    const processChunk = ({ done, value }) => {
-      if (done) {
-        // 完成时隐藏进度条
-        $('.progress-text').parent().hide();
-        return;
-      }
-
-      buffer += decoder.decode(value, { stream: true });
-      const parts = buffer.split('\n');
-      buffer = parts.pop();
-
-      parts.forEach(part => {
-        if (!part.trim()) return;
-        try {
-          const data = JSON.parse(part);
-          
-          if (data.total) {
-            totalPlatforms = data.total;
-            $('.progress-text').text(`正在搜索中... (0/${totalPlatforms})`);
-          } 
-          else if (data.progress) {
-            $('.progress-text').text(`正在搜索中... (${data.progress.completed}/${data.progress.total})`);
-            if (data.result) addResult(data.result);
-          }
-          else if (data.done) {
-            $('.progress-text').parent().hide();
-          }
-        } catch (e) {
-          console.error('解析错误:', e);
-        }
-      });
-
-      return reader.read().then(processChunk);
-    };
-
-    return reader.read().then(processChunk);
-  }).catch(error => {
-    Swal.fire('错误', '搜索失败，请稍后重试', 'error');
-  });
-}
-
-// 传统搜索模式
-function classicSearch(formData) {
-  fetch('/search-classic', { 
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    $('#results').empty();
-    if(data.error) {
-      Swal.fire('错误', data.error, 'error');
-      return;
-    }
-    data.results.forEach(result => addResult(result));
-    $('.progress-text').parent().hide();
-  })
-  .catch(error => {
-    Swal.fire('错误', '搜索失败，请稍后重试', 'error');
-  });
-}
-
-function addResult(result) {
-  const platformId = `platform-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  
-  // 构建平台卡片
-  const cardHtml = `
-    <div class="col-12">
-      <div id="${platformId}" class="platform-card" style="color: ${result.color};">
-        <div class="card-header border-bottom-0" style="color: ${result.color};">
-          <i class="fa-solid fa-diamond me-2"></i>${result.name}
-          ${result.error ? 
-            '<span class="badge bg-danger float-end">错误</span>' : 
-            `<span class="badge bg-dark float-end">${result.items.length} 结果</span>`}
-        </div>
-        <div class="card-body py-2">
-          ${result.error ? `
-            <div class="result-item">
-              <div class="d-flex justify-content-between align-items-center">
-                <div style="min-width: 0;">
-                  <h5 class="text-white mb-2">${result.error}</h5>
-                </div>
-              </div>
-            </div>
-          ` : result.items.map(item => `
-            <div class="result-item">
-              <div class="d-flex justify-content-between align-items-center">
-                <div style="min-width: 0;">
-                  <h5 class="text-white mb-2">${item.name}</h5>
-                  <div class="url-box" onclick="copyUrl('${item.url}')" 
-                        onmousedown="this.classList.add('url-box-active')"
-                        onmouseup="this.classList.remove('url-box-active')"
-                        style="cursor: pointer;">
-                    <small class="text-muted">${item.url}</small>
-                  </div>
-                </div>
-                <button class="btn btn-sm btn-outline-light ms-3" 
-                        onclick="window.open('${item.url}')"
-                        style="flex-shrink: 0;">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </button>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    </div>
-  `;
-
-  // 插入结果
-  $('#results').append(cardHtml);
-  
-  // 更新导航栏
-  const navLink = `<a href="#${platformId}" style="border: 1px solid ${result.color} !important;">${result.name}</a>`;
-  $('#platformNav').append(navLink).removeClass('d-none');
-  
-  // 调整布局
-  adjustUrlBox();
-}
-  // 监听输入框的回车键事件
-  $('#gameInput').on('keypress', function(event) {
-    if (event.key === 'Enter') {  // 判断是否按下的是回车键
-      event.preventDefault();  // 防止回车键引发默认行为（如表单提交）
-      $('.search-btn').click();  // 模拟点击搜索按钮
-    }
-  });
-
-  let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if(isMobile) {
-      $('#gameInput').attr('autocomplete', 'off');
-      window.addEventListener('resize', function() {
-        if(document.activeElement.tagName === 'INPUT') {
-          window.scrollTo(0, 0);
-        }
-      });
-    }
-  </script>
+  <script src="https://registry.npmmirror.com/instant.page/latest/files/instantpage.js" type="module"></script>
+  <script async src="./main.js" fetchpriority="high"></script>
 </body>
+
 </html>
