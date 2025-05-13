@@ -7,7 +7,7 @@
 
 
 ## 🌟 项目亮点
-> <strong>🖥️预览地址: [SearchGal.homes](https://searchgal.homes)</strong>
+> <strong>🖥️预览地址: [SearchGal.homes](https://searchgal.homes)</strong> <br>(感谢@Palentum大佬的服务器支撑与技术支持)
  
 ✅ **双端适配**  
 ▸ 提供 **EXE桌面程序**~~*(已废弃)*~~ 与 **WEB在线版** 双版本 <br>
@@ -83,6 +83,11 @@
 ---
 
 ## 📜 更新日志
+### V10 (2025/05/13)
+```
+* Touchgal 请求格式修正
+* 优化外部资源到本地，提升加载速度（感谢@Palentum）
+```
 ### V9 (2025/05/02)
 ```
 * 内存优化[1]
