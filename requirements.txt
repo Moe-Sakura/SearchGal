@@ -6,3 +6,4 @@ cloudscraper
 rich
 PyQt5
 flask
+gunicorn

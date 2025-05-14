@@ -204,6 +204,9 @@ def search_classic():
 
 
 if __name__ == "__main__":
+    # 测试环境，启动命令: python app.py
     print("搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入WEB搜索")
     tracemalloc.start()
     app.run(host="0.0.0.0", port=8898, threaded=True, debug=False)
+
+    # 生产环境，启动命令(Linux): gunicorn --bind 0.0.0.0:8898 app:app
