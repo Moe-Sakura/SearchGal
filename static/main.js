@@ -1,8 +1,8 @@
 // 首次访问显示公告，带有动画效果
 $(document).ready(function () {
-    Swal.fire({
-        title: '✨ 使用须知 ✨',
-        html: `<div style="text-align: left; color: #eee;">
+  Swal.fire({
+    title: "✨ 使用须知 ✨",
+    html: `<div style="text-align: left; color: #eee;">
                   <p>1. 本程序仅供学习交流使用，请支持正版游戏</p>
         <p>2. 本程序只用于搜索互联网平台上的内容，搜索结果来自第三方平台，请自行判断内容安全性</p>
         <p>3. 访问海外站点需要启用魔法搜索功能，请在服务端设置魔法(访客无需关注)</p>
@@ -15,45 +15,45 @@ $(document).ready(function () {
         <center><p style='color:#FF6969'>有能力者请支持Galgame正版！</p></center>
         <center><small>觉得好用请前往<a href="https://github.com/Jurangren/SearchGal" target="_blank">Github项目</a>点一个免费的Star支持一下, 秋梨膏~!</small></center>
                </div>`,
-        icon: 'info',
-        confirmButtonText: '我已了解并认同上述观点',
-        background: 'rgba(40,40,40,0.95)',
-        confirmButtonColor: '#ff7eb9',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        customClass: {
-            popup: 'animate__animated animate__zoomIn'
-        }
-    });
+    icon: "info",
+    confirmButtonText: "我已了解并认同上述观点",
+    background: "rgba(40,40,40,0.95)",
+    confirmButtonColor: "#ff7eb9",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    customClass: {
+      popup: "animate__animated animate__zoomIn",
+    },
+  });
 });
 
 // 调整 url-box 的宽度（防止超出或折叠）
 function adjustUrlBox() {
-    $('.url-box').each(function () {
-        const $this = $(this);
-        const parent = $this.closest('div[style*="min-width: 0"]');
-        if (!parent.length) return;
-        const tempSpan = $('<span>')
-            .text($this.text())
-            .css({
-                'position': 'absolute',
-                'visibility': 'hidden',
-                'white-space': 'nowrap',
-                'font': $this.css('font'),
-                'padding': $this.css('padding'),
-                'letter-spacing': $this.css('letter-spacing')
-            })
-            .appendTo('body');
-        const textWidth = tempSpan.outerWidth();
-        const parentWidth = parent.width();
-        tempSpan.remove();
-        $this.css('max-width', textWidth < parentWidth ? textWidth : parentWidth);
-    });
+  $(".url-box").each(function () {
+    const $this = $(this);
+    const parent = $this.closest('div[style*="min-width: 0"]');
+    if (!parent.length) return;
+    const tempSpan = $("<span>")
+      .text($this.text())
+      .css({
+        position: "absolute",
+        visibility: "hidden",
+        "white-space": "nowrap",
+        font: $this.css("font"),
+        padding: $this.css("padding"),
+        "letter-spacing": $this.css("letter-spacing"),
+      })
+      .appendTo("body");
+    const textWidth = tempSpan.outerWidth();
+    const parentWidth = parent.width();
+    tempSpan.remove();
+    $this.css("max-width", textWidth < parentWidth ? textWidth : parentWidth);
+  });
 }
 let resizeTimer;
-$(window).on('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(adjustUrlBox, 100);
+$(window).on("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(adjustUrlBox, 100);
 });
 // const observer = new MutationObserver(mutations => {
 //     adjustUrlBox();
@@ -65,180 +65,193 @@ $(window).on('resize', () => {
 // });
 
 function copyUrl(url) {
-    const fallbackCopy = () => {
-        const textarea = document.createElement('textarea');
-        textarea.value = url;
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            document.execCommand('copy');
-            showCopySuccess();
-        } catch (err) {
-            showCopyError();
-        } finally {
-            document.body.removeChild(textarea);
-        }
-    };
-
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() => {
-            showCopySuccess();
-        }).catch(() => {
-            fallbackCopy();
-        });
-    } else {
-        fallbackCopy();
+  const fallbackCopy = () => {
+    const textarea = document.createElement("textarea");
+    textarea.value = url;
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand("copy");
+      showCopySuccess();
+    } catch (err) {
+      showCopyError();
+    } finally {
+      document.body.removeChild(textarea);
     }
+  };
+
+  if (navigator.clipboard) {
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        showCopySuccess();
+      })
+      .catch(() => {
+        fallbackCopy();
+      });
+  } else {
+    fallbackCopy();
+  }
 }
 
 // 独立提示函数
 function showCopySuccess() {
-    Swal.fire({
-        icon: 'success',
-        title: '复制成功',
-        text: '链接已存入剪贴板',
-        toast: true,
-        position: 'top',
-        showConfirmButton: false,
-        timer: 1500,
-        background: 'rgba(0,255,0,0.9)',
-        customClass: {
-            popup: 'animate__animated animate__fadeInDown'
-        }
-    });
+  Swal.fire({
+    icon: "success",
+    title: "复制成功",
+    text: "链接已存入剪贴板",
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 1500,
+    background: "rgba(0,255,0,0.9)",
+    customClass: {
+      popup: "animate__animated animate__fadeInDown",
+    },
+  });
 }
 
 function showCopyError() {
-    Swal.fire({
-        icon: 'error',
-        title: '复制失败',
-        html: '请手动选择链接后按<kbd>Ctrl+C</kbd>复制',
-        toast: true,
-        position: 'top',
-        showConfirmButton: false,
-        timer: 3000,
-        background: 'rgba(255,0,0,0.9)'
-    });
+  Swal.fire({
+    icon: "error",
+    title: "复制失败",
+    html: "请手动选择链接后按<kbd>Ctrl+C</kbd>复制",
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 3000,
+    background: "rgba(255,0,0,0.9)",
+  });
 }
-
-
 
 // 搜索函数
 function doSearch() {
-    const game = $('#gameInput').val().trim();
-    if (!game) return;
+  const game = $("#gameInput").val().trim();
+  if (!game) return;
 
-    // 清空结果
-    $('#platformNav').empty().addClass('d-none');
-    $('#results').html(`
+  // 清空结果
+  $("#platformNav").empty().addClass("d-none");
+  $("#results").html(`
     <div class="col-12 text-center text-white py-4">
       <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
       <div class="mt-2 progress-text">正在搜索中...</div>
     </div>
   `);
 
-    const formData = new FormData();
-    formData.append('game', game);
-    formData.append('magic', $('#magicCheck').prop('checked'));
-    formData.append('stream', $('#streamCheck').prop('checked')); // 新增流式模式参数
-    formData.append('zypassword', $('#zyPassword').val());
+  const formData = new FormData();
+  formData.append("game", game);
+  formData.append("magic", $("#magicCheck").prop("checked"));
+  formData.append("stream", $("#streamCheck").prop("checked")); // 新增流式模式参数
+  formData.append("zypassword", $("#zyPassword").val());
 
-    // 根据流式模式选择请求方式
-    if ($('#streamCheck').prop('checked')) {
-        streamSearch(formData);
-    } else {
-        classicSearch(formData);
-    }
+  // 根据流式模式选择请求方式
+  if ($("#streamCheck").prop("checked")) {
+    streamSearch(formData);
+  } else {
+    classicSearch(formData);
+  }
 }
 
 // 流式搜索模式
 function streamSearch(formData) {
-    fetch('/search', {
-        method: 'POST',
-        body: formData
-    }).then(response => {
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-        let totalPlatforms = 0;
+  fetch("/search", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let totalPlatforms = 0;
 
-        const processChunk = ({ done, value }) => {
-            if (done) {
-                // 完成时隐藏进度条
-                $('.progress-text').parent().hide();
-                return;
+      const processChunk = ({ done, value }) => {
+        if (done) {
+          // 完成时隐藏进度条
+          $(".progress-text").parent().hide();
+          return;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const parts = buffer.split("\n");
+        buffer = parts.pop();
+
+        parts.forEach((part) => {
+          if (!part.trim()) return;
+          try {
+            const data = JSON.parse(part);
+
+            if (data.total) {
+              totalPlatforms = data.total;
+              $(".progress-text").text(`正在搜索中... (0/${totalPlatforms})`);
+            } else if (data.progress) {
+              $(".progress-text").text(
+                `正在搜索中... (${data.progress.completed}/${data.progress.total})`
+              );
+              if (data.result) addResult(data.result);
+            } else if (data.done) {
+              $(".progress-text").parent().hide();
             }
-
-            buffer += decoder.decode(value, { stream: true });
-            const parts = buffer.split('\n');
-            buffer = parts.pop();
-
-            parts.forEach(part => {
-                if (!part.trim()) return;
-                try {
-                    const data = JSON.parse(part);
-
-                    if (data.total) {
-                        totalPlatforms = data.total;
-                        $('.progress-text').text(`正在搜索中... (0/${totalPlatforms})`);
-                    }
-                    else if (data.progress) {
-                        $('.progress-text').text(`正在搜索中... (${data.progress.completed}/${data.progress.total})`);
-                        if (data.result) addResult(data.result);
-                    }
-                    else if (data.done) {
-                        $('.progress-text').parent().hide();
-                    }
-                } catch (e) {
-                    console.error('解析错误:', e);
-                }
-            });
-
-            return reader.read().then(processChunk);
-        };
+          } catch (e) {
+            console.error("解析错误:", e);
+          }
+        });
 
         return reader.read().then(processChunk);
-    }).catch(error => {
-        Swal.fire('错误', '搜索失败，请稍后重试', 'error');
+      };
+
+      return reader.read().then(processChunk);
+    })
+    .catch((error) => {
+      Swal.fire("错误", "搜索失败，请稍后重试", "error");
     });
 }
 
 // 传统搜索模式
 function classicSearch(formData) {
-    fetch('/search-classic', {
-        method: 'POST',
-        body: formData
+  fetch("/search-classic", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      $("#results").empty();
+      if (data.error) {
+        Swal.fire("错误", data.error, "error");
+        return;
+      }
+      data.results.forEach((result) => addResult(result));
+      $(".progress-text").parent().hide();
     })
-        .then(response => response.json())
-        .then(data => {
-            $('#results').empty();
-            if (data.error) {
-                Swal.fire('错误', data.error, 'error');
-                return;
-            }
-            data.results.forEach(result => addResult(result));
-            $('.progress-text').parent().hide();
-        })
-        .catch(error => {
-            Swal.fire('错误', '搜索失败，请稍后重试', 'error');
-        });
+    .catch((error) => {
+      Swal.fire("错误", "搜索失败，请稍后重试", "error");
+    });
 }
 
 function addResult(result) {
-    const platformId = `platform-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const platformId = `platform-${Date.now()}-${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
 
-    // 构建平台卡片
-    const cardHtml = `
+  // 构建平台卡片
+  const cardHtml = `
     <div class="col-12">
-      <div id="${platformId}" class="platform-card" style="color: ${result.color};">
-        <div class="card-header border-bottom-0" style="color: ${result.color};">
+      <div id="${platformId}" class="platform-card" style="color: ${
+    result.color
+  };">
+        <div class="card-header border-bottom-0" style="color: ${
+          result.color
+        };">
           <i class="fa-solid fa-diamond me-2"></i>${result.name}
-          ${result.error ?
-            '<span class="badge bg-danger float-end">错误</span>' :
-            `<span class="badge bg-dark float-end">${result.items.length} 结果</span>`}
+          ${
+            result.error
+              ? '<span class="badge bg-danger float-end">错误</span>'
+              : `<span class="badge bg-dark float-end">${result.items.length} 结果</span>`
+          }
         </div>
         <div class="card-body py-2">
-          ${result.error ? `
+          ${
+            result.error
+              ? `
             <div class="result-item">
               <div class="d-flex justify-content-between align-items-center">
                 <div style="min-width: 0;">
@@ -246,7 +259,10 @@ function addResult(result) {
                 </div>
               </div>
             </div>
-          ` : result.items.map(item => `
+          `
+              : result.items
+                  .map(
+                    (item) => `
             <div class="result-item">
               <div class="d-flex justify-content-between align-items-center">
                 <div style="min-width: 0;">
@@ -265,64 +281,87 @@ function addResult(result) {
                 </button>
               </div>
             </div>
-          `).join('')}
+          `
+                  )
+                  .join("")
+          }
         </div>
       </div>
     </div>
   `;
 
-    // 插入结果
-    $('#results').append(cardHtml);
+  // 插入结果
+  $("#results").append(cardHtml);
 
-    // 更新导航栏
-    const navLink = `<a href="#${platformId}" style="border: 1px solid ${result.color} !important;">${result.name}</a>`;
-    $('#platformNav').append(navLink).removeClass('d-none');
+  // 更新导航栏
+  const navLink = `<a href="#${platformId}" style="border: 1px solid ${result.color} !important;">${result.name}</a>`;
+  $("#platformNav").append(navLink).removeClass("d-none");
 
-    // 调整布局
-    // adjustUrlBox();
+  // 调整布局
+  // adjustUrlBox();
 }
 // 监听输入框的回车键事件
-$('#gameInput').on('keypress', function (event) {
-    if (event.key === 'Enter') {  // 判断是否按下的是回车键
-        event.preventDefault();  // 防止回车键引发默认行为（如表单提交）
-        $('.search-btn').click();  // 模拟点击搜索按钮
-    }
+$("#gameInput").on("keypress", function (event) {
+  if (event.key === "Enter") {
+    // 判断是否按下的是回车键
+    event.preventDefault(); // 防止回车键引发默认行为（如表单提交）
+    $(".search-btn").click(); // 模拟点击搜索按钮
+  }
 });
 
 // Handle collapse icon toggling
-$('#configCollapse').on('show.bs.collapse', function () {
-    $(this).prev('.d-flex').find('i.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+$("#configCollapse").on("show.bs.collapse", function () {
+  $(this)
+    .prev(".d-flex")
+    .find("i.fa-chevron-down")
+    .removeClass("fa-chevron-down")
+    .addClass("fa-chevron-up");
 });
 
-$('#configCollapse').on('hide.bs.collapse', function () {
-    $(this).prev('.d-flex').find('i.fa-chevron-up').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+$("#configCollapse").on("hide.bs.collapse", function () {
+  $(this)
+    .prev(".d-flex")
+    .find("i.fa-chevron-up")
+    .removeClass("fa-chevron-up")
+    .addClass("fa-chevron-down");
 });
 
-$('#commentsCollapse').on('show.bs.collapse', function () {
-    $(this).prev('.d-flex').find('i.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+$("#commentsCollapse").on("show.bs.collapse", function () {
+  $(this)
+    .prev(".d-flex")
+    .find("i.fa-chevron-down")
+    .removeClass("fa-chevron-down")
+    .addClass("fa-chevron-up");
 });
 
-$('#commentsCollapse').on('hide.bs.collapse', function () {
-    $(this).prev('.d-flex').find('i.fa-chevron-up').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+$("#commentsCollapse").on("hide.bs.collapse", function () {
+  $(this)
+    .prev(".d-flex")
+    .find("i.fa-chevron-up")
+    .removeClass("fa-chevron-up")
+    .addClass("fa-chevron-down");
 });
 
 let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 if (isMobile) {
-    $('#gameInput').attr('autocomplete', 'off');
-    window.addEventListener('resize', function () {
-        if (document.activeElement.tagName === 'INPUT') {
-            window.scrollTo(0, 0);
-        }
-    });
+  $("#gameInput").attr("autocomplete", "off");
+  window.addEventListener("resize", function () {
+    if (document.activeElement.tagName === "INPUT") {
+      window.scrollTo(0, 0);
+    }
+  });
 }
 
 // 初始化评论区
-Artalk.init({
-    el: '#Comments',
-    pageKey: 'https://searchgal.homes',
-    server: 'https://artalk.saop.cc',
-    site: 'Galgame 聚合搜索',
-}, () => {
+Artalk.init(
+  {
+    el: "#Comments",
+    pageKey: "https://searchgal.homes",
+    server: "https://artalk.saop.cc",
+    site: "Galgame 聚合搜索",
+  },
+  () => {
     // Artalk 初始化完成后触发评论区折叠
-    $('#commentsCollapse').collapse('hide');
-})
+    $("#commentsCollapse").collapse("hide");
+  }
+);
