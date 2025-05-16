@@ -359,6 +359,7 @@ Artalk.init(
     pageKey: "https://searchgal.homes",
     server: "https://artalk.saop.cc",
     site: "Galgame 聚合搜索",
+    darkMode: true,
   },
   () => {
     // Artalk 初始化完成后触发评论区折叠
