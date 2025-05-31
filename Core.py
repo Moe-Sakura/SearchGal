@@ -8,6 +8,8 @@ from urllib3.exceptions import InsecureRequestWarning
 urllib3.disable_warnings(InsecureRequestWarning)
 import cloudscraper
 from concurrent.futures import ThreadPoolExecutor
+import urllib.parse
+import xml.etree.ElementTree as ET
 
 session = requests.Session()
 # 超时时间/秒
@@ -22,9 +24,10 @@ timeoutsec = 15
 
 headers = {
     "Connection": "close",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 (From Searchgal.homes)",
 }
 
+sp = cloudscraper.create_scraper()
 
 # 如果你想要修改正则 或者添加搜索平台 可以模仿该函数模板新建一个函数
 def PinTai_Name(game: str, mode=False) -> list:
@@ -360,38 +363,38 @@ def touch(game: str, mode=False) -> list:
             pass
         return [[], -1, yinqin, e]
 
-
-def sakustar(game: str, mode=False) -> list:
-    yinqin = "晴空咖啡馆"
-    color = "#1FD700"
-    if mode:
-        return yinqin
-    try:
-        searesp = session.get(
-            url="https://api.aozoracafe.com/api/home/list?page=1&pageSize=100&search="
-            + game,
-            headers=headers,
-            timeout=timeoutsec,
-        )
-        resjson = json.loads(searesp.text)
-        if resjson["success"] != True:
-            raise Exception(str(resjson))
-        count = 0
-        gamelst = []
-        mainurl = "https://aozoracafe.com/detail/"
-        for i in resjson["data"]["list"]:
-            gamelst.append(
-                {"name": i["title_cn"].strip(), "url": mainurl + str(i["id"])}
-            )
-            count += 1
-        searesp.close()
-        return [gamelst, count, yinqin]
-    except Exception as e:
-        try:
-            searesp.close()
-        except Exception:
-            pass
-        return [[], -1, yinqin, e]
+# cloudflare
+# def sakustar(game: str, mode=False) -> list:
+#     yinqin = "晴空咖啡馆"
+#     color = "#1FD700"
+#     if mode:
+#         return yinqin
+#     try:
+#         searesp = sp.get(
+#             url="https://api.aozoracafe.com/api/home/list?page=1&pageSize=100&search="
+#             + game,
+#             headers=headers,
+#             timeout=timeoutsec,
+#         )
+#         resjson = json.loads(searesp.text)
+#         if resjson["success"] != True:
+#             raise Exception(str(resjson))
+#         count = 0
+#         gamelst = []
+#         mainurl = "https://aozoracafe.com/detail/"
+#         for i in resjson["data"]["list"]:
+#             gamelst.append(
+#                 {"name": i["title_cn"].strip(), "url": mainurl + str(i["id"])}
+#             )
+#             count += 1
+#         searesp.close()
+#         return [gamelst, count, yinqin]
+#     except Exception as e:
+#         try:
+#             searesp.close()
+#         except Exception:
+#             pass
+#         return [[], -1, yinqin, e]
 
 
 def shinnku(game: str, mode=False) -> list:
@@ -401,7 +404,7 @@ def shinnku(game: str, mode=False) -> list:
         return yinqin
     try:
         searul = re.compile(
-            r'<div class="flex flex-col">\s*<p class="text-lg">(?P<NAME>.*?)</p>\s*</div>\s*</div>\s*<hr class="shrink-0 bg-divider border-none w-full h-divider" role="separator"/>\s*<div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased">\s*<p>路径：\s*<!-- -->\s*(?P<URL>.*?)</p>'
+            r'<div class="p-4">.+?<div class="p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex gap-3">.+?<span class="text-lg">(?P<NAME>.*?)</span>.+?<div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased">\s*<p>路径：\s*<!-- -->\s*(?P<URL>.*?)</p>'
         )
         searesp = session.get(
             url="https://www.shinnku.com/search?q=" + game,
@@ -412,10 +415,10 @@ def shinnku(game: str, mode=False) -> list:
             raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
         count = 0
         gamelst = []
-        mainurl = "https://dl.oo0o.ooo/file/shinnku/"
+        mainurl = "https://download.shinnku.com/file/shinnku/"
         for i in list(searul.finditer(searesp.text))[:20]:
             gamelst.append(
-                {"name": i.group("NAME").strip(), "url": mainurl + i.group("URL")}
+                {"name": i.group("NAME").strip(), "url": mainurl + urllib.parse.quote(i.group("URL"))}
             )
             count += 1
         searesp.close()
@@ -426,7 +429,114 @@ def shinnku(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-
+    
+def nekogal(game: str, mode=False) -> list:
+    yinqin = "NekoGal"
+    if mode:
+        return yinqin
+    try:
+        searul = re.compile(
+            r'<div class="item-thumbnail">\s*<a target="_blank" href="(?P<URL>.*?)">.+?" alt="(?P<NAME>.*?)" class="lazyload'
+        )
+        searesp = session.get(
+            url="https://www.nekogal.com/?type=post&s=" + game,
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        if searesp.status_code != 200:
+            raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
+        count = 0
+        gamelst = []
+        for i in list(searul.finditer(searesp.text)):
+            gamelst.append(
+                {"name": i.group("NAME").strip().strip("-NekoGAL - Galgame传递者"), "url": i.group("URL")}
+            )
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+    
+def miaoyuanlingyu(game: str, mode=False) -> list:
+    yinqin = "喵源领域"
+    if mode:
+        return yinqin
+    try:
+        searul = re.compile(
+            r'<div class="item-thumbnail">\s*<a target="_blank" href="(?P<URL>.*?)">.+?" alt="(?P<NAME>.*?)" class="lazyload'
+        )
+        searesp = session.get(
+            url="https://www.nyantaku.com/?type=post&s=" + game,
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        if searesp.status_code != 200:
+            raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
+        count = 0
+        gamelst = []
+        for i in list(searul.finditer(searesp.text)):
+            gamelst.append(
+                {"name": i.group("NAME").strip().strip("-喵源领域"), "url": i.group("URL")}
+            )
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+    
+def ziling(game: str, mode=False) -> list:
+    yinqin = "梓澪の妙妙屋"
+    color = "#1FD700"
+    if mode:
+        return yinqin
+    try:
+        data = {
+            "parent": "/",
+            "keywords": game,
+            "scope": 0,
+            "page": 1,
+            "per_page": 20,
+            "password": "",
+        }
+        searesp = session.post(
+            url=f"https://zi0.cc/api/fs/search",
+            json=data,
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        resjson = json.loads(searesp.text)
+        if resjson["message"] != "success":
+            raise Exception(str(resjson))
+        count = 0
+        gamelst = []
+        mainurl = "https://zi0.cc"
+        reslen = len(resjson["data"]["content"])
+        if (reslen != resjson["data"]["total"]) and (reslen != 20):
+            raise Exception("访问密码错误")
+        for i in resjson["data"]["content"]:
+            gamelst.append(
+                {
+                    "name": i["name"].strip(),
+                    "url": mainurl + i["parent"] + "/" + i["name"],
+                }
+            )
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
 
 def KunGal(game: str, mode=False) -> list:
     yinqin = "鲲Galgame"
@@ -645,7 +755,7 @@ def jimengacg(game: str, mode=False) -> list:
     try:
         # searul = re.compile(r'<div class="flex-1">\s*?<a href="(?P<URL>.*?)" class="text-lg xl:text-xl font-semibold line-2">(?P<NAME>.*?)</a>',re.S)
         searul = re.compile(
-            r'<div class="p-2 sm:p-3">.+?<a href="(?P<URL>.*?)" class="dark:hover:text-\[var\(--primary\)\] hover:text-\[var\(--primary\)\] duration-300 text-sm sm:text-base font-bold line-clamp-10">(?P<NAME>.*?)</a>',
+            r'<div class="p-2 sm:p-3">.+?<a href="(?P<URL>.*?)" class="dark:hover:text-\[var\(--primary\)\] hover:text-\[var\(--primary\)\] duration-300 text-sm sm:text-base font-bold line-clamp-9">(?P<NAME>.*?)</a>',
             re.S,
         )
         searesp = session.get(
@@ -675,7 +785,6 @@ def qingjiacg(game: str, mode=False) -> list:
     color = "#1FD700"
     if mode:
         return yinqin
-    sp = cloudscraper.create_scraper()
     try:
         searul = re.compile(
             r'" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h2>',
@@ -705,13 +814,43 @@ def qingjiacg(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+    
+def lstacg(game: str, mode=False) -> list:
+    yinqin = "莉斯坦ACG"
+    color = "#1FD700"
+    if mode:
+        return yinqin
+    try:
+        searesp = session.get(
+            url=f"https://www.limulu.moe/search.xml",
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        if searesp.status_code != 200:
+            raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
+        root = ET.fromstring(searesp.text)
+        count = 0
+        gamelst = []
+        main_URL = "https://www.limulu.moe"
+        for entry in root.findall('entry'):
+            if game not in entry.findtext("title"): continue
+            gamelst.append({"name": entry.findtext("title").strip(), "url": main_URL + entry.findtext("url")})
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
 
 
 # Cli命令行搜索平台
 search = [
     vika,
     touch,
-    sakustar,
+    # sakustar,
     tianyou,
     shinnku,
     KunGal,
@@ -723,6 +862,10 @@ search = [
     fufugal,
     jimengacg,
     qingjiacg,
+    nekogal,
+    miaoyuanlingyu,
+    ziling,
+    lstacg
 ]
 
 # GUI图形化搜索平台
@@ -731,7 +874,7 @@ searchGUI = [
     (vika, "#FFD700", True),
     (touch, "#1FD700", False),
     (zygal, "#FFFFFF", False),
-    (sakustar, "#1FD700", False),
+    # (sakustar, "#1FD700", False),
     (shinnku, "#1FD700", False),
     (KunGal, "#1FD700", False),
     (tianyou, "#FFFFFF", False),
@@ -743,6 +886,10 @@ searchGUI = [
     (fufugal, "#FFFFFF", False),
     (jimengacg, "#1FD700", False),
     (qingjiacg, "#1FD700", False),
+    (nekogal, "#FFFFFF", False),
+    (miaoyuanlingyu, "#FFFFFF", False),
+    (ziling, "#1FD700", False),
+    (lstacg, "#1FD700", False),
 ]
 tmp = None
 color_map = {"#FFD700": "gold", "#1FD700": "lime", "#FFFFFF": "white"}

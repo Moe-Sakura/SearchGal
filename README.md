@@ -30,14 +30,15 @@
 
 ## 🚀 已收录平台
 ### 🟢 免登录直链下载
-[![晴空咖啡馆](https://img.shields.io/badge/晴空咖啡馆-00C853)](https://aozoracafe.com/)
 [![真红小站](https://img.shields.io/badge/真红小站-00C853)](https://shinnku.com)
 [![TouchGal](https://img.shields.io/badge/TouchGal-00C853)](https://www.touchgal.io/)
 [![忧郁的loli](https://img.shields.io/badge/忧郁的loli-00C853)](https://www.ttloli.com/)
 [![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)
-[![绮梦ACG](https://img.shields.io/badge/绮梦ACG-00C853)](https://acgs.one/)
+[![绮梦ACG](https://img.shields.io/badge/绮梦ACG-00C853)](https://game.acgs.one/)
 [![青桔ACG](https://img.shields.io/badge/青桔ACG-00C853)](https://spare.qingju.org/)
 [![鲲Galgame](https://img.shields.io/badge/鲲Galgame-00C853)](https://www.kungal.com/zh-cn/)
+[![梓澪の妙妙屋](https://img.shields.io/badge/梓澪の妙妙屋-00C853)](https://zi0.cc/)
+[![莉斯坦ACG](https://img.shields.io/badge/莉斯坦ACG-00C853)](https://www.limulu.moe/)
 
 ### ⚪ 需登录/特殊条件
 [![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)
@@ -45,6 +46,8 @@
 [![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
 [![天游二次元](https://img.shields.io/badge/天游二次元-FFFFFF)](https://www.tiangal.com/)
 [![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
+[![NekoGal](https://img.shields.io/badge/NekoGal-FFFFFF)](https://www.nekogal.com/)
+[![喵源领域](https://img.shields.io/badge/喵源领域-FFFFFF)](https://www.nyantaku.com/)
 
 ### 🟡 需魔法访问
 [![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/)
@@ -75,7 +78,9 @@
 ✉️ **写给站长**<br>
 ▸ 本程序搜索结果仅提供各Gal平台的**游戏发布页** *（非下载链接）* , 用户点击后自行跳转各网站的**游戏发布页**<br>
 ▸ 本程序不会提供任何站点的解压码/访问码信息，需要用户自行在各站点寻找<br>
-▸ 本程序每次搜索需调用一次各平台的搜索API *(调用完毕立即关闭断开连接)*，如有任何异议或疑问请提出Issue与我联系
+▸ 本程序每次搜索需调用一次各平台的搜索API *(调用完毕立即关闭断开连接)*，如有任何异议或疑问请提出Issue与我联系<br>
+▸ 如果您的网站不想被 Searchgal.homes 搜索, 请过滤Header中包含`Searchgal`字符串的请求<br>
+> &nbsp;&nbsp;只能保证不被 Searchgal.homes 该网站搜索, 不排除其他人克隆项目修改 Header 特征后进行搜索, 如需彻底禁止请修改您网站的 Search API
 
 🔐 **安全声明**<br>
 ▸ 本工具仅提供搜索聚合服务，不托管任何资源<br>
@@ -84,6 +89,16 @@
 ---
 
 ## 📜 更新日志
+### V12 (2025/05/31)
+```
++ 新增 梓澪の妙妙屋
++ 新增 莉斯坦ACG
++ 新增 NekoGal
++ 新增 喵源领域
+* 真红小站 正则修正
+* 绮梦ACG 正则修正
+- 去除 清空咖啡馆 (CloudFlare验证)
+```
 ### V11 (2025/05/13)
 ```
 + 增加评论区功能（感谢 @Asuna）
