@@ -80,7 +80,7 @@
 ▸ 本程序不会提供任何站点的解压码/访问码信息，需要用户自行在各站点寻找<br>
 ▸ 本程序每次搜索需调用一次各平台的搜索API *(调用完毕立即关闭断开连接)*，如有任何异议或疑问请提出Issue与我联系<br>
 ▸ 如果您的网站不想被 Searchgal.homes 搜索, 请过滤Header中包含`Searchgal`字符串的请求<br>
-> &nbsp;&nbsp;只能保证不被 Searchgal.homes 该网站搜索, 不排除其他人克隆项目修改 Header 特征后进行搜索, 如需彻底禁止请修改您网站的 Search API
+> &nbsp;&nbsp;只能保证不被 Searchgal.homes 该网站搜索, 不排除其他人克隆项目修改 Header 特征后进行搜索, 如需彻底禁止请修改您网站的 Search API 或针对其加上诸如 cloudflare 的高防
 
 🔐 **安全声明**<br>
 ▸ 本工具仅提供搜索聚合服务，不托管任何资源<br>
