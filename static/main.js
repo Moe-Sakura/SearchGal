@@ -3,8 +3,8 @@ $(document).ready(function () {
   Swal.fire({
     title: "✨ 使用须知 ✨",
     html: `<div style="text-align: left; color: #eee;">
-        <center><p style='color:#1FD700'>感谢 <a href='https://saop.cc/'>@Asuna</a> 大佬的服务器支撑与技术支持</p></center>
-                  <p>1. 本程序仅供学习交流使用，请支持正版游戏</p>
+        <center><p style='color:#1FD700'>感谢 <a href='https://saop.cc/' target='_blank'>@Asuna</a> 大佬的服务器支撑与技术支持</p></center>
+        <p>1. 本程序仅供学习交流使用，请支持正版游戏</p>
         <p>2. 本程序只用于搜索互联网平台上的内容，搜索结果来自第三方平台，请自行判断内容安全性</p>
         <p>3. 访问海外站点需要启用魔法搜索功能，请在服务端设置魔法(访客无需关注)</p>
         <p>4. 如果搜索词过短，部分平台的结果可能搜索不全(截取第一页结果)，因此尽量精确游戏名搜索</p>
