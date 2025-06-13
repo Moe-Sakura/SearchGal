@@ -3,6 +3,7 @@ $(document).ready(function () {
   Swal.fire({
     title: "✨ 使用须知 ✨",
     html: `<div style="text-align: left; color: #eee;">
+        <center><p style='color:#1FD700'>感谢 <a href='https://saop.cc/'>@Asuna</a> 大佬的服务器支撑与技术支持</p></center>
                   <p>1. 本程序仅供学习交流使用，请支持正版游戏</p>
         <p>2. 本程序只用于搜索互联网平台上的内容，搜索结果来自第三方平台，请自行判断内容安全性</p>
         <p>3. 访问海外站点需要启用魔法搜索功能，请在服务端设置魔法(访客无需关注)</p>
@@ -158,7 +159,27 @@ function streamSearch(formData) {
     method: "POST",
     body: formData,
   })
-    .then((response) => {
+    .then(async (response) => {
+      if (response.status === 429) {
+        const data = await response.json();
+        Swal.fire({
+          icon: "error",
+          title: "请求过于频繁",
+          text: data.error,
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          background: "rgba(255,0,0,0.9)",
+          customClass: {
+            popup: "animate__animated animate__fadeInDown",
+          },
+        });
+        // 清理加载状态
+        $("#results").empty();
+        $(".progress-text").parent().hide();
+        return;
+      }
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
@@ -212,10 +233,34 @@ function classicSearch(formData) {
     method: "POST",
     body: formData,
   })
-    .then((response) => response.json())
+    .then(async (response) => {
+      if (response.status === 429) {
+        const data = await response.json();
+        Swal.fire({
+          icon: "error",
+          title: "请求过于频繁",
+          text: data.error,
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          background: "rgba(255,0,0,0.9)",
+          customClass: {
+            popup: "animate__animated animate__fadeInDown",
+          },
+        });
+        // 清理加载状态
+        $("#results").empty();
+        $(".progress-text").parent().hide();
+        return;
+      }
+      return response.json();
+    })
     .then((data) => {
+      if (!data) return; // 如果因为429错误提前返回，则data为undefined
       $("#results").empty();
       if (data.error) {
+        // 这里的error是针对搜索内容本身的错误，例如游戏名为空
         Swal.fire("错误", data.error, "error");
         return;
       }

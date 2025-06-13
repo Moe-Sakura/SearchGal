@@ -18,11 +18,42 @@ from Core import *
 from datetime import datetime
 import gc
 import threading
+import time
 
 lock = threading.Lock()
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
 executor = ThreadPoolExecutor(max_workers=20)
+
+# 用于存储IP和最后访问时间
+ip_last_search_time = {}
+ip_limit_lock = threading.Lock()
+SEARCH_INTERVAL_SECONDS = 15 # 搜索等待时间
+IP_CACHE_MAX_SIZE = 100000  # 缓存中IP的最大数量
+IP_CACHE_ENTRY_TTL = 15  # IP条目在缓存中的存活时间 (15秒)
+IP_CACHE_CLEANUP_INTERVAL = 3600 # 清理IP缓存的周期 (1小时)
+last_cleanup_execution_time = 0.0 # 上次清理执行时间
+
+def cleanup_ip_cache():
+    global last_cleanup_execution_time
+    current_time = time.time()
+    
+    # 检查是否需要执行清理（达到清理周期 或 缓存大小超出限制）
+    if (current_time - last_cleanup_execution_time > IP_CACHE_CLEANUP_INTERVAL) or \
+       (len(ip_last_search_time) > IP_CACHE_MAX_SIZE):
+        
+        # 筛选出需要移除的条目（存活时间超过TTL的）
+        # 使用 list(ip_last_search_time.items()) 来获取当前条目的快照进行迭代
+        keys_to_remove = [
+            key for key, last_access_time in list(ip_last_search_time.items())
+            if (current_time - last_access_time) > IP_CACHE_ENTRY_TTL
+        ]
+        
+        # 由于此函数在 ip_limit_lock 锁的保护下调用
+        for key_to_remove in keys_to_remove:
+            ip_last_search_time.pop(key_to_remove, None)
+            
+        last_cleanup_execution_time = current_time # 更新最后清理时间
 
 import logging
 
@@ -69,6 +100,7 @@ def serve_style():
 
 @app.route("/")
 def index():
+    print(ip_last_search_time, last_cleanup_execution_time)
     rip = request.headers.get("X-Real-Ip", request.remote_addr)
     ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
     if rip != "127.0.0.1":
@@ -118,8 +150,17 @@ def search():
     if not game:
         return jsonify({"error": "游戏名称不能为空"}), 400
 
-    # 日志记录
     ip_address = request.headers.get("X-Real-Ip", request.remote_addr)
+    current_time = time.time()
+
+    with ip_limit_lock:
+        last_search_time = ip_last_search_time.get(ip_address)
+        if last_search_time and (current_time - last_search_time) < SEARCH_INTERVAL_SECONDS:
+            return jsonify({"error": f"请 {SEARCH_INTERVAL_SECONDS - int(current_time - last_search_time)} 秒后再试"}), 429
+        ip_last_search_time[ip_address] = current_time
+        cleanup_ip_cache()
+
+    # 日志记录
     ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
     search_log(ip_address, game, ua)
 
@@ -179,8 +220,17 @@ def search_classic():
     if not game:
         return jsonify({"error": "游戏名称不能为空"}), 400
 
-    # 日志记录
     ip_address = request.headers.get("X-Real-Ip", request.remote_addr)
+    current_time = time.time()
+
+    with ip_limit_lock:
+        last_search_time = ip_last_search_time.get(ip_address)
+        if last_search_time and (current_time - last_search_time) < SEARCH_INTERVAL_SECONDS:
+            return jsonify({"error": f"请 {SEARCH_INTERVAL_SECONDS - int(current_time - last_search_time)} 秒后再试"}), 429
+        ip_last_search_time[ip_address] = current_time
+        cleanup_ip_cache()
+    
+    # 日志记录
     ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
     search_log(ip_address, game, ua)
 
