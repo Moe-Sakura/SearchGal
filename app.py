@@ -100,7 +100,6 @@ def serve_style():
 
 @app.route("/")
 def index():
-    print(ip_last_search_time, last_cleanup_execution_time)
     rip = request.headers.get("X-Real-Ip", request.remote_addr)
     ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
     if rip != "127.0.0.1":
