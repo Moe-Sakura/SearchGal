@@ -935,7 +935,7 @@ def GGS(game: str, mode=False) -> list:
         resjson = [ i for i in json.loads(searesp.text) if game in i['title'] ]
         count = 0
         gamelst = []
-        mainurl = "hhttps://gal.saop.cc"
+        mainurl = "https://gal.saop.cc"
         for i in resjson[:20]:
             gamelst.append(
                 {"name": i['title'], "url": mainurl + i['url']}
