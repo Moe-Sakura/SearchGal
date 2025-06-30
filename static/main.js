@@ -398,10 +398,16 @@ if (isMobile) {
 }
 
 // 初始化评论区
-Artalk.init({
-  el: "#Comments",
-  pageKey: "https://searchgal.homes",
-  server: "https://artalk.saop.cc",
-  site: "Galgame 聚合搜索",
-  darkMode: true,
+let artalkInitialized = false;
+$("#commentsCollapse").on("shown.bs.collapse", function () {
+  if (!artalkInitialized) {
+    Artalk.init({
+      el: "#Comments",
+      pageKey: "https://searchgal.homes",
+      server: "https://artalk.saop.cc",
+      site: "Galgame 聚合搜索",
+      darkMode: true,
+    });
+    artalkInitialized = true;
+  }
 });

@@ -11,16 +11,20 @@ from concurrent.futures import ThreadPoolExecutor
 import urllib.parse
 import xml.etree.ElementTree as ET
 
-session = requests.Session()
 # 超时时间/秒
 timeoutsec = 15
 
-# 如果需要设置代理请取消注释
+# 如果需要设置代理请取消下列注释, 并修改代理端口
+# session = requests.Session()
 # proxy = "http://127.0.0.1:10809"
 # session.proxies = {
 #      "http": proxy,
 #      "https": proxy,
 # }
+
+# 如果需要代理请注释下面一行代码
+session = requests
+
 
 headers = {
     "Connection": "close",
@@ -455,7 +459,7 @@ def shinnku(game: str, mode=False) -> list:
         return yinqin
     try:
         searul = re.compile(
-            r'<div class="p-4">.+?<div class="p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex gap-3">.+?<span class="text-lg">(?P<NAME>.*?)</span>.+?<div class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased">\s*<p>路径：\s*<!-- -->\s*(?P<URL>.*?)</p>'
+            r'<div class="flex flex-col space-y-1.5 p-6 pb-0"><a class="text-lg text-blue-600 hover:underline" href="(?P<URL>.*?)">(?P<NAME>.*?)</a><p class="break-all text-sm text-muted-foreground">'
         )
         searesp = session.get(
             url="https://www.shinnku.com/search?q=" + game,
@@ -466,7 +470,7 @@ def shinnku(game: str, mode=False) -> list:
             raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
         count = 0
         gamelst = []
-        mainurl = "https://download.shinnku.com/file/shinnku/"
+        mainurl = "https://www.shinnku.com"
         for i in list(searul.finditer(searesp.text))[:20]:
             gamelst.append(
                 {
@@ -677,11 +681,11 @@ def shenshi(game: str, mode=False) -> list:
         return yinqin
     try:
         searul = re.compile(
-            r'-->\s*<h2 class="post-list-title">\s*<a  href="(?P<URL>.*?)">(?P<NAME>.*?)</a>\s*</h2>\s*<span class="category-meta">',
+            r'<h2 class="post-list-title">\s*<a href="(?P<URL>.*?)" title=".+?" class="text-reset">(?P<NAME>.*?)</a>\s*</h2>\s*<span class="category-meta">',
             re.S,
         )
         searesp = session.get(
-            url="https://www.gogalgame.com/",
+            url="https://www.chgal.com/",
             params={"s": game},
             verify=False,
             headers=headers,
@@ -917,6 +921,36 @@ def lstacg(game: str, mode=False) -> list:
         return [[], -1, yinqin, e]
 
 
+def GGS(game: str, mode=False) -> list:
+    yinqin = "GGS"
+    color = "#FFD700"
+    if mode:
+        return yinqin
+    try:
+        searesp = session.get(
+            url=f"https://gal.saop.cc/search.json",
+            headers=headers,
+            timeout=timeoutsec
+        )
+        resjson = [ i for i in json.loads(searesp.text) if game in i['title'] ]
+        count = 0
+        gamelst = []
+        mainurl = "hhttps://gal.saop.cc"
+        for i in resjson[:20]:
+            gamelst.append(
+                {"name": i['title'], "url": mainurl + i['url']}
+            )
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+
+
 # Cli命令行搜索平台
 search = [
     vika,
@@ -938,6 +972,7 @@ search = [
     miaoyuanlingyu,
     ziling,
     lstacg,
+    GGS,
 ]
 
 # GUI图形化搜索平台
@@ -963,6 +998,7 @@ searchGUI = [
     (miaoyuanlingyu, "#FFFFFF", False),
     (ziling, "#1FD700", False),
     (lstacg, "#1FD700", False),
+    (GGS, "#1FD700", False),
 ]
 tmp = None
 color_map = {"#FFD700": "gold", "#1FD700": "lime", "#FFFFFF": "white"}

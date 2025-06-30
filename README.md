@@ -30,6 +30,7 @@
 
 ## 🚀 已收录平台
 ### 🟢 免登录直链下载
+[![GGS](https://img.shields.io/badge/GGS-00C853)](https://gal.saop.cc/)
 [![真红小站](https://img.shields.io/badge/真红小站-00C853)](https://shinnku.com)
 [![TouchGal](https://img.shields.io/badge/TouchGal-00C853)](https://www.touchgal.us/)
 [![Galgamex](https://img.shields.io/badge/Galgamex-00C853)](https://www.galgamex.net/)
@@ -90,6 +91,15 @@
 ---
 
 ## 📜 更新日志
+### V13 (2025/07/01)
+```
++ 新增 Galgamex
++ 新增 GGS
+* 真红小站 正则修正
+* 绅仕天堂 正则修正
+* TouchGal 域名修正
+* 前端评论区优化
+```
 ### V12 (2025/05/31)
 ```
 + 新增 梓澪の妙妙屋
