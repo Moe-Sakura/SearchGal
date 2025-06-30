@@ -604,6 +604,53 @@ def ziling(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+    
+    
+def weizhialist(game: str, mode=False) -> list:
+    yinqin = "未知云盘"
+    color = "#1FD700"
+    if mode:
+        return yinqin
+    try:
+        data = {
+            "parent": "/",
+            "keywords": game,
+            "scope": 0,
+            "page": 1,
+            "per_page": 20,
+            "password": "",
+        }
+        searesp = session.post(
+            url=f"https://www.nullcloud.top/api/fs/search",
+            json=data,
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        resjson = json.loads(searesp.text)
+        if resjson["message"] != "success":
+            raise Exception(str(resjson))
+        count = 0
+        gamelst = []
+        mainurl = "https://www.nullcloud.top"
+        reslen = len(resjson["data"]["content"])
+        if (reslen != resjson["data"]["total"]) and (reslen != 20):
+            raise Exception("访问密码错误")
+        for i in resjson["data"]["content"]:
+            gamelst.append(
+                {
+                    "name": i["name"].strip(),
+                    "url": mainurl + i["parent"] + "/" + i["name"],
+                }
+            )
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
 
 
 def KunGal(game: str, mode=False) -> list:
@@ -960,6 +1007,7 @@ search = [
     tianyou,
     shinnku,
     KunGal,
+    weizhialist,
     shenshi,
     acgyyg,
     loli,
@@ -985,6 +1033,7 @@ searchGUI = [
     # (sakustar, "#1FD700", False),
     (shinnku, "#1FD700", False),
     (KunGal, "#1FD700", False),
+    (weizhialist, "#1FD700", False),
     (tianyou, "#FFFFFF", False),
     (shenshi, "#FFD700", True),
     (acgyyg, "#FFFFFF", False),
