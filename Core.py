@@ -29,6 +29,7 @@ headers = {
 
 sp = cloudscraper.create_scraper()
 
+
 # 如果你想要修改正则 或者添加搜索平台 可以模仿该函数模板新建一个函数
 def PinTai_Name(game: str, mode=False) -> list:
     # 设置平台的名字
@@ -322,9 +323,9 @@ def touch(game: str, mode=False) -> list:
         return yinqin
     try:
         # searul = re.compile(r'.jpg" alt="(?P<NAME>.*?)" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">',re.S)
-        # searesp = session.get(url='https://www.touchgal.com/', params={'s':game,'type':'post'}, headers=headers)
+        # searesp = session.get(url='https://www.touchgal.us/', params={'s':game,'type':'post'}, headers=headers)
         searesp = session.post(
-            url="https://www.touchgal.io/api/search",
+            url="https://www.touchgal.us/api/search",
             headers=headers,
             json={
                 "queryString": '[{"type":"keyword","name":"' + game + '"}]',
@@ -350,7 +351,7 @@ def touch(game: str, mode=False) -> list:
         resjson = json.loads(searesp.text)
         count = 0
         gamelst = []
-        mainurl = "https://www.touchgal.io/"
+        mainurl = "https://www.touchgal.us/"
         for i in resjson["galgames"]:
             gamelst.append({"name": i["name"].strip(), "url": mainurl + i["uniqueId"]})
             count += 1
@@ -362,6 +363,56 @@ def touch(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
+
+def galx(game: str, mode=False) -> list:
+    yinqin = "Galgamex"
+    color = "#1FD700"
+    if mode:
+        return yinqin
+    try:
+        # searul = re.compile(r'.jpg" alt="(?P<NAME>.*?)" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">',re.S)
+        # searesp = session.get(url='https://www.galgamex.net/', params={'s':game,'type':'post'}, headers=headers)
+        searesp = session.post(
+            url="https://www.galgamex.net/api/search",
+            headers=headers,
+            json={
+                "queryString": '[{"type":"keyword","name":"' + game + '"}]',
+                "limit": 20,
+                "searchOption": {
+                    "searchInIntroduction": False,
+                    "searchInAlias": True,
+                    "searchInTag": False,
+                },
+                "page": 1,
+                "selectedType": "all",
+                "selectedLanguage": "all",
+                "selectedPlatform": "all",
+                "sortField": "resource_update_time",
+                "sortOrder": "desc",
+                "selectedYears": ["all"],
+                "selectedMonths": ["all"],
+            },
+            timeout=timeoutsec,
+        )
+        if searesp.status_code != 200:
+            raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
+        resjson = json.loads(searesp.text)
+        count = 0
+        gamelst = []
+        mainurl = "https://www.galgamex.net/"
+        for i in resjson["galgames"]:
+            gamelst.append({"name": i["name"].strip(), "url": mainurl + i["uniqueId"]})
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+
 
 # cloudflare
 # def sakustar(game: str, mode=False) -> list:
@@ -418,7 +469,10 @@ def shinnku(game: str, mode=False) -> list:
         mainurl = "https://download.shinnku.com/file/shinnku/"
         for i in list(searul.finditer(searesp.text))[:20]:
             gamelst.append(
-                {"name": i.group("NAME").strip(), "url": mainurl + urllib.parse.quote(i.group("URL"))}
+                {
+                    "name": i.group("NAME").strip(),
+                    "url": mainurl + urllib.parse.quote(i.group("URL")),
+                }
             )
             count += 1
         searesp.close()
@@ -429,7 +483,8 @@ def shinnku(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
+
+
 def nekogal(game: str, mode=False) -> list:
     yinqin = "NekoGal"
     if mode:
@@ -449,7 +504,10 @@ def nekogal(game: str, mode=False) -> list:
         gamelst = []
         for i in list(searul.finditer(searesp.text)):
             gamelst.append(
-                {"name": i.group("NAME").strip().strip("-NekoGAL - Galgame传递者"), "url": i.group("URL")}
+                {
+                    "name": i.group("NAME").strip().strip("-NekoGAL - Galgame传递者"),
+                    "url": i.group("URL"),
+                }
             )
             count += 1
         searesp.close()
@@ -460,7 +518,8 @@ def nekogal(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
+
+
 def miaoyuanlingyu(game: str, mode=False) -> list:
     yinqin = "喵源领域"
     if mode:
@@ -480,7 +539,10 @@ def miaoyuanlingyu(game: str, mode=False) -> list:
         gamelst = []
         for i in list(searul.finditer(searesp.text)):
             gamelst.append(
-                {"name": i.group("NAME").strip().strip("-喵源领域"), "url": i.group("URL")}
+                {
+                    "name": i.group("NAME").strip().strip("-喵源领域"),
+                    "url": i.group("URL"),
+                }
             )
             count += 1
         searesp.close()
@@ -491,7 +553,8 @@ def miaoyuanlingyu(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
+
+
 def ziling(game: str, mode=False) -> list:
     yinqin = "梓澪の妙妙屋"
     color = "#1FD700"
@@ -537,6 +600,7 @@ def ziling(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 def KunGal(game: str, mode=False) -> list:
     yinqin = "鲲Galgame"
@@ -814,7 +878,8 @@ def qingjiacg(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
+
+
 def lstacg(game: str, mode=False) -> list:
     yinqin = "莉斯坦ACG"
     color = "#1FD700"
@@ -832,9 +897,15 @@ def lstacg(game: str, mode=False) -> list:
         count = 0
         gamelst = []
         main_URL = "https://www.limulu.moe"
-        for entry in root.findall('entry'):
-            if game not in entry.findtext("title"): continue
-            gamelst.append({"name": entry.findtext("title").strip(), "url": main_URL + entry.findtext("url")})
+        for entry in root.findall("entry"):
+            if game not in entry.findtext("title"):
+                continue
+            gamelst.append(
+                {
+                    "name": entry.findtext("title").strip(),
+                    "url": main_URL + entry.findtext("url"),
+                }
+            )
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]
@@ -850,6 +921,7 @@ def lstacg(game: str, mode=False) -> list:
 search = [
     vika,
     touch,
+    galx,
     # sakustar,
     tianyou,
     shinnku,
@@ -865,7 +937,7 @@ search = [
     nekogal,
     miaoyuanlingyu,
     ziling,
-    lstacg
+    lstacg,
 ]
 
 # GUI图形化搜索平台
@@ -873,6 +945,7 @@ search = [
 searchGUI = [
     (vika, "#FFD700", True),
     (touch, "#1FD700", False),
+    (galx, "#1FD700", False),
     (zygal, "#FFFFFF", False),
     # (sakustar, "#1FD700", False),
     (shinnku, "#1FD700", False),

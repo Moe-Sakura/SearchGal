@@ -14,7 +14,7 @@ $(document).ready(function () {
         <p style='color:#FFD700'>收录的大多是提供PC平台资源的网站，大部分平台都提供Onedrive或直链，两种方式比国内网盘下载速度更快</p>
         <p style='color:#FF6969'>请关闭浏览器的广告拦截插件, 或将各gal网站添加到白名单, 各网站建站不易, 这是对这些网站最基本支持</p>
         <center><p style='color:#FF6969'>有能力者请支持Galgame正版！</p></center>
-        <center><small>觉得好用请前往<a href="https://github.com/Jurangren/SearchGal" target="_blank">Github项目</a>点一个免费的Star支持一下, 秋梨膏~!</small></center>
+        <center><small>觉得好用请前往 <a href="https://github.com/Jurangren/SearchGal" target="_blank">Github</a> 给项目点个免费的 Star 支持一下, 秋梨膏~!</small></center>
                </div>`,
     icon: "info",
     confirmButtonText: "我已了解并认同上述观点",
@@ -398,16 +398,10 @@ if (isMobile) {
 }
 
 // 初始化评论区
-Artalk.init(
-  {
-    el: "#Comments",
-    pageKey: "https://searchgal.homes",
-    server: "https://artalk.saop.cc",
-    site: "Galgame 聚合搜索",
-    darkMode: true,
-  },
-  () => {
-    // Artalk 初始化完成后触发评论区折叠
-    $("#commentsCollapse").collapse("hide");
-  }
-);
+Artalk.init({
+  el: "#Comments",
+  pageKey: "https://searchgal.homes",
+  server: "https://artalk.saop.cc",
+  site: "Galgame 聚合搜索",
+  darkMode: true,
+});
