@@ -6,4 +6,5 @@ cloudscraper
 rich
 PyQt5
 flask
+flask_cors
 gunicorn
