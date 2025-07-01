@@ -15,7 +15,7 @@
 ▸ WEB移动端完美适配，随时随地畅快搜索
 
 💡 **核心功能**<br>
-▸ 实时聚合 **21+** 主流Gal资源平台<br>
+▸ 实时聚合 **24+** 主流Gal资源平台<br>
 ▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件<br>
 ▸ 多线程加速搜索，快速响应
 
@@ -54,6 +54,8 @@ gunicorn --bind 0.0.0.0:8898 app:app
 [![未知云盘](https://img.shields.io/badge/未知云盘-00C853)](https://www.nullcloud.top/)
 [![梓澪の妙妙屋](https://img.shields.io/badge/梓澪の妙妙屋-00C853)](https://zi0.cc/)
 [![莉斯坦ACG](https://img.shields.io/badge/莉斯坦ACG-00C853)](https://www.limulu.moe/)
+[![猫猫网盘](https://img.shields.io/badge/猫猫网盘-00C853)](https://sakiko.de/)
+[![彼岸星露](https://img.shields.io/badge/彼岸星露-00C853)](https://seve.yugal.cc/)
 
 ### ⚪ 需登录/特殊条件
 [![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)
@@ -63,6 +65,7 @@ gunicorn --bind 0.0.0.0:8898 app:app
 [![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
 [![NekoGal](https://img.shields.io/badge/NekoGal-FFFFFF)](https://www.nekogal.com/)
 [![喵源领域](https://img.shields.io/badge/喵源领域-FFFFFF)](https://www.nyantaku.com/)
+[![Hikarinagi](https://img.shields.io/badge/Hikarinagi-FFFFFF)](https://www.hikarinagi.net/)
 
 ### 🟡 需魔法访问
 [![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/)
@@ -106,14 +109,12 @@ gunicorn --bind 0.0.0.0:8898 app:app
 ## 📜 更新日志
 ### V13 (2025/07/01)
 ```
-+ 新增 未知云盘 (导览网站: 喵源领域)
-+ 新增 Galgamex
-+ 新增 GGS
-* 真红小站 正则修正
-* 绅仕天堂 正则修正
-* TouchGal 域名修正
++ 新增「未知云盘」「Galgamex」「GGS」「彼岸星露」「猫猫网盘」「Hikarinagi」
+* 「真红小站」「绅仕天堂」 正则修正
+* 「TouchGal」 域名修正
 * 前端评论区优化
 * 并发搜索优化
+* 新增搜索接口API文档
 ```
 ### V12 (2025/05/31)
 ```
