@@ -11,7 +11,6 @@ from flask import (
     Response,
     stream_with_context,
 )
-from flask_cors import CORS
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import traceback
 import tracemalloc
@@ -25,7 +24,6 @@ lock = threading.Lock()
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
 executor = ThreadPoolExecutor(max_workers=20)
-CORS(app)
 
 # 用于存储IP和最后访问时间
 ip_last_search_time = {}
