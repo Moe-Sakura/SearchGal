@@ -28,6 +28,39 @@
 
 ---
 
+## 如何运行
+
+### Linux
+
+```sh
+apt install python
+pip install -r requirements.txt
+gunicorn --bind 0.0.0.0:8898 app:app
+
+```
+
+建议使用 [Nginx](https://nginx.org/) 反代 `8898` 端口
+
+### macOS
+
+```sh
+brew install python
+pip install -r requirements.txt
+python app.py
+
+```
+
+### Windows
+
+```sh
+winget install python
+pip install -r requirements.txt
+python app.py
+
+```
+
+---
+
 ## 🚀 已收录平台
 ### 🟢 免登录直链下载
 [![GGS](https://img.shields.io/badge/GGS-00C853)](https://gal.saop.cc/)
