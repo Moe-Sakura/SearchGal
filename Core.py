@@ -604,8 +604,8 @@ def ziling(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
-    
+
+
 def weizhialist(game: str, mode=False) -> list:
     yinqin = "未知云盘"
     color = "#1FD700"
@@ -975,18 +975,14 @@ def GGS(game: str, mode=False) -> list:
         return yinqin
     try:
         searesp = session.get(
-            url=f"https://gal.saop.cc/search.json",
-            headers=headers,
-            timeout=timeoutsec
+            url=f"https://gal.saop.cc/search.json", headers=headers, timeout=timeoutsec
         )
-        resjson = [ i for i in json.loads(searesp.text) if game in i['title'] ]
+        resjson = [i for i in json.loads(searesp.text) if game in i["title"]]
         count = 0
         gamelst = []
         mainurl = "https://gal.saop.cc"
         for i in resjson[:20]:
-            gamelst.append(
-                {"name": i['title'], "url": mainurl + i['url']}
-            )
+            gamelst.append({"name": i["title"], "url": mainurl + i["url"]})
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]

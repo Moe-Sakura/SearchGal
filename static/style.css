@@ -4,8 +4,7 @@
 }
 
 body {
-  background: url("https://api.suyanw.cn/api/comic/api.php") no-repeat center
-    fixed;
+  background: url("https://api.suyanw.cn/api/comic/api.php") no-repeat center fixed;
   background-size: cover;
   min-height: 100vh;
   display: flex;
@@ -108,11 +107,9 @@ body {
 }
 
 .result-item {
-  background: linear-gradient(
-    45deg,
-    rgba(50, 50, 50, 0.8),
-    rgba(60, 60, 60, 0.8)
-  );
+  background: linear-gradient(45deg,
+      rgba(50, 50, 50, 0.8),
+      rgba(60, 60, 60, 0.8));
   border-radius: 8px;
   margin: 0.5rem 0;
   padding: 1rem;
@@ -269,6 +266,7 @@ kbd {
 }
 
 @media (max-width: 768px) {
+
   /* 主容器宽度优化 */
   .main-wrapper {
     width: 95%;
@@ -340,6 +338,7 @@ kbd {
 
 /* 横向尺寸优化 */
 @media (max-width: 480px) {
+
   /* 超小屏幕优化 */
   .main-wrapper {
     width: 98%;
@@ -398,7 +397,7 @@ kbd {
 }
 
 /* 开关组间距调整 */
-.input-group-text + .input-group-text {
+.input-group-text+.input-group-text {
   margin-left: 8px;
 }
 
