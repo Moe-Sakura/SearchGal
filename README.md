@@ -21,19 +21,9 @@
 
 ---
 
-## 📸 界面预览
-|          桌面端GUI          |          WEB端PC           |              WEB端移动              |
-| :-------------------------: | :------------------------: | :---------------------------------: |
-| ![GUI演示](./shot-GUI.avif) | ![WEB-PC](./shot-WEB.avif) | ![WEB-Phone](./shot-WEB-Phone.avif) |
-
----
-
 ## 如何运行
 
-### Linux
-
 ```sh
-apt install python
 pip install -r requirements.txt
 gunicorn --bind 0.0.0.0:8898 app:app
 
@@ -41,23 +31,12 @@ gunicorn --bind 0.0.0.0:8898 app:app
 
 建议使用 [Nginx](https://nginx.org/) 反代 `8898` 端口
 
-### macOS
+---
 
-```sh
-brew install python
-pip install -r requirements.txt
-python app.py
-
-```
-
-### Windows
-
-```sh
-winget install python
-pip install -r requirements.txt
-python app.py
-
-```
+## 📸 界面预览
+|          桌面端GUI          |          WEB端PC           |              WEB端移动              |
+| :-------------------------: | :------------------------: | :---------------------------------: |
+| ![GUI演示](./shot-GUI.avif) | ![WEB-PC](./shot-WEB.avif) | ![WEB-Phone](./shot-WEB-Phone.avif) |
 
 ---
 
