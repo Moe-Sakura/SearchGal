@@ -72,7 +72,6 @@ def PinTai_Name(game: str, mode=False) -> list:
 
 def loli(game: str, mode=False) -> list:
     yinqin = "忧郁的loli"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -107,7 +106,6 @@ def loli(game: str, mode=False) -> list:
 
 def vika(game: str, mode=False) -> list:
     yinqin = "VikaACG"
-    color = "#FFD700"
     if mode:
         return yinqin
     try:
@@ -190,7 +188,6 @@ def vika(game: str, mode=False) -> list:
 
 def tianyou(game: str, mode=False) -> list:
     yinqin = "天游二次元"
-    color = "#FFD700"
     if mode:
         return yinqin
     try:
@@ -322,7 +319,6 @@ def zygal(game: str, mode=False, zypassword="") -> list:
 # zg
 def touch(game: str, mode=False) -> list:
     yinqin = "TouchGal"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -371,7 +367,6 @@ def touch(game: str, mode=False) -> list:
 
 def galx(game: str, mode=False) -> list:
     yinqin = "Galgamex"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -421,7 +416,6 @@ def galx(game: str, mode=False) -> list:
 # cloudflare
 # def sakustar(game: str, mode=False) -> list:
 #     yinqin = "晴空咖啡馆"
-#     color = "#1FD700"
 #     if mode:
 #         return yinqin
 #     try:
@@ -454,7 +448,6 @@ def galx(game: str, mode=False) -> list:
 
 def shinnku(game: str, mode=False) -> list:
     yinqin = "真红小站"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -561,7 +554,6 @@ def miaoyuanlingyu(game: str, mode=False) -> list:
 
 def ziling(game: str, mode=False) -> list:
     yinqin = "梓澪の妙妙屋"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -608,7 +600,6 @@ def ziling(game: str, mode=False) -> list:
     
 def weizhialist(game: str, mode=False) -> list:
     yinqin = "未知云盘"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -655,7 +646,6 @@ def weizhialist(game: str, mode=False) -> list:
 
 def KunGal(game: str, mode=False) -> list:
     yinqin = "鲲Galgame"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -688,7 +678,6 @@ def KunGal(game: str, mode=False) -> list:
 
 def gallibrary(game: str, mode=False) -> list:
     yinqin = "GAL图书馆"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -864,7 +853,6 @@ def fufugal(game: str, mode=False) -> list:
 
 def jimengacg(game: str, mode=False) -> list:
     yinqin = "绮梦ACG"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -897,7 +885,6 @@ def jimengacg(game: str, mode=False) -> list:
 
 def qingjiacg(game: str, mode=False) -> list:
     yinqin = "青桔ACG"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -933,7 +920,6 @@ def qingjiacg(game: str, mode=False) -> list:
 
 def lstacg(game: str, mode=False) -> list:
     yinqin = "莉斯坦ACG"
-    color = "#1FD700"
     if mode:
         return yinqin
     try:
@@ -970,7 +956,6 @@ def lstacg(game: str, mode=False) -> list:
 
 def GGS(game: str, mode=False) -> list:
     yinqin = "GGS"
-    color = "#FFD700"
     if mode:
         return yinqin
     try:
@@ -987,6 +972,119 @@ def GGS(game: str, mode=False) -> list:
             gamelst.append(
                 {"name": i['title'], "url": mainurl + i['url']}
             )
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+    
+    
+def hikarinagi(game: str, mode=False) -> list:
+    yinqin = "Hikarinagi"
+    if mode:
+        return yinqin
+    try:
+        searul = re.compile(
+            r'" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h2><div class="item-tags scroll-x no-scrollbar mb6">',
+            re.S,
+        )
+        searesp = session.get(
+            url="https://www.hikarinagi.net/",
+            params={"s": game},
+            verify=False,
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        if searesp.status_code != 200:
+            raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
+        count = 0
+        gamelst = []
+        for i in searul.finditer(searesp.text):
+            gamelst.append({"name": i.group("NAME").strip(), "url": i.group("URL")})
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+    
+
+def mmwp(game: str, mode=False) -> list:
+    yinqin = "猫猫网盘"
+    if mode:
+        return yinqin
+    try:
+        data = {
+            "parent": "/GalGame/",
+            "keywords": game,
+            "scope": 0,
+            "page": 1,
+            "per_page": 20,
+            "password": "",
+        }
+        searesp = session.post(
+            url=f"https://sakiko.de/api/fs/search",
+            json=data,
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        resjson = json.loads(searesp.text)
+        if resjson["message"] != "success":
+            raise Exception(str(resjson))
+        count = 0
+        gamelst = []
+        mainurl = "https://sakiko.de"
+        reslen = len(resjson["data"]["content"])
+        if (reslen != resjson["data"]["total"]) and (reslen != 20):
+            raise Exception("访问密码错误")
+        for i in resjson["data"]["content"]:
+            if not i['parent'].startswith("/GalGame/SP后端1[GalGame分区]/"): continue
+            gamelst.append(
+                {
+                    "name": i["name"].strip(),
+                    "url": mainurl + i["parent"] + "/" + i["name"],
+                }
+            )
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+    
+    
+def baxl(game: str, mode=False) -> list:
+    yinqin = "彼岸星露"
+    if mode:
+        return yinqin
+    try:
+        searul = re.compile(
+            r'<div class="post-info">\s*?<h2><a  href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h2>',
+            re.S,
+        )
+        searesp = session.get(
+            url="https://seve.yugal.cc",
+            params={"s": game},
+            verify=False,
+            headers=headers,
+            timeout=timeoutsec,
+        )
+        if searesp.status_code != 200:
+            raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
+        count = 0
+        gamelst = []
+        for i in searul.finditer(searesp.text):
+            gamelst.append({"name": i.group("NAME").strip(), "url": i.group("URL")})
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]
@@ -1021,6 +1119,9 @@ search = [
     ziling,
     lstacg,
     GGS,
+    hikarinagi,
+    mmwp,
+    baxl
 ]
 
 # GUI图形化搜索平台
@@ -1048,6 +1149,9 @@ searchGUI = [
     (ziling, "#1FD700", False),
     (lstacg, "#1FD700", False),
     (GGS, "#1FD700", False),
+    (hikarinagi, "#FFFFFF", False),
+    (mmwp, "#1FD700", False),
+    (baxl, "#1FD700", False),
 ]
 tmp = None
 color_map = {"#FFD700": "gold", "#1FD700": "lime", "#FFFFFF": "white"}

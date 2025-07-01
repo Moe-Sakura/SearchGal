@@ -60,7 +60,7 @@ import logging
 log = logging.getLogger("werkzeug")
 # log.setLevel(logging.ERROR)
 
-MAX_RESULTS = 50
+MAX_RESULTS = 20
 
 
 def search_log(ip: str, searchgame: str, ua: str = "unknow"):
@@ -120,7 +120,9 @@ def search_platform(platform, game, zypassword):
             result = platform["func"](game)
         try:
             error = str(result[3])
-            if error == "":
+            if "Read timed out." in error:
+                error = "Search API 请求超时"
+            elif error == "":
                 error = "Unknow Error 未知错误"
             print(error)
         except:
