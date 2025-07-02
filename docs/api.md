@@ -2,7 +2,7 @@
 
 本文档介绍了如何使用后端的搜索 API。
 
-## 接口: 传统搜索
+## **(已废弃)** 接口: 传统搜索 
 
 这是一个标准的 HTTP 接口，它会等待所有搜索任务完成后，一次性返回全部结果。
 
@@ -88,7 +88,7 @@
 
 ```javascript
 async function searchGame(gameName, magic = false, ...args) {
-  const url = '/search-classic';
+  const url = '/search-gal';
   
   // 第一个位置变量作为 zypassword
   const zypassword = args[0] || '';
@@ -139,7 +139,7 @@ searchGame("Clover Day's");
 
 这是一个基于 [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) 的流式接口。它会立即开始搜索，并逐步返回每个搜索平台的结果，从而允许前端实时展示进度和结果。
 
-- **URL**: `/search`
+- **URL**: `/search-gal`
 - **方法**: `POST`
 - **Content-Type**: `application/x-www-form-urlencoded` 或 `multipart/form-data`
 
@@ -302,3 +302,12 @@ const callbacks = {
 //   magic: true,
 //   zypassword: "your-password-here"
 // }, callbacks);
+```
+
+## 接口: 流式搜索Galgame补丁
+
+- **URL**: `/search-patch`
+- **方法**: `POST`
+- **Content-Type**: `application/x-www-form-urlencoded` 或 `multipart/form-data`
+
+请求参数与请求参数完全同 `/search-gal` 接口

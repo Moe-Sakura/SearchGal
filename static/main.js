@@ -26,6 +26,69 @@ $(document).ready(function () {
       popup: "animate__animated animate__zoomIn",
     },
   });
+
+  // 更新流式搜索按钮状态
+  function updateStreamButton(isInitial) {
+    const streamCheck = $("#streamCheck");
+    const streamLabel = $("label[for='streamCheck']");
+    const streamContainer = streamCheck.closest(".input-group-text");
+    const patchText = $("#patch-text");
+    const overlay = $("#page-transition-overlay");
+    const transitionMessage = $("#transition-message");
+
+    const showOverlay = (message) => {
+      transitionMessage.text(message);
+      overlay.addClass("visible");
+    };
+
+    const hideOverlay = () => {
+      overlay.removeClass("visible");
+    };
+
+    const updateContent = () => {
+      if (streamCheck.prop("checked")) {
+        streamLabel.text("搜索游戏");
+        streamContainer.css("background-color", "rgba(255, 0, 0, 0.5)");
+        patchText.fadeOut(300);
+      } else {
+        streamLabel.text("搜索补丁");
+        streamContainer.css("background-color", "rgba(0, 255, 0, 0.5)");
+        patchText.fadeIn(300);
+      }
+    };
+
+    if (isInitial) {
+      // 初始化时，不显示遮罩，直接更新内容
+      updateContent();
+    } else {
+      // 用户点击时，执行带动画的切换流程
+      const message = streamCheck.prop("checked")
+        ? "切换至 游戏搜索"
+        : "切换至 补丁搜索";
+      
+      // 1. 显示遮罩和消息
+      showOverlay(message);
+
+      // 2. 等待遮罩动画完成 (400ms) + 短暂显示 (300ms)
+      setTimeout(() => {
+        // 3. 开始更新背景内容（按钮颜色和标题文字淡入淡出）
+        updateContent();
+
+        // 4. 等待内容更新动画完成 (300ms) 后，开始隐藏遮罩
+        setTimeout(() => {
+          hideOverlay();
+        }, 300);
+      }, 700);
+    }
+  }
+
+  // 页面加载时初始化按钮状态
+  updateStreamButton(true); // 传入true表示是初始化
+
+  // 监听流式搜索开关的变化
+  $("#streamCheck").on("change", function () {
+    updateStreamButton(false); // 传入false表示是用户点击
+  });
 });
 
 // 调整 url-box 的宽度（防止超出或折叠）
@@ -146,16 +209,15 @@ function doSearch() {
   formData.append("zypassword", $("#zyPassword").val());
 
   // 根据流式模式选择请求方式
-  if ($("#streamCheck").prop("checked")) {
-    streamSearch(formData);
-  } else {
-    classicSearch(formData);
-  }
+  const url = $("#streamCheck").prop("checked")
+    ? "/search-gal"
+    : "/search-patch";
+  streamSearch(url, formData);
 }
 
-// 流式搜索模式
-function streamSearch(formData) {
-  fetch("/search", {
+// 通用流式搜索函数
+function streamSearch(url, formData) {
+  fetch(url, {
     method: "POST",
     body: formData,
   })
@@ -219,56 +281,13 @@ function streamSearch(formData) {
 
         return reader.read().then(processChunk);
       };
+      adjustUrlBox()
 
       return reader.read().then(processChunk);
     })
     .catch((error) => {
-      Swal.fire("错误", "搜索失败，请稍后重试", "error");
-    });
-}
-
-// 传统搜索模式
-function classicSearch(formData) {
-  fetch("/search-classic", {
-    method: "POST",
-    body: formData,
-  })
-    .then(async (response) => {
-      if (response.status === 429) {
-        const data = await response.json();
-        Swal.fire({
-          icon: "error",
-          title: "请求过于频繁",
-          text: data.error,
-          toast: true,
-          position: "top",
-          showConfirmButton: false,
-          timer: 3000,
-          background: "rgba(255,0,0,0.9)",
-          customClass: {
-            popup: "animate__animated animate__fadeInDown",
-          },
-        });
-        // 清理加载状态
-        $("#results").empty();
-        $(".progress-text").parent().hide();
-        return;
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (!data) return; // 如果因为429错误提前返回，则data为undefined
-      $("#results").empty();
-      if (data.error) {
-        // 这里的error是针对搜索内容本身的错误，例如游戏名为空
-        Swal.fire("错误", data.error, "error");
-        return;
-      }
-      data.results.forEach((result) => addResult(result));
-      $(".progress-text").parent().hide();
-    })
-    .catch((error) => {
-      Swal.fire("错误", "搜索失败，请稍后重试", "error");
+      console.error("搜索请求失败:", error);
+      Swal.fire("错误", "搜索失败，请检查网络连接或稍后重试", "error");
     });
 }
 
@@ -411,3 +430,4 @@ $("#commentsCollapse").on("shown.bs.collapse", function () {
     artalkInitialized = true;
   }
 });
+

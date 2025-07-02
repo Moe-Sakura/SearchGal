@@ -82,10 +82,15 @@
   </head>
 
   <body>
+    <!-- 页面切换遮罩 -->
+    <div id="page-transition-overlay">
+      <div id="transition-message"></div>
+    </div>
+
     <div class="main-wrapper">
       <div class="container">
-        <h1 class="text-center mb-4 text-white fw-bold">
-          <i class="fa-solid fa-gamepad me-2"></i>Galgame 聚合搜索
+        <h1 id="main-title" class="text-center mb-4 text-white fw-bold">
+          <i class="fa-solid fa-gamepad me-2"></i>Galgame<span id="patch-text" style="display: none;">补丁</span> 聚合搜索
         </h1>
 
         <div class="search-box mb-4">
@@ -123,7 +128,7 @@
                   checked
                 />
                 <label class="form-check-label text-white" for="streamCheck"
-                  >流式搜索</label
+                  ></label
                 >
               </div>
             </div>

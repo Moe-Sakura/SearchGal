@@ -63,9 +63,6 @@ import logging
 log = logging.getLogger("werkzeug")
 # log.setLevel(logging.ERROR)
 
-MAX_RESULTS = 20
-
-
 def search_log(ip: str, searchgame: str, ua: str = "unknow"):
     now = datetime.now()
     logstr = now.strftime("%Y-%m-%d %H:%M:%S") + " " + ip
@@ -114,14 +111,18 @@ def index():
     return response
 
 
-def search_platform(platform, game, zypassword):
+def search_platform(platform, game, *args, **kwargs):
     """执行单个平台的搜索"""
+    zypassword = kwargs.get("zypassword", "")
     try:
+        # 特殊平台密码处理
         if platform["name"] == "紫缘Gal":
             result = platform["func"](game, False, zypassword)
         else:
             result = platform["func"](game)
+            
         try:
+            # 错误简单输出
             error = str(result[3])
             if "Read timed out." in error:
                 error = "Search API 请求超时"
@@ -130,6 +131,7 @@ def search_platform(platform, game, zypassword):
             print(error)
         except:
             error = ""
+            
         if (result[1] > 0) or error:
             return {
                 "name": result[2],
@@ -145,12 +147,7 @@ def search_platform(platform, game, zypassword):
     return None
 
 
-@app.route("/search", methods=["POST"])
-def search():
-    game = request.form.get("game", "").strip()
-    use_magic = request.form.get("magic", "false") == "true"
-    zypassword = request.form.get("zypassword", "").strip()
-
+def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs):
     if not game:
         return jsonify({"error": "游戏名称不能为空"}), 400
 
@@ -177,7 +174,7 @@ def search():
 
     def generate():
         futures = {
-            executor.submit(search_platform, platform, game, zypassword): platform
+            executor.submit(search_platform, platform, game, *args, **kwargs): platform
             for platform in PLATFORMS
             if use_magic or not platform["magic"]
         }
@@ -220,55 +217,20 @@ def search():
     return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
 
-# 新增传统搜索路由
-@app.route("/search-classic", methods=["POST"])
-def search_classic():
-    # 参数获取与流式搜索相同
+@app.route("/search-gal", methods=["POST"])
+def searchgal():
     game = request.form.get("game", "").strip()
     use_magic = request.form.get("magic", "false") == "true"
     zypassword = request.form.get("zypassword", "").strip()
+    return _handle_search_request(request, PLATFORMS_GAL, game, use_magic, zypassword=zypassword)
 
-    if not game:
-        return jsonify({"error": "游戏名称不能为空"}), 400
+@app.route("/search-patch", methods=["POST"])
+def searchpatch():
+    game = request.form.get("game", "").strip()
+    use_magic = request.form.get("magic", "false") == "true"
+    zypassword = request.form.get("zypassword", "").strip()
+    return _handle_search_request(request, PLATFORMS_PATCH, game, use_magic, zypassword=zypassword)
 
-    ip_address = request.headers.get("X-Real-Ip", request.remote_addr)
-    current_time = time.time()
-
-    with ip_limit_lock:
-        last_search_time = ip_last_search_time.get(ip_address)
-        if (
-            last_search_time
-            and (current_time - last_search_time) < SEARCH_INTERVAL_SECONDS
-        ):
-            return jsonify(
-                {
-                    "error": f"请 {SEARCH_INTERVAL_SECONDS - int(current_time - last_search_time)} 秒后再试"
-                }
-            ), 429
-        ip_last_search_time[ip_address] = current_time
-        cleanup_ip_cache()
-
-    # 日志记录
-    ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
-    search_log(ip_address, game, ua)
-
-    # 同步处理所有结果
-    futures = {
-        executor.submit(search_platform, platform, game, zypassword): platform
-        for platform in PLATFORMS
-        if use_magic or not platform["magic"]
-    }
-
-    results = []
-    for future in as_completed(futures):
-        result = future.result()
-        if result:
-            results.append(result)
-        del future  # 显式删除
-    gc.collect()
-    futures.clear()
-
-    return jsonify({"results": results})
 
 
 if __name__ == "__main__":
