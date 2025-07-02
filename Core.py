@@ -978,6 +978,30 @@ def GGS(game: str, mode=False) -> list:
             pass
         return [[], -1, yinqin, e]
     
+
+def thyzyw(game: str, mode=False) -> list:
+    yinqin = "桃花源"
+    if mode:
+        return yinqin
+    try:
+        searesp = session.get(
+            url=f"https://peach.sslswwdx.top/page/search/index.json", headers=headers, timeout=timeoutsec
+        )
+        resjson = [i for i in json.loads(searesp.text) if game in i["title"]]
+        count = 0
+        gamelst = []
+        for i in resjson[:20]:
+            gamelst.append({"name": i["title"], "url": i["permalink"]})
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+    
     
 def hikarinagi(game: str, mode=False) -> list:
     yinqin = "Hikarinagi"
@@ -1117,7 +1141,8 @@ search = [
     GGS,
     hikarinagi,
     mmwp,
-    baxl
+    baxl,
+    thyzyw
 ]
 
 # GUI图形化搜索平台
@@ -1148,6 +1173,7 @@ searchGUI = [
     (hikarinagi, "#FFFFFF", False),
     (mmwp, "#1FD700", False),
     (baxl, "#1FD700", False),
+    (thyzyw, "#1FD700", False),
 ]
 tmp = None
 color_map = {"#FFD700": "gold", "#1FD700": "lime", "#FFFFFF": "white"}

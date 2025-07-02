@@ -15,7 +15,7 @@
 ▸ WEB移动端完美适配，随时随地畅快搜索
 
 💡 **核心功能**<br>
-▸ 实时聚合 **24+** 主流Gal资源平台<br>
+▸ 实时聚合 **25+** 主流Gal资源平台<br>
 ▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件<br>
 ▸ 多线程加速搜索，快速响应
 
@@ -52,6 +52,7 @@ gunicorn --bind 0.0.0.0:8898 app:app
 [![青桔ACG](https://img.shields.io/badge/青桔ACG-00C853)](https://spare.qingju.org/)
 [![鲲Galgame](https://img.shields.io/badge/鲲Galgame-00C853)](https://www.kungal.com/zh-cn/)
 [![未知云盘](https://img.shields.io/badge/未知云盘-00C853)](https://www.nullcloud.top/)
+[![桃花源](https://img.shields.io/badge/桃花源-00C853)](https://peach.sslswwdx.top/)
 [![梓澪の妙妙屋](https://img.shields.io/badge/梓澪の妙妙屋-00C853)](https://zi0.cc/)
 [![莉斯坦ACG](https://img.shields.io/badge/莉斯坦ACG-00C853)](https://www.limulu.moe/)
 [![猫猫网盘](https://img.shields.io/badge/猫猫网盘-00C853)](https://sakiko.de/)
@@ -109,7 +110,7 @@ gunicorn --bind 0.0.0.0:8898 app:app
 ## 📜 更新日志
 ### V13 (2025/07/01)
 ```
-+ 新增「未知云盘」「Galgamex」「GGS」「彼岸星露」「猫猫网盘」「Hikarinagi」
++ 新增「未知云盘」「Galgamex」「GGS」「彼岸星露」「猫猫网盘」「Hikarinagi」「桃花源」
 * 「真红小站」「绅仕天堂」 正则修正
 * 「TouchGal」 域名修正
 * 前端评论区优化
