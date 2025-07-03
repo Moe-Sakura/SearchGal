@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def KunGalgameBuDing(game: str, mode=False) -> list:
     yinqin = "鲲Galgame补丁"
     if mode:
@@ -38,6 +39,7 @@ def KunGalgameBuDing(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 KunGalgameBuDing.color = "lime"
 KunGalgameBuDing.magic = False

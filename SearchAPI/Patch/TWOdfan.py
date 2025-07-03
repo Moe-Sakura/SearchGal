@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def TWOdfan(game: str, mode=False) -> list:
     yinqin = "2dfan"
     if mode:
@@ -36,6 +37,7 @@ def TWOdfan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 TWOdfan.color = "lime"
 TWOdfan.magic = False

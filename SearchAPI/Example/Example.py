@@ -1,5 +1,6 @@
 from ..common import *
 
+
 # 如果你想要修改正则 或者添加搜索平台 可以模仿该函数模板新建一个函数
 # 这里函数的名字需要为文件名，用来表示一个平台的搜索规则
 def Example(game: str, mode=False) -> list:
@@ -35,7 +36,8 @@ def Example(game: str, mode=False) -> list:
         # 异常处理，当搜索到的数量返回-1，会判定为搜索失败
         return [[], -1, yinqin, e]
 
-# 定义平台的颜色 
+
+# 定义平台的颜色
 # gold 金色  lime 绿色  white 白色
 Example.color = "lime"
 
