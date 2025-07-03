@@ -63,6 +63,7 @@ import logging
 log = logging.getLogger("werkzeug")
 # log.setLevel(logging.ERROR)
 
+
 def search_log(ip: str, searchgame: str, ua: str = "unknow"):
     now = datetime.now()
     logstr = now.strftime("%Y-%m-%d %H:%M:%S") + " " + ip
@@ -120,7 +121,7 @@ def search_platform(platform, game, *args, **kwargs):
             result = platform["func"](game, False, zypassword)
         else:
             result = platform["func"](game)
-            
+
         try:
             # 错误简单输出
             error = str(result[3])
@@ -131,7 +132,7 @@ def search_platform(platform, game, *args, **kwargs):
             print(error)
         except:
             error = ""
-            
+
         if (result[1] > 0) or error:
             return {
                 "name": result[2],
@@ -222,15 +223,19 @@ def searchgal():
     game = request.form.get("game", "").strip()
     use_magic = request.form.get("magic", "false") == "true"
     zypassword = request.form.get("zypassword", "").strip()
-    return _handle_search_request(request, PLATFORMS_GAL, game, use_magic, zypassword=zypassword)
+    return _handle_search_request(
+        request, PLATFORMS_GAL, game, use_magic, zypassword=zypassword
+    )
+
 
 @app.route("/search-patch", methods=["POST"])
 def searchpatch():
     game = request.form.get("game", "").strip()
     use_magic = request.form.get("magic", "false") == "true"
     zypassword = request.form.get("zypassword", "").strip()
-    return _handle_search_request(request, PLATFORMS_PATCH, game, use_magic, zypassword=zypassword)
-
+    return _handle_search_request(
+        request, PLATFORMS_PATCH, game, use_magic, zypassword=zypassword
+    )
 
 
 if __name__ == "__main__":

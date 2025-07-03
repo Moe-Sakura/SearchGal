@@ -97,7 +97,8 @@ def loli(game: str, mode=False) -> list:
                 continue
             gamelst.append({"name": i.group("NAME").strip(), "url": i.group("URL")})
             count += 1
-            if len(gamelst) == MAX_RESULTS: break
+            if len(gamelst) == MAX_RESULTS:
+                break
         searesp.close()
         return [gamelst, count, yinqin]
     except Exception as e:
@@ -913,7 +914,8 @@ def qingjiacg(game: str, mode=False) -> list:
                 continue
             gamelst.append({"name": i.group("NAME").strip(), "url": i.group("URL")})
             count += 1
-            if len(gamelst) == MAX_RESULTS: break
+            if len(gamelst) == MAX_RESULTS:
+                break
         searesp.close()
         return [gamelst, count, yinqin]
     except Exception as e:
@@ -950,7 +952,8 @@ def lstacg(game: str, mode=False) -> list:
                 }
             )
             count += 1
-            if len(gamelst) == MAX_RESULTS: break
+            if len(gamelst) == MAX_RESULTS:
+                break
         searesp.close()
         return [gamelst, count, yinqin]
     except Exception as e:
@@ -984,7 +987,7 @@ def GGS(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
+
 
 def thyzyw(game: str, mode=False) -> list:
     yinqin = "桃花源"
@@ -992,7 +995,9 @@ def thyzyw(game: str, mode=False) -> list:
         return yinqin
     try:
         searesp = session.get(
-            url=f"https://peach.sslswwdx.top/page/search/index.json", headers=headers, timeout=timeoutsec
+            url=f"https://peach.sslswwdx.top/page/search/index.json",
+            headers=headers,
+            timeout=timeoutsec,
         )
         resjson = [i for i in json.loads(searesp.text) if game in i["title"]]
         count = 0
@@ -1008,8 +1013,8 @@ def thyzyw(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
-    
+
+
 def hikarinagi(game: str, mode=False) -> list:
     yinqin = "Hikarinagi"
     if mode:
@@ -1041,7 +1046,7 @@ def hikarinagi(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
+
 
 def mmwp(game: str, mode=False) -> list:
     yinqin = "猫猫网盘"
@@ -1072,7 +1077,8 @@ def mmwp(game: str, mode=False) -> list:
         if (reslen != resjson["data"]["total"]) and (reslen != 20):
             raise Exception("访问密码错误")
         for i in resjson["data"]["content"]:
-            if not i['parent'].startswith("/GalGame/SP后端1[GalGame分区]/"): continue
+            if not i["parent"].startswith("/GalGame/SP后端1[GalGame分区]/"):
+                continue
             gamelst.append(
                 {
                     "name": i["name"].strip(),
@@ -1080,7 +1086,8 @@ def mmwp(game: str, mode=False) -> list:
                 }
             )
             count += 1
-            if len(gamelst) == MAX_RESULTS: break
+            if len(gamelst) == MAX_RESULTS:
+                break
         searesp.close()
         return [gamelst, count, yinqin]
     except Exception as e:
@@ -1089,8 +1096,8 @@ def mmwp(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
-    
+
+
 def baxl(game: str, mode=False) -> list:
     yinqin = "彼岸星露"
     if mode:
@@ -1122,8 +1129,8 @@ def baxl(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
-    
+
+
 def TWOdfan(game: str, mode=False) -> list:
     yinqin = "2dfan"
     if mode:
@@ -1145,8 +1152,12 @@ def TWOdfan(game: str, mode=False) -> list:
         count = 0
         gamelst = []
         mainurl = "https://2dfan.com"
-        for i in list(searul.finditer(json.loads(searesp.text)['subjects']))[:MAX_RESULTS]:
-            gamelst.append({"name": i.group("NAME").strip(), "url": mainurl + i.group("URL")})
+        for i in list(searul.finditer(json.loads(searesp.text)["subjects"]))[
+            :MAX_RESULTS
+        ]:
+            gamelst.append(
+                {"name": i.group("NAME").strip(), "url": mainurl + i.group("URL")}
+            )
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]
@@ -1156,8 +1167,8 @@ def TWOdfan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
-    
+
+
 def KunPatch(game: str, mode=False) -> list:
     yinqin = "鲲Galgame补丁"
     if mode:
@@ -1170,25 +1181,23 @@ def KunPatch(game: str, mode=False) -> list:
             "searchOption": {
                 "searchInAlias": True,
                 "searchInIntroduction": False,
-                "searchInTag": False
-            }
+                "searchInTag": False,
+            },
         }
         searesp = session.post(
             url=f"https://www.moyu.moe/api/search",
             headers=headers,
             timeout=timeoutsec,
             verify=False,
-            json=data
+            json=data,
         )
         resjson = json.loads(searesp.text)
         count = 0
         gamelst = []
         mainurl = "https://www.moyu.moe/patch/"
         lasturl = "/introduction"
-        for i in resjson['galgames'][:MAX_RESULTS]:
-            gamelst.append(
-                {"name": i["name"], "url": mainurl + str(i["id"]) + lasturl}
-            )
+        for i in resjson["galgames"][:MAX_RESULTS]:
+            gamelst.append({"name": i["name"], "url": mainurl + str(i["id"]) + lasturl})
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]
@@ -1198,7 +1207,6 @@ def KunPatch(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
-    
 
 
 # Cli命令行搜索平台
@@ -1227,7 +1235,7 @@ search = [
     hikarinagi,
     mmwp,
     baxl,
-    thyzyw
+    thyzyw,
 ]
 
 # GUI图形化搜索平台 Galgame平台
@@ -1267,9 +1275,9 @@ patchInfo = [
 ]
 
 
-
 tmp = None
 color_map = {"#FFD700": "gold", "#1FD700": "lime", "#FFFFFF": "white"}
+
 
 def generate_platforms(info):
     return [
@@ -1281,6 +1289,7 @@ def generate_platforms(info):
         }
         for func, color, magic in info
     ]
+
 
 PLATFORMS_GAL = generate_platforms(searchGUI)
 PLATFORMS_PATCH = generate_platforms(patchInfo)
