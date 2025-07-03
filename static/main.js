@@ -6,15 +6,15 @@ $(document).ready(function () {
         <center><p style='color:#1FD700'>感谢 <a href='https://saop.cc/' target='_blank'>@Asuna</a> 大佬的服务器支撑与技术支持</p></center>
         <p>1. 本程序仅供学习交流使用，请支持正版游戏</p>
         <p>2. 本程序只用于搜索互联网平台上的内容，搜索结果来自第三方平台，请自行判断内容安全性</p>
-        <p>3. 访问海外站点需要启用魔法搜索功能，请在服务端设置魔法(访客无需关注)</p>
-        <p>4. 如果搜索词过短，部分平台的结果可能搜索不全(截取第一页结果)，因此尽量精确游戏名搜索</p>
+        <p>3. 如果你开启了魔法，请勾选 "包含魔法站"，搜索结果将包含需要魔法访问的平台</p>
+        <p>4. 如果搜索词过短，部分平台的结果可能搜索不全(截取第一页结果)。如果搜索词过长，有可能会无法完全匹配到搜索结果。请搜索适当长度的关键词！</p>
         <p>5. 本程序每获取到请求后都会关闭与服务器的连接，本程序不提倡爆破/恶意爬取数据</p>
         <p>6. 如果遇到某个平台搜索失败, 检查你是否开了魔法, 也可能是平台炸了或者正则失效了</p>
         <p style='color:#1FD700'>平台标签绿色免登录可下载，金色需要魔法，白色需一定条件才能下载(例如登录/回复等)</p>
         <p style='color:#FFD700'>收录的大多是提供PC平台资源的网站，大部分平台都提供Onedrive或直链，两种方式比国内网盘下载速度更快</p>
         <p style='color:#FF6969'>请关闭浏览器的广告拦截插件, 或将各gal网站添加到白名单, 各网站建站不易, 这是对这些网站最基本支持</p>
-        <center><p style='color:#FF6969'>有能力者请支持Galgame正版！</p></center>
-        <center><small>觉得好用请前往 <a href="https://github.com/Jurangren/SearchGal" target="_blank">Github</a> 给项目点个免费的 Star 支持一下, 秋梨膏~!</small></center>
+        <center><p style='color:#FF6969'>请支持Galgame正版！</p></center>
+        <center><small>觉得好用请前往 <a href="https://github.com/Moe-Sakura/SearchGal" target="_blank">Github</a> 给项目点个免费的 Star 支持一下, 秋梨膏~!</small></center>
                </div>`,
     icon: "info",
     confirmButtonText: "我已了解并认同上述观点",

@@ -1,0 +1,51 @@
+from ..common import *
+
+def TouchGal(game: str, mode=False) -> list:
+    yinqin = "TouchGal"
+    if mode:
+        return yinqin
+    try:
+        # searul = re.compile(r'.jpg" alt="(?P<NAME>.*?)" class="lazyload fit-cover radius8"></a></div><div class="item-body"><h2 class="item-heading"><a target="_blank" href="(?P<URL>.*?)">',re.S)
+        # searesp = session.get(url='https://www.touchgal.us/', params={'s':game,'type':'post'}, headers=headers)
+        searesp = session.post(
+            url="https://www.touchgal.us/api/search",
+            headers=headers,
+            json={
+                "queryString": '[{"type":"keyword","name":"' + game + '"}]',
+                "limit": 20,
+                "searchOption": {
+                    "searchInIntroduction": False,
+                    "searchInAlias": True,
+                    "searchInTag": False,
+                },
+                "page": 1,
+                "selectedType": "all",
+                "selectedLanguage": "all",
+                "selectedPlatform": "all",
+                "sortField": "resource_update_time",
+                "sortOrder": "desc",
+                "selectedYears": ["all"],
+                "selectedMonths": ["all"],
+            },
+            timeout=timeoutsec,
+        )
+        if searesp.status_code != 200:
+            raise Exception("Search API 响应状态码为 " + str(searesp.status_code))
+        resjson = json.loads(searesp.text)
+        count = 0
+        gamelst = []
+        mainurl = "https://www.touchgal.us/"
+        for i in resjson["galgames"][:MAX_RESULTS]:
+            gamelst.append({"name": i["name"].strip(), "url": mainurl + i["uniqueId"]})
+            count += 1
+        searesp.close()
+        return [gamelst, count, yinqin]
+    except Exception as e:
+        try:
+            searesp.close()
+        except Exception:
+            pass
+        return [[], -1, yinqin, e]
+
+TouchGal.color = "lime"
+TouchGal.magic = False

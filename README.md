@@ -15,7 +15,7 @@
 ▸ WEB移动端完美适配，随时随地畅快搜索
 
 💡 **核心功能**<br>
-▸ 实时聚合 **25+** 主流Gal资源平台 / **2+** Galgame补丁站<br>
+▸ 实时聚合 **28+** 主流Gal资源平台 / **2+** Galgame补丁站<br>
 ▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件<br>
 ▸ 多线程加速搜索，快速响应
 
@@ -36,7 +36,7 @@ gunicorn --bind 0.0.0.0:8898 app:app
 ## 📸 界面预览
 |          桌面端GUI          |          WEB端PC           |              WEB端移动              |
 | :-------------------------: | :------------------------: | :---------------------------------: |
-| ![GUI演示](./shot-GUI.avif) | ![WEB-PC](./shot-WEB.avif) | ![WEB-Phone](./shot-WEB-Phone.avif) |
+| ![GUI演示](./docs/img/shot-GUI.avif) | ![WEB-PC](./docs/img/shot-WEB.avif) | ![WEB-Phone](./docs/img/shot-WEB-Phone.avif) |
 
 ---
 
@@ -57,6 +57,9 @@ gunicorn --bind 0.0.0.0:8898 app:app
 [![莉斯坦ACG](https://img.shields.io/badge/莉斯坦ACG-00C853)](https://www.limulu.moe/)
 [![猫猫网盘](https://img.shields.io/badge/猫猫网盘-00C853)](https://sakiko.de/)
 [![彼岸星露](https://img.shields.io/badge/彼岸星露-00C853)](https://seve.yugal.cc/)
+[![晴空咖啡馆](https://img.shields.io/badge/晴空咖啡馆-00C853)](https://aosoracafe.com/)
+[![Koyso](https://img.shields.io/badge/Koyso-00C853)](https://koyso.to/)
+[![萤ノ光](https://img.shields.io/badge/萤ノ光-00C853)](https://yinghu.netlify.app/)
 ---
 [![鲲Galgame补丁](https://img.shields.io/badge/鲲Galgame补丁-00C853)](https://www.moyu.moe/)
 [![2dfan](https://img.shields.io/badge/2dfan-00C853)](https://2dfan.com)
@@ -111,96 +114,19 @@ gunicorn --bind 0.0.0.0:8898 app:app
 ---
 
 ## 📜 更新日志
-### V14 (2025/07/03)
+
+### 最新版本: V14 (2025/07/03)
 ```
 + 新增补丁搜索模式
 + 新增「鲲Galgame补丁」「2dfan」补丁网站
++ 新增「晴空咖啡馆」「Koyso」「萤ノ光」资源网站
+* 「真红小站」正则修正
 * API文档修改
+* 结构改为单文件保存单平台搜索规则
 * 单平台最大搜索结果代码修正
 - 去除传统搜索模式, 现以流式搜索为主
 ```
-### V13 (2025/07/01)
-```
-+ 新增「未知云盘」「Galgamex」「GGS」「彼岸星露」「猫猫网盘」「Hikarinagi」「桃花源」
-* 「真红小站」「绅仕天堂」 正则修正
-* 「TouchGal」 域名修正
-* 前端评论区优化
-* 并发搜索优化
-* 新增搜索接口API文档
-```
-### V12 (2025/05/31)
-```
-+ 新增 梓澪の妙妙屋
-+ 新增 莉斯坦ACG
-+ 新增 NekoGal
-+ 新增 喵源领域
-* 真红小站 正则修正
-* 绮梦ACG 正则修正
-- 去除 晴空咖啡馆 (CloudFlare验证)
-```
-### V11 (2025/05/13)
-```
-+ 增加评论区功能（感谢 @Asuna）
-* 前端优化，解决搜索卡顿问题
-```
-### V10 (2025/05/13)
-```
-* Touchgal 请求格式修正
-* 优化外部资源到本地，提升加载速度（感谢 @Asuna）
-```
-### V9 (2025/05/02)
-```
-* 内存优化[1]
-* 绮梦ACG 域名/正则修正
-```
-### V8 (2025/04/05)
-```
-+ Index页面优化 (PR:#2)
-* TouchGal 请求格式修正
-* 鲲Galgame 请求格式修正
-```
-### V7 (2025/03/15)
-```
-* 真红小站 正则修正
-```
-### V6 (2025/03/07)
-```
-* 失落的小站 站点更新 -> 真红小站
-* 真红小站 正则修正
-```
-### V5 (2025/02/17)
-```
-* 青桔ACG 正则修正
-* 修正 Issue #1: TouchGal搜索建议（感谢 @Palentum）
-```
-### V4 (2025/02/09)
-```
-+ WEB新增流式搜索 (beta测试中，可能占用过多浏览器性能)
-+ WEB新增「特殊平台配置」选项，可供用户配置特殊平台的认证口令进行搜索
-+ WEB新增点击链接复制功能
-+ 新增「紫缘Gal」平台 (需输入在「特殊平台配置」输入密码)
-```
-### V3 (2025/02/08)
-```
-+ WEB现在可显示平台搜索错误日志
-+ WEB本地调用jquery（解决手机点击搜索无反应问题）
-+ 可设置搜索超时时间（解决某平台搜索卡住问题）
-- 弃用GUI图形化界面版本
-```
-> 待发布构建版本
-### V2 (2025/02/04)
-```
-+ 新增WEB在线版，支持多终端访问
-+ 新增WEB端日志记录搜索关键词
-+ 手动指定代理 (需手动构建)
-+ 新增「失落的小站」「鲲Galgame」平台
-+ 重构核心代码，优化搜索性能30%
-- 弃用CLI终端版本
-```
-### V1 (2025/02/03)
-```
-+ 首发收录12大平台，支持桌面端搜索
-```
+**历史更新见 [更新日志](./version.md) 页面**
 
 ---
 
