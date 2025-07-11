@@ -15,7 +15,7 @@
 ▸ WEB移动端完美适配，随时随地畅快搜索
 
 💡 **核心功能**<br>
-▸ 实时聚合 **28+** 主流Gal资源平台 / **2+** Galgame补丁站<br>
+▸ 实时聚合 **27+** 主流Gal资源平台 / **2+** Galgame补丁站<br>
 ▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件<br>
 ▸ 多线程加速搜索，快速响应
 
@@ -70,7 +70,6 @@ gunicorn --bind 0.0.0.0:8898 app:app
 [![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
 [![天游二次元](https://img.shields.io/badge/天游二次元-FFFFFF)](https://www.tiangal.com/)
 [![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
-[![NekoGal](https://img.shields.io/badge/NekoGal-FFFFFF)](https://www.nekogal.com/)
 [![喵源领域](https://img.shields.io/badge/喵源领域-FFFFFF)](https://www.nyantaku.com/)
 [![Hikarinagi](https://img.shields.io/badge/Hikarinagi-FFFFFF)](https://www.hikarinagi.net/)
 
