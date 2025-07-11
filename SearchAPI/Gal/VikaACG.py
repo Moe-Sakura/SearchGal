@@ -14,7 +14,8 @@ def VikaACG(game: str, mode=False) -> list:
             json={
                 "paged": 1,
                 "post_paged": 1,
-                "post_count": 24,
+                # Limit硬编码：过大将导致超时
+                "post_count": min(MAX_RESULTS, 1000),
                 "post_type": "post-1",
                 "post_cat": [6],
                 "post_order": "modified",

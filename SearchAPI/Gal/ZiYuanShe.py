@@ -10,7 +10,7 @@ def ZiYuanShe(game: str, mode=False, zypassword="") -> list:
             "keywords": game,
             "scope": 0,
             "page": 1,
-            "per_page": 20,
+            "per_page": MAX_RESULTS,
             "password": zypassword,
         }
         searesp = session.post(

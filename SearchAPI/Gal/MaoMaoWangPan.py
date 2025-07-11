@@ -10,7 +10,7 @@ def MaoMaoWangPan(game: str, mode=False) -> list:
             "keywords": game,
             "scope": 0,
             "page": 1,
-            "per_page": 20,
+            "per_page": MAX_RESULTS,
             "password": "",
         }
         searesp = session.post(

@@ -244,4 +244,4 @@ if __name__ == "__main__":
     tracemalloc.start()
     app.run(host="0.0.0.0", port=8898, threaded=True, debug=False)
 
-    # 生产环境，启动命令(Linux): gunicorn --bind 0.0.0.0:8898 app:app
+    # 生产环境，启动命令(Linux): gunicorn -w 4 --bind 0.0.0.0:8898 app:app

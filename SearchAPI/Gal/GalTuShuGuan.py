@@ -6,7 +6,7 @@ def GalTuShuGuan(game: str, mode=False) -> list:
         return yinqin
     try:
         searesp = session.get(
-            url="https://gallibrary.pw/galgame/game/manyGame?page=1&type=1&keyWord="
+            url=f"https://gallibrary.pw/galgame/game/manyGame?page=1&type=1&count={min(1000,MAX_RESULTS)}&keyWord="
             + game,
             headers=headers,
             timeout=timeoutsec,

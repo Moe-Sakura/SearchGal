@@ -15,7 +15,7 @@ p = ThreadPoolExecutor(20)
 timeoutsec = 15
 
 # 每个平台最大返回结果
-MAX_RESULTS = 20
+MAX_RESULTS = 999999
 
 # requests session
 # 如果需要设置代理请取消下列注释, 并修改代理端口

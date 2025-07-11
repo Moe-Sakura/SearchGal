@@ -6,6 +6,7 @@ def KunGalgame(game: str, mode=False) -> list:
         return yinqin
     try:
         searesp = session.get(
+            # Limit硬编码：非12报错
             url=f"https://www.kungal.com/api/search?keywords={game}&type=galgame&page=1&limit=12",
             headers=headers,
             timeout=timeoutsec,

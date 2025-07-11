@@ -6,6 +6,7 @@ def QingKongKaFeiGuan(game: str, mode=False) -> list:
         return yinqin
     try:
         searesp = session.get(
+            # Limit硬编码：改变无效
             url="https://aosoracafe.com/api/home/list?page=1&pageSize=18&search="
             + game,
             headers=headers,

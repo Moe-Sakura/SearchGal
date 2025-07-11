@@ -7,7 +7,8 @@ def KunGalgameBuDing(game: str, mode=False) -> list:
         return yinqin
     try:
         data = {
-            "limit": 12,
+            # Limit硬编码：Number must be less than or equal to 24
+            "limit": min(24,MAX_RESULTS),
             "page": 1,
             "query": list(game.split()),
             "searchOption": {

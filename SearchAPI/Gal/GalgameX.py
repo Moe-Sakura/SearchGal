@@ -12,7 +12,8 @@ def GalgameX(game: str, mode=False) -> list:
             headers=headers,
             json={
                 "queryString": '[{"type":"keyword","name":"' + game + '"}]',
-                "limit": 20,
+                # Limit硬编码：Number must be less than or equal to 24
+                "limit": min(MAX_RESULTS, 24),
                 "searchOption": {
                     "searchInIntroduction": False,
                     "searchInAlias": True,
