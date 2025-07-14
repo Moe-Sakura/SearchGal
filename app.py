@@ -32,7 +32,7 @@ executor = ThreadPoolExecutor(max_workers=20)
 # 用于存储IP和最后访问时间
 ip_last_search_time = {}
 ip_limit_lock = threading.Lock()
-SEARCH_INTERVAL_SECONDS = 60  # 搜索等待时间
+SEARCH_INTERVAL_SECONDS = 15  # 搜索等待时间
 IP_CACHE_MAX_SIZE = 100000  # 缓存中IP的最大数量
 IP_CACHE_ENTRY_TTL = 15  # IP条目在缓存中的存活时间 (15秒)
 IP_CACHE_CLEANUP_INTERVAL = 3600  # 清理IP缓存的周期 (1小时)
