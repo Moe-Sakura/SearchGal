@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def TouchGal(game: str, mode=False) -> list:
     yinqin = "TouchGal"
     if mode:
@@ -47,6 +48,7 @@ def TouchGal(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 TouchGal.color = "lime"
 TouchGal.magic = False

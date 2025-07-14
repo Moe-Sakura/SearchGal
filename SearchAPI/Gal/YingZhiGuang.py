@@ -1,12 +1,15 @@
 from ..common import *
 
+
 def YingZhiGuang(game: str, mode=False) -> list:
     yinqin = "萤ノ光"
     if mode:
         return yinqin
     try:
         searesp = session.get(
-            url=f"https://yinghu.netlify.app/search.xml", headers=headers, timeout=timeoutsec
+            url=f"https://yinghu.netlify.app/search.xml",
+            headers=headers,
+            timeout=timeoutsec,
         )
         root = ET.fromstring(searesp.text)
         count = 0
@@ -32,6 +35,7 @@ def YingZhiGuang(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 YingZhiGuang.color = "lime"
 YingZhiGuang.magic = False

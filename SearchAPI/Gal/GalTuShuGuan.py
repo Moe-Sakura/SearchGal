@@ -1,12 +1,13 @@
 from ..common import *
 
+
 def GalTuShuGuan(game: str, mode=False) -> list:
     yinqin = "GAL图书馆"
     if mode:
         return yinqin
     try:
         searesp = session.get(
-            url=f"https://gallibrary.pw/galgame/game/manyGame?page=1&type=1&count={min(1000,MAX_RESULTS)}&keyWord="
+            url=f"https://gallibrary.pw/galgame/game/manyGame?page=1&type=1&count={min(1000, MAX_RESULTS)}&keyWord="
             + game,
             headers=headers,
             timeout=timeoutsec,
@@ -33,6 +34,7 @@ def GalTuShuGuan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 GalTuShuGuan.color = "lime"
 GalTuShuGuan.magic = False

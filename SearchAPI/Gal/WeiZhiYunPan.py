@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def WeiZhiYunPan(game: str, mode=False) -> list:
     yinqin = "未知云盘"
     if mode:
@@ -44,6 +45,7 @@ def WeiZhiYunPan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 WeiZhiYunPan.color = "lime"
 WeiZhiYunPan.magic = False

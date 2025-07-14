@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def QingKongKaFeiGuan(game: str, mode=False) -> list:
     yinqin = "晴空咖啡馆"
     if mode:
@@ -10,7 +11,7 @@ def QingKongKaFeiGuan(game: str, mode=False) -> list:
             url="https://aosoracafe.com/api/home/list?page=1&pageSize=18&search="
             + game,
             headers=headers,
-            timeout=timeoutsec
+            timeout=timeoutsec,
         )
         resjson = json.loads(searesp.text)
         if resjson["success"] != True:
@@ -31,6 +32,7 @@ def QingKongKaFeiGuan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 QingKongKaFeiGuan.color = "lime"
 QingKongKaFeiGuan.magic = False

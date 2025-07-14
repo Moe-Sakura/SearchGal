@@ -8,7 +8,7 @@ def KunGalgameBuDing(game: str, mode=False) -> list:
     try:
         data = {
             # Limit硬编码：Number must be less than or equal to 24
-            "limit": min(24,MAX_RESULTS),
+            "limit": min(24, MAX_RESULTS),
             "page": 1,
             "query": list(game.split()),
             "searchOption": {

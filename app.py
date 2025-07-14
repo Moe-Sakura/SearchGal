@@ -21,7 +21,7 @@ import gc
 import threading
 import time
 import sys
-from flask_cors import CORS # 导入 Flask-Cors
+from flask_cors import CORS  # 导入 Flask-Cors
 
 lock = threading.Lock()
 app = Flask(__name__)
@@ -86,7 +86,6 @@ def request_log(ip: str, ua: str, method, url):
     with lock:  # 获取锁，确保只有一个线程能写
         with open("log.txt", "a", encoding="utf-8") as f:
             f.write(logstr + "\n")
-
 
 
 @app.route("/")
@@ -227,6 +226,8 @@ def searchpatch():
 if __name__ == "__main__":
     # 开发: flask run -p 8898
     # 生产: nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
-    print("搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入 Web 搜索")
+    print(
+        "搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入 Web 搜索"
+    )
     tracemalloc.start()
     app.run(host="0.0.0.0", port=8898, threaded=True, debug=False)

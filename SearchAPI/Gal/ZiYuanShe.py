@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def ZiYuanShe(game: str, mode=False, zypassword="") -> list:
     yinqin = "紫缘Gal"
     if mode:
@@ -44,6 +45,7 @@ def ZiYuanShe(game: str, mode=False, zypassword="") -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 ZiYuanShe.color = "white"
 ZiYuanShe.magic = False

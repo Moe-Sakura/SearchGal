@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def QingJiACG(game: str, mode=False) -> list:
     yinqin = "青桔ACG"
     if mode:
@@ -35,6 +36,7 @@ def QingJiACG(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 QingJiACG.color = "lime"
 QingJiACG.magic = False

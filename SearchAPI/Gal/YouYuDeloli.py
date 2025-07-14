@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def YouYuDeloli(game: str, mode=False) -> list:
     yinqin = "忧郁的loli"
     if mode:
@@ -34,6 +35,7 @@ def YouYuDeloli(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 YouYuDeloli.color = "lime"
 YouYuDeloli.magic = False

@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def VikaACG(game: str, mode=False) -> list:
     yinqin = "VikaACG"
     if mode:
@@ -62,6 +63,7 @@ def VikaACG(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 VikaACG.color = "gold"
 VikaACG.magic = True

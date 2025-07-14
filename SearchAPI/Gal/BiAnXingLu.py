@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def BiAnXingLu(game: str, mode=False) -> list:
     yinqin = "彼岸星露"
     if mode:
@@ -31,6 +32,7 @@ def BiAnXingLu(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 BiAnXingLu.color = "lime"
 BiAnXingLu.magic = False

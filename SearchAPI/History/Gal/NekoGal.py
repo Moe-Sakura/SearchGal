@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def NekoGal(game: str, mode=False) -> list:
     yinqin = "NekoGal"
     if mode:
@@ -33,6 +34,7 @@ def NekoGal(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 NekoGal.color = "white"
 NekoGal.magic = False

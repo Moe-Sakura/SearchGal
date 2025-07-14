@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def Koyso(game: str, mode=False) -> list:
     yinqin = "Koyso"
     if mode:
@@ -7,7 +8,7 @@ def Koyso(game: str, mode=False) -> list:
     try:
         searul = re.compile(
             r'<a class="game_item" href="(?P<URL>.+?)"\s*>.*?<span style="background-color: rgba\(128,128,128,0\)">(?P<NAME>.+?)</span>',
-            re.S
+            re.S,
         )
         searesp = session.get(
             url="https://koyso.to/?keywords=" + game,
@@ -35,6 +36,7 @@ def Koyso(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 Koyso.color = "lime"
 Koyso.magic = False

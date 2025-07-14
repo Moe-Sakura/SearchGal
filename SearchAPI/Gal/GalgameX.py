@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def GalgameX(game: str, mode=False) -> list:
     yinqin = "Galgamex"
     if mode:
@@ -47,6 +48,7 @@ def GalgameX(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 GalgameX.color = "lime"
 GalgameX.magic = False

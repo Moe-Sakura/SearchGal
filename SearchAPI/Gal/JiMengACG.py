@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def JiMengACG(game: str, mode=False) -> list:
     yinqin = "绮梦ACG"
     if mode:
@@ -16,9 +17,7 @@ def JiMengACG(game: str, mode=False) -> list:
         count = 0
         gamelst = []
         for i in resjson["data"]["dataSet"][:MAX_RESULTS]:
-            gamelst.append(
-                {"name": i["title"].strip(), "url": i["permalink"]}
-            )
+            gamelst.append({"name": i["title"].strip(), "url": i["permalink"]})
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]
@@ -28,6 +27,7 @@ def JiMengACG(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 JiMengACG.color = "lime"
 JiMengACG.magic = False

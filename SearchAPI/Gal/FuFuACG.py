@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def FuFuACG(game: str, mode=False) -> list:
     yinqin = "FuFuACG"
     if mode:
@@ -36,6 +37,7 @@ def FuFuACG(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 FuFuACG.color = "white"
 FuFuACG.magic = False

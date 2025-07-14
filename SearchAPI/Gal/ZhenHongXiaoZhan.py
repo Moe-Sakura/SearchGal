@@ -1,13 +1,13 @@
 from ..common import *
 
+
 def ZhenHongXiaoZhan(game: str, mode=False) -> list:
     yinqin = "真红小站"
     if mode:
         return yinqin
     try:
         searul = re.compile(
-            r'hover:underline" href="(?P<URL>.+?)">\s*(?P<NAME>.+?)\s*</a>',
-            re.S
+            r'hover:underline" href="(?P<URL>.+?)">\s*(?P<NAME>.+?)\s*</a>', re.S
         )
         searesp = session.get(
             url="https://www.shinnku.com/search?q=" + game,
@@ -35,6 +35,7 @@ def ZhenHongXiaoZhan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 ZhenHongXiaoZhan.color = "lime"
 ZhenHongXiaoZhan.magic = False

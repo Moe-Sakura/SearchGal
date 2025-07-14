@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def Hikarinagi(game: str, mode=False) -> list:
     yinqin = "Hikarinagi"
     if mode:
@@ -31,6 +32,7 @@ def Hikarinagi(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 Hikarinagi.color = "white"
 Hikarinagi.magic = False

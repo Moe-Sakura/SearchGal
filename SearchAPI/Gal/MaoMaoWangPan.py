@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def MaoMaoWangPan(game: str, mode=False) -> list:
     yinqin = "猫猫网盘"
     if mode:
@@ -48,6 +49,7 @@ def MaoMaoWangPan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 MaoMaoWangPan.color = "lime"
 MaoMaoWangPan.magic = False

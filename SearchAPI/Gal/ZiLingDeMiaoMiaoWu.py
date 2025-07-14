@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def ZiLingDeMiaoMiaoWu(game: str, mode=False) -> list:
     yinqin = "梓澪の妙妙屋"
     if mode:
@@ -44,6 +45,7 @@ def ZiLingDeMiaoMiaoWu(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 ZiLingDeMiaoMiaoWu.color = "lime"
 ZiLingDeMiaoMiaoWu.magic = False

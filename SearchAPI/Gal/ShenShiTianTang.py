@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def ShenShiTianTang(game: str, mode=False) -> list:
     yinqin = "绅仕天堂"
     if mode:
@@ -31,6 +32,7 @@ def ShenShiTianTang(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 ShenShiTianTang.color = "gold"
 ShenShiTianTang.magic = True

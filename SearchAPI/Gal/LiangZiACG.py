@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def LiangZiACG(game: str, mode=False) -> list:
     yinqin = "量子acg"
     if mode:
@@ -30,6 +31,7 @@ def LiangZiACG(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 LiangZiACG.color = "white"
 LiangZiACG.magic = False

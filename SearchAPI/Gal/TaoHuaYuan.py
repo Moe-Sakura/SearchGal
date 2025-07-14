@@ -1,5 +1,6 @@
 from ..common import *
 
+
 def TaoHuaYuan(game: str, mode=False) -> list:
     yinqin = "桃花源"
     if mode:
@@ -24,6 +25,7 @@ def TaoHuaYuan(game: str, mode=False) -> list:
         except Exception:
             pass
         return [[], -1, yinqin, e]
+
 
 TaoHuaYuan.color = "lime"
 TaoHuaYuan.magic = False
