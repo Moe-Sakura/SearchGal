@@ -1,5 +1,6 @@
-.vscode/
 __pycache__/
 .history/
+.ruff_cache/
+.vscode/
 log.txt
 docker-compose.yml
