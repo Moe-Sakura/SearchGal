@@ -2,26 +2,25 @@
 # 访问 http://127.0.0.1:8898
 # 打包: 将Core.py内容全部复制到此处并删除第八行import
 # pyinstaller --add-data "templates:templates" -F app.py
-from flask import (
-    Flask,
-    render_template,
-    request,
-    make_response,
-    jsonify,
-    Response,
-    stream_with_context,
-    redirect,
-)
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import traceback
-import tracemalloc
-from Core import *
-from datetime import datetime
 import gc
 import threading
 import time
-import sys
+import traceback
+import tracemalloc
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
+
+from flask import (
+    Flask,
+    Response,
+    jsonify,
+    redirect,
+    request,
+    stream_with_context,
+)
 from flask_cors import CORS  # 导入 Flask-Cors
+
+from Core import *
 
 lock = threading.Lock()
 app = Flask(__name__)
@@ -128,7 +127,7 @@ def search_platform(platform, game, *args, **kwargs):
                 ],
                 "error": error,
             }
-    except Exception as e:
+    except Exception:
         print(f"搜索失败：{platform['func'].__name__} - {traceback.format_exc()}")
     return None
 
@@ -224,7 +223,7 @@ def searchpatch():
 
 
 if __name__ == "__main__":
-    # 开发: flask run -p 8898
+    # 开发: flask run -h 0.0.0.0 -p 8898
     # 生产: nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
     print(
         "搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入 Web 搜索"
