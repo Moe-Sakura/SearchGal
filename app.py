@@ -20,11 +20,15 @@ from datetime import datetime
 import gc
 import threading
 import time
+import sys
 from flask_cors import CORS # 导入 Flask-Cors
 
 lock = threading.Lock()
 app = Flask(__name__)
-CORS(app)
+if 'gunicorn' in sys.modules:
+    CORS(app, origins=['https://searchgal.homes','https://www.searchgal.homes','https://sg.saop.cc'])
+else:
+    CORS(app)
 app.secret_key = "your_secret_key_here"
 executor = ThreadPoolExecutor(max_workers=20)
 
