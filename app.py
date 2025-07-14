@@ -229,5 +229,3 @@ if __name__ == "__main__":
     print("搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入 Web 搜索")
     tracemalloc.start()
     app.run(host="0.0.0.0", port=8898, threaded=True, debug=False)
-
-    # 生产环境，启动命令(Linux): gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
