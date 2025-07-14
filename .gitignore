@@ -2,5 +2,4 @@
 __pycache__/
 .history/
 log.txt
-redis-password.key
 docker-compose.yml

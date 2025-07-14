@@ -10,6 +10,7 @@ from flask import (
     jsonify,
     Response,
     stream_with_context,
+    redirect,
 )
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import traceback
@@ -19,7 +20,6 @@ from datetime import datetime
 import gc
 import threading
 import time
-import redis
 from flask_cors import CORS # 导入 Flask-Cors
 
 lock = threading.Lock()
@@ -28,30 +28,37 @@ CORS(app)
 app.secret_key = "your_secret_key_here"
 executor = ThreadPoolExecutor(max_workers=20)
 
-SEARCH_INTERVAL_SECONDS = 15  # 搜索等待时间
+# 用于存储IP和最后访问时间
+ip_last_search_time = {}
+ip_limit_lock = threading.Lock()
+SEARCH_INTERVAL_SECONDS = 60  # 搜索等待时间
+IP_CACHE_MAX_SIZE = 100000  # 缓存中IP的最大数量
+IP_CACHE_ENTRY_TTL = 15  # IP条目在缓存中的存活时间 (15秒)
+IP_CACHE_CLEANUP_INTERVAL = 3600  # 清理IP缓存的周期 (1小时)
+last_cleanup_execution_time = 0.0  # 上次清理执行时间
 
-# 读取 Redis 密码
-def get_redis_password(file_path="redis-password.key"):
-    try:
-        with open(file_path, "r") as f:
-            return f.read().strip()
-    except FileNotFoundError:
-        print(f"错误：未找到 Redis 密码文件 '{file_path}'。")
-        return None
 
-redis_password = get_redis_password()
+def cleanup_ip_cache():
+    global last_cleanup_execution_time
+    current_time = time.time()
 
-# 初始化 Redis 客户端
-if redis_password:
-    try:
-        redis_client = redis.Redis(host='redis.searchgal.homes', port=6379, db=0, password=redis_password, decode_responses=True)
-        redis_client.ping() # 测试连接
-        print("成功连接到 Redis。")
-    except Exception as e:
-        print(f"无法连接到 Redis: {e}")
-else:
-    print("未设置 Redis 密码")
-    redis_client = None
+    # 检查是否需要执行清理（达到清理周期 或 缓存大小超出限制）
+    if (current_time - last_cleanup_execution_time > IP_CACHE_CLEANUP_INTERVAL) or (
+        len(ip_last_search_time) > IP_CACHE_MAX_SIZE
+    ):
+        # 筛选出需要移除的条目（存活时间超过TTL的）
+        # 使用 list(ip_last_search_time.items()) 来获取当前条目的快照进行迭代
+        keys_to_remove = [
+            key
+            for key, last_access_time in list(ip_last_search_time.items())
+            if (current_time - last_access_time) > IP_CACHE_ENTRY_TTL
+        ]
+
+        # 由于此函数在 ip_limit_lock 锁的保护下调用
+        for key_to_remove in keys_to_remove:
+            ip_last_search_time.pop(key_to_remove, None)
+
+        last_cleanup_execution_time = current_time  # 更新最后清理时间
 
 
 import logging
@@ -80,20 +87,6 @@ def request_log(ip: str, ua: str, method, url):
             f.write(logstr + "\n")
 
 
-@app.route("/gamepad-solid.svg")
-def serve_gamepad_solid():
-    return app.send_static_file("gamepad-solid.svg")
-
-
-@app.route("/main.js")
-def serve_main():
-    return app.send_static_file("main.js")
-
-
-@app.route("/style.css")
-def serve_style():
-    return app.send_static_file("style.css")
-
 
 @app.route("/")
 def index():
@@ -101,11 +94,7 @@ def index():
     ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
     if rip != "127.0.0.1":
         request_log(rip, ua, request.method, request.base_url)
-    seen_splash = request.cookies.get("seen_splash")
-    response = make_response(render_template("index.html"))
-    if not seen_splash:
-        response.set_cookie("seen_splash", "1", max_age=365 * 24 * 60 * 60)
-    return response
+    return redirect(f"https://searchgal.homes?api={request.base_url}")
 
 
 def search_platform(platform, game, *args, **kwargs):
@@ -151,26 +140,19 @@ def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs)
     ip_address = request.headers.get("X-Real-Ip", request.remote_addr)
     current_time = time.time()
 
-    # --- 新的 Redis 限流逻辑 ---
-    try:
-        if redis_client:
-            redis_key = f"{ip_address}"
-
-            # 检查 IP 是否在限制期内
-            # .exists() 比 .get() 更快，因为它只检查键是否存在
-            if redis_client.exists(redis_key):
-                ttl = redis_client.ttl(redis_key)
-                return jsonify(
-                    {
-                        "error": f"操作过于频繁，请 {ttl or SEARCH_INTERVAL_SECONDS} 秒后再试"
-                    }
-                ), 429
-
-            # 如果不在限制期内，则设置新的限制，并让它在指定秒数后自动过期
-            redis_client.set(redis_key, "locked", ex=SEARCH_INTERVAL_SECONDS)
-    except Exception:
-        pass
-    # --- Redis 限流逻辑结束 ---
+    with ip_limit_lock:
+        last_search_time = ip_last_search_time.get(ip_address)
+        if (
+            last_search_time
+            and (current_time - last_search_time) < SEARCH_INTERVAL_SECONDS
+        ):
+            return jsonify(
+                {
+                    "error": f"搜索过于频繁, 请 {SEARCH_INTERVAL_SECONDS - int(current_time - last_search_time)} 秒后再试"
+                }
+            ), 429
+        ip_last_search_time[ip_address] = current_time
+        cleanup_ip_cache()
 
     # 日志记录
     ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
@@ -247,4 +229,4 @@ if __name__ == "__main__":
     tracemalloc.start()
     app.run(host="0.0.0.0", port=8898, threaded=True, debug=False)
 
-    # 生产环境，启动命令(Linux): gunicorn -w 4 --bind 0.0.0.0:8898 app:app
+    # 生产环境，启动命令(Linux): gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
