@@ -203,7 +203,7 @@ def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs)
     return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
 
-@app.route("/search-gal", methods=["POST"])
+@app.route("/gal", methods=["POST"])
 def searchgal():
     game = request.form.get("game", "").strip()
     use_magic = request.form.get("magic", "false") == "true"
@@ -213,7 +213,7 @@ def searchgal():
     )
 
 
-@app.route("/search-patch", methods=["POST"])
+@app.route("/patch", methods=["POST"])
 def searchpatch():
     game = request.form.get("game", "").strip()
     use_magic = request.form.get("magic", "false") == "true"

@@ -19,11 +19,11 @@
 - ⏱️ 实时进度反馈
 
 主要接口：
-- `/search-gal` —— 流式搜索接口（推荐）
-- `/search-patch` —— 补丁搜索接口
+- `/gal` —— 流式搜索接口（推荐）
+- `/patch` —— 补丁搜索接口
 - `/search-classic` —— 传统搜索接口（已废弃）
 
-> **推荐优先使用流式接口 `/search-gal`，体验最佳。**
+> **推荐优先使用流式接口 `/gal`，体验最佳。**
 
 ---
 
@@ -133,7 +133,7 @@
 
 ```javascript
 async function searchGame(gameName, magic = false, ...args) {
-  const url = '/search-gal';
+  const url = '/gal';
   
   // 第一个位置变量作为 zypassword
   const zypassword = args[0] || '';
@@ -191,7 +191,7 @@ searchGame("Clover Day's");
 - 📱 更好的用户体验：适合在前端实时展示进度和结果
 - 🛡️ 更强的容错性：单个平台失败不影响整体搜索
 
-- **URL**: `/search-gal`
+- **URL**: `/gal`
 - **方法**: `POST`
 - **Content-Type**: `application/x-www-form-urlencoded` 或 `multipart/form-data`
 
@@ -358,7 +358,7 @@ const callbacks = {
 
 ## 接口: 流式搜索Galgame补丁
 
-- **URL**: `/search-patch`
+- **URL**: `/patch`
 - **方法**: `POST`
 - **Content-Type**: `application/x-www-form-urlencoded` 或 `multipart/form-data`
 
