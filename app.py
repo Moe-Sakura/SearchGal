@@ -25,8 +25,7 @@ from flask_cors import CORS # 导入 Flask-Cors
 
 lock = threading.Lock()
 app = Flask(__name__)
-if 'gunicorn' not in sys.modules:
-    CORS(app)
+CORS(app)
 app.secret_key = "your_secret_key_here"
 executor = ThreadPoolExecutor(max_workers=20)
 
