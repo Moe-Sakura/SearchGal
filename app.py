@@ -42,16 +42,16 @@ def get_redis_password(file_path="redis-password.key"):
 redis_password = get_redis_password()
 
 # 初始化 Redis 客户端
-redis_client = None
 if redis_password:
     try:
         redis_client = redis.Redis(host='redis.searchgal.homes', port=6379, db=0, password=redis_password, decode_responses=True)
         redis_client.ping() # 测试连接
         print("成功连接到 Redis。")
-    except redis.exceptions.ConnectionError as e:
+    except Exception as e:
         print(f"无法连接到 Redis: {e}")
 else:
     print("未设置 Redis 密码")
+    redis_client = None
 
 
 import logging
@@ -152,21 +152,24 @@ def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs)
     current_time = time.time()
 
     # --- 新的 Redis 限流逻辑 ---
-    if redis_client:
-        redis_key = f"{ip_address}"
+    try:
+        if redis_client:
+            redis_key = f"{ip_address}"
 
-        # 检查 IP 是否在限制期内
-        # .exists() 比 .get() 更快，因为它只检查键是否存在
-        if redis_client.exists(redis_key):
-            ttl = redis_client.ttl(redis_key)
-            return jsonify(
-                {
-                    "error": f"操作过于频繁，请 {ttl or SEARCH_INTERVAL_SECONDS} 秒后再试"
-                }
-            ), 429
+            # 检查 IP 是否在限制期内
+            # .exists() 比 .get() 更快，因为它只检查键是否存在
+            if redis_client.exists(redis_key):
+                ttl = redis_client.ttl(redis_key)
+                return jsonify(
+                    {
+                        "error": f"操作过于频繁，请 {ttl or SEARCH_INTERVAL_SECONDS} 秒后再试"
+                    }
+                ), 429
 
-        # 如果不在限制期内，则设置新的限制，并让它在指定秒数后自动过期
-        redis_client.set(redis_key, "locked", ex=SEARCH_INTERVAL_SECONDS)
+            # 如果不在限制期内，则设置新的限制，并让它在指定秒数后自动过期
+            redis_client.set(redis_key, "locked", ex=SEARCH_INTERVAL_SECONDS)
+    except Exception:
+        pass
     # --- Redis 限流逻辑结束 ---
 
     # 日志记录
