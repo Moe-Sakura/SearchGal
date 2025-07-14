@@ -24,12 +24,15 @@
 ## 如何运行
 
 ```sh
+git clone https://github.com/Moe-Sakura/SearchGal.git
+cd SearchGal && screen -S sg
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-gunicorn --bind 0.0.0.0:8898 app:app
+nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
 
 ```
 
-建议使用 [Nginx](https://nginx.org/) 反代 `8898` 端口
+建议使用 [Nginx](https://nginx.org/) 反代 [Gunicorn](https://gunicorn.org/)
 
 ---
 
