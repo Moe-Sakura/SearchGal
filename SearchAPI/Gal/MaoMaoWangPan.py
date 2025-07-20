@@ -15,7 +15,7 @@ def MaoMaoWangPan(game: str, mode=False) -> list:
             "password": "",
         }
         searesp = session.post(
-            url=f"https://sakiko.de/api/fs/search",
+            url="https://catcat.cloud/api/fs/search",
             json=data,
             headers=headers,
             timeout=timeoutsec,
@@ -25,7 +25,7 @@ def MaoMaoWangPan(game: str, mode=False) -> list:
             raise Exception(str(resjson))
         count = 0
         gamelst = []
-        mainurl = "https://sakiko.de"
+        mainurl = "https://catcat.cloud"
         reslen = len(resjson["data"]["content"])
         if (reslen != resjson["data"]["total"]) and (reslen != 20):
             raise Exception("访问密码错误")

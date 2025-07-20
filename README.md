@@ -58,9 +58,9 @@ nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
 [![桃花源](https://img.shields.io/badge/桃花源-00C853)](https://peach.sslswwdx.top/)
 [![梓澪の妙妙屋](https://img.shields.io/badge/梓澪の妙妙屋-00C853)](https://zi0.cc/)
 [![莉斯坦ACG](https://img.shields.io/badge/莉斯坦ACG-00C853)](https://www.limulu.moe/)
-[![猫猫网盘](https://img.shields.io/badge/猫猫网盘-00C853)](https://sakiko.de/)
+[![猫猫网盘](https://img.shields.io/badge/猫猫网盘-00C853)](https://catcat.cloud/)
 [![彼岸星露](https://img.shields.io/badge/彼岸星露-00C853)](https://seve.yugal.cc/)
-[![晴空咖啡馆](https://img.shields.io/badge/晴空咖啡馆-00C853)](https://aosoracafe.com/)
+[![稻荷GAL](https://img.shields.io/badge/稻荷GAL-00C853)](https://inarigal.com/)
 [![Koyso](https://img.shields.io/badge/Koyso-00C853)](https://koyso.to/)
 [![萤ノ光](https://img.shields.io/badge/萤ノ光-00C853)](https://yinghu.netlify.app/)
 ---
