@@ -15,7 +15,7 @@ def MaoMaoWangPan(game: str, mode=False) -> list:
             "password": "",
         }
         searesp = session.post(
-            url="https://catcat.cloud/api/fs/search",
+            url=f"https://catcat.cloud/api/fs/search",
             json=data,
             headers=headers,
             timeout=timeoutsec,
