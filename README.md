@@ -15,7 +15,7 @@
 ▸ WEB移动端完美适配，随时随地畅快搜索
 
 💡 **核心功能**<br>
-▸ 实时聚合 **27+** 主流Gal资源平台 / **2+** Galgame补丁站<br>
+▸ 实时聚合 **32+** 主流Gal资源平台 / **2+** Galgame补丁站<br>
 ▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件<br>
 ▸ 多线程加速搜索，快速响应
 
@@ -63,6 +63,9 @@ nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
 [![稻荷GAL](https://img.shields.io/badge/稻荷GAL-00C853)](https://inarigal.com/)
 [![Koyso](https://img.shields.io/badge/Koyso-00C853)](https://koyso.to/)
 [![萤ノ光](https://img.shields.io/badge/萤ノ光-00C853)](https://yinghu.netlify.app/)
+[![GGBases](https://img.shields.io/badge/GGBases-00C853)](https://www.ggbases.com/)
+[![月谣](https://img.shields.io/badge/月谣-00C853)](https://www.sayafx.vip/)
+[![05的资源小站](https://img.shields.io/badge/05的资源小站-00C853)](https://05fx.022016.xyz/)
 ---
 [![鲲Galgame补丁](https://img.shields.io/badge/鲲Galgame补丁-00C853)](https://www.moyu.moe/)
 [![2dfan](https://img.shields.io/badge/2dfan-00C853)](https://2dfan.com)
@@ -71,7 +74,6 @@ nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
 [![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)
 [![FuFuGal](https://img.shields.io/badge/FuFuGal-FFFFFF)](https://www.fufugal.com/)
 [![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
-[![天游二次元](https://img.shields.io/badge/天游二次元-FFFFFF)](https://www.tiangal.com/)
 [![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
 [![喵源领域](https://img.shields.io/badge/喵源领域-FFFFFF)](https://www.nyantaku.com/)
 [![Hikarinagi](https://img.shields.io/badge/Hikarinagi-FFFFFF)](https://www.hikarinagi.net/)
@@ -79,6 +81,9 @@ nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
 ### 🟡 需魔法访问
 [![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/)
 [![绅仕天堂](https://img.shields.io/badge/绅仕天堂-FFC107)](https://www.gogalgame.com/)
+[![天游二次元](https://img.shields.io/badge/天游二次元-FFC107)](https://www.tiangal.com/)
+[![Nysoure](https://img.shields.io/badge/Nysoure-FFC107)](https://res.nyne.dev/)
+[![xxacg](https://img.shields.io/badge/xxacg-FFC107)](https://xxacg.net/)
 
 ---
 
@@ -117,11 +122,12 @@ nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
 
 ## 📜 更新日志
 
-### 最新版本: V15 (2025/07/11)
+### 最新版本: V16 (2025/07/26)
 ```
-* 部分平台搜索最大数代码修正，现部分平台默认直接返回所有搜索结果
-* 「绮梦ACG」转API搜索
-- 去除「NekoGAL」(高防)
++ 新增「GGBases」「Nysoure」「xxacg」「月谣」「05的资源小站」资源网站
+* 「鲲Galgame」正则修正
+* 部分平台魔法性质改变
+* 错误信息会显示可能导致的原因
 ```
 **历史更新见 [更新日志](./version.md) 页面**
 

@@ -1,7 +1,7 @@
 from ..common import *
 
 
-def QingKongKaFeiGuan(game: str, mode=False) -> list:
+def DaoHeGal(game: str, mode=False) -> list:
     yinqin = "稻荷GAL"
     if mode:
         return yinqin
@@ -33,5 +33,5 @@ def QingKongKaFeiGuan(game: str, mode=False) -> list:
         return [[], -1, yinqin, e]
 
 
-QingKongKaFeiGuan.color = "lime"
-QingKongKaFeiGuan.magic = False
+DaoHeGal.color = "lime"
+DaoHeGal.magic = False

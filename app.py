@@ -111,9 +111,13 @@ def search_platform(platform, game, *args, **kwargs):
             error = str(result[3])
             if "Read timed out." in error:
                 error = "Search API 请求超时"
+            if ("Expecting value:" in error) or ("EOF occurred in violation of protocol" in error):
+                error += "<br/>(该平台搜索可能需要魔法, 而搜索后端暂未接入魔法)"
+            if ("Expecting value:" in error) or (error[0] in ("'",'"') and error[-1] in ("'",'"')):
+                error += "<br/>(站点搜索API改变, 或正则失效)"
             elif error == "":
-                error = "Unknow Error 未知错误"
-            print(error)
+                error = "搜索过程中遇到未知错误"
+            print(platform["func"]("",True), "搜索错误:",error)
         except:
             error = ""
 
@@ -128,7 +132,7 @@ def search_platform(platform, game, *args, **kwargs):
                 "error": error,
             }
     except Exception:
-        print(f"搜索失败：{platform['func'].__name__} - {traceback.format_exc()}")
+        print(f"搜索失败：{platform['func']('',True)} - {traceback.format_exc()}")
     return None
 
 

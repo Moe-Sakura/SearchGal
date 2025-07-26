@@ -1,16 +1,19 @@
 from ..common import *
 
 
-def TianYouErCiYuan(game: str, mode=False) -> list:
-    yinqin = "天游二次元"
+def xxacg(game: str, mode=False) -> list:
+    yinqin = "xxacg"
     if mode:
         return yinqin
     try:
         searul = re.compile(
-            r'</i></a><h2><a href="(?P<URL>.*?)" title="(?P<NAME>.*?)"', re.S
+            r'<h4 class="entry-title title"><a href="(?P<URL>.*?)">(?P<NAME>.*?)</a></h4>',
+            re.S,
         )
         searesp = session.get(
-            url=f"https://www.tiangal.com/search/{game}",
+            url="https://xxacg.net/",
+            params={"s": game},
+            verify=False,
             headers=headers,
             timeout=timeoutsec,
         )
@@ -31,5 +34,5 @@ def TianYouErCiYuan(game: str, mode=False) -> list:
         return [[], -1, yinqin, e]
 
 
-TianYouErCiYuan.color = "gold"
-TianYouErCiYuan.magic = True
+xxacg.color = "gold"
+xxacg.magic = True

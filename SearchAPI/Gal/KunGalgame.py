@@ -21,7 +21,7 @@ def KunGalgame(game: str, mode=False) -> list:
             zhname = i["name"]["zh-cn"].strip()
             jpname = i["name"]["ja-jp"].strip()
             gamelst.append(
-                {"name": zhname if zhname else jpname, "url": mainurl + str(i["gid"])}
+                {"name": zhname if zhname else jpname, "url": mainurl + str(i["id"])}
             )
             count += 1
         searesp.close()
