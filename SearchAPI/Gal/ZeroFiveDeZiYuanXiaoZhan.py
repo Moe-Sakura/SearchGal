@@ -27,7 +27,7 @@ def ZeroFiveDeZiYuanXiaoZhan(game: str, mode=False) -> list:
         gamelst = []
         mainurl = "https://05fx.022016.xyz"
         reslen = len(resjson["data"]["content"])
-        if (reslen != resjson["data"]["total"]):
+        if reslen != resjson["data"]["total"]:
             raise Exception("访问密码错误")
         for i in resjson["data"]["content"]:
             gamelst.append(

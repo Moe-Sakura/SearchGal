@@ -23,7 +23,9 @@ def GGBases(game: str, mode=False) -> list:
         gamelst = []
         mainurl = "https://www.ggbases.com/view.so?id="
         for i in list(searul.finditer(restext))[:MAX_RESULTS]:
-            gamelst.append({"name": i.group("NAME").strip(), "url": mainurl + i.group("URL")})
+            gamelst.append(
+                {"name": i.group("NAME").strip(), "url": mainurl + i.group("URL")}
+            )
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]

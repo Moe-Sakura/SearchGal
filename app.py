@@ -111,19 +111,32 @@ def search_platform(platform, game, *args, **kwargs):
             error = str(result[3])
             if "Read timed out." in error:
                 error = "Search API 请求超时"
-                
-            if ("Search API 请求超时" in error) or ("Network is unreachable" in error) or ("Expecting value:" in error) or ("EOF occurred in violation of protocol" in error) or (("Search API 响应状态码为 " in error) and ("400" in error or "403" in error)):
+
+            if (
+                ("Search API 请求超时" in error)
+                or ("Network is unreachable" in error)
+                or ("Expecting value:" in error)
+                or ("EOF occurred in violation of protocol" in error)
+                or (
+                    ("Search API 响应状态码为 " in error)
+                    and ("400" in error or "403" in error)
+                )
+            ):
                 error += "<br/>(该平台搜索可能需要魔法, 而搜索后端暂未接入魔法)"
-            if ("Expecting value:" in error) or (error[0] in ("'",'"') and error[-1] in ("'",'"')):
+            if ("Expecting value:" in error) or (
+                error[0] in ("'", '"') and error[-1] in ("'", '"')
+            ):
                 error += "<br/>(站点搜索API改变, 或正则失效)"
-            if ("Search API 响应状态码为 " in error) and ("503" in error or "502" in error or "500" in error):
+            if ("Search API 响应状态码为 " in error) and (
+                "503" in error or "502" in error or "500" in error
+            ):
                 error += "<br/>(目标站点服务器故障)"
-            if ("Connection aborted" in error):
+            if "Connection aborted" in error:
                 error += "<br/>(尝试重新搜索, 如同样报错则可能是魔法问题, 或平台站点服务器故障)"
-                
+
             elif error == "":
                 error = "搜索过程中遇到未知错误"
-            print(platform["func"]("",True), "搜索错误:",error.replace('<br/>', " "))
+            print(platform["func"]("", True), "搜索错误:", error.replace("<br/>", " "))
         except:
             error = ""
 
@@ -138,7 +151,7 @@ def search_platform(platform, game, *args, **kwargs):
                 "error": error,
             }
     except Exception:
-        print(f"搜索失败：{platform['func']('',True)} - {traceback.format_exc()}")
+        print(f"搜索失败：{platform['func']('', True)} - {traceback.format_exc()}")
     return None
 
 

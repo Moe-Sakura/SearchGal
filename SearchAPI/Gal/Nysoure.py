@@ -18,9 +18,7 @@ def Nysoure(game: str, mode=False) -> list:
         gamelst = []
         mainurl = "https://res.nyne.dev/resources/"
         for i in resjson["data"][:MAX_RESULTS]:
-            gamelst.append(
-                {"name": i["title"].strip(), "url": mainurl + str(i["id"])}
-            )
+            gamelst.append({"name": i["title"].strip(), "url": mainurl + str(i["id"])})
             count += 1
         searesp.close()
         return [gamelst, count, yinqin]
