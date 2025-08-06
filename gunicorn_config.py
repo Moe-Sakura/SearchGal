@@ -29,31 +29,39 @@ ip_limit_lock = Lock()
 def on_starting(server):
     """
     在主进程中创建共享内存块。
+    如果之前存在，先清理掉。
     """
-    print(f"Master process {os.getpid()} is creating shared memory block...")
+    print(f"Master process {os.getpid()} is setting up shared memory block...")
     try:
-        # 尝试创建一个新的共享内存块
+        # 尝试清理任何可能残留的旧共享内存块
+        shared_memory.SharedMemory(name=SHARED_MEM_NAME).unlink()
+        print(f"Successfully unlinked pre-existing shared memory block '{SHARED_MEM_NAME}'.")
+    except FileNotFoundError:
+        # 这是正常情况，说明没有残留
+        pass
+
+    try:
+        # 创建一个新的共享内存块
         shm = shared_memory.SharedMemory(name=SHARED_MEM_NAME, create=True, size=SHARED_MEM_SIZE)
         # 在内存块的开头写入一个空的 JSON 字典 '{}'，并以 null 结尾
         shm.buf[:3] = b'{}\x00'
         shm.close()
-        print(f"Shared memory block '{SHARED_MEM_NAME}' created.")
-    except FileExistsError:
-        print(f"Shared memory block '{SHARED_MEM_NAME}' already exists. No action needed.")
+        print(f"Shared memory block '{SHARED_MEM_NAME}' created successfully.")
+    except Exception as e:
+        server.log.error(f"Failed to create shared memory: {e}")
+        raise
 
-def when_ready(server):
+def on_exit(server):
     """
-    在服务器完全启动后，注册一个清理钩子，以确保在 Gunicorn 退出时删除共享内存块。
+    当 Gunicorn 关闭时，清理共享内存块。
+    这个钩子在 master 进程退出时被调用。
     """
-    def _cleanup():
-        print("Master process is shutting down. Unlinking shared memory.")
-        try:
-            # 只需要 unlink，不需要 close，因为我们没有在这里打开它
-            shared_memory.SharedMemory(name=SHARED_MEM_NAME).unlink()
-        except FileNotFoundError:
-            pass
-    
-    atexit.register(_cleanup)
+    print("Gunicorn is shutting down. Unlinking shared memory.")
+    try:
+        shared_memory.SharedMemory(name=SHARED_MEM_NAME).unlink()
+        print(f"Shared memory block '{SHARED_MEM_NAME}' unlinked.")
+    except FileNotFoundError:
+        print(f"Shared memory block '{SHARED_MEM_NAME}' was not found, no need to unlink.")
 
 def post_fork(server, worker):
     worker.log.info(f"Worker {worker.pid} forked. Shared memory is accessible.")

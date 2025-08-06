@@ -169,7 +169,12 @@ def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs)
         # --- START of atomic rate-limiting block ---
         if IS_GUNICORN:
             # Gunicorn 环境：直接操作共享内存
-            shm = shared_memory.SharedMemory(name=SHARED_MEM_NAME)
+            try:
+                shm = shared_memory.SharedMemory(name=SHARED_MEM_NAME)
+            except FileNotFoundError:
+                # 这是一个严重错误，说明 master 进程的共享内存不见了
+                print("[CRITICAL]!!!: Shared memory block not found. This indicates a problem with the Gunicorn master process.")
+                return jsonify({"error": "服务器内部状态错误，请稍后重试或联系管理员。"}), 500
             try:
                 # 读取和解析
                 # shm.buf 是一个 memoryview，没有 find 方法，需要先转换为 bytes
