@@ -28,7 +28,7 @@ git clone https://github.com/Moe-Sakura/SearchGal.git
 cd SearchGal && screen -S sg
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
+nice -n 19 gunicorn -c gunicorn_config.py --preload -w 4 --bind 0.0.0.0:8898 app:app
 
 ```
 

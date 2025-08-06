@@ -3,12 +3,17 @@
 # 打包: 将Core.py内容全部复制到此处并删除第八行import
 # pyinstaller --add-data "templates:templates" -F app.py
 import gc
+import json
+import logging
+import os
 import threading
 import time
+import uuid
 import traceback
 import tracemalloc
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
+from multiprocessing import shared_memory
 
 from flask import (
     Flask,
@@ -18,54 +23,60 @@ from flask import (
     request,
     stream_with_context,
 )
-from flask_cors import CORS  # 导入 Flask-Cors
+from flask_cors import CORS
 
 from Core import *
 
-lock = threading.Lock()
+# --- 初始化速率限制模块 ---
+if "gunicorn" in os.environ.get("SERVER_SOFTWARE", ""):
+    # Gunicorn 环境: 导入共享内存配置
+    print("Detected Gunicorn, using shared memory for rate limiting.")
+    IS_GUNICORN = True
+    from gunicorn_config import SHARED_MEM_NAME, ip_limit_lock
+else:
+    # 非 Gunicorn 环境 (例如，直接运行): 使用本地回退方案
+    print("Not running with Gunicorn, using local threading for rate limiting.")
+    IS_GUNICORN = False
+    ip_limit_lock = threading.Lock()
+    ip_last_search_time = {}
+
+# --- Flask 应用设置 ---
+lock = threading.Lock()  # 这个锁用于log文件写入，与速率限制无关
 app = Flask(__name__)
 CORS(app)
-app.secret_key = "your_secret_key_here"
-executor = ThreadPoolExecutor(max_workers=20)
+app.secret_key = uuid.uuid4()
 
-# 用于存储IP和最后访问时间
-ip_last_search_time = {}
-ip_limit_lock = threading.Lock()
-SEARCH_INTERVAL_SECONDS = 15  # 搜索等待时间
-IP_CACHE_MAX_SIZE = 100000  # 缓存中IP的最大数量
-IP_CACHE_ENTRY_TTL = 15  # IP条目在缓存中的存活时间 (15秒)
-IP_CACHE_CLEANUP_INTERVAL = 3600  # 清理IP缓存的周期 (1小时)
-last_cleanup_execution_time = 0.0  # 上次清理执行时间
+# 启动内存追踪
+tracemalloc.start()
 
+# --- 速率限制常量 ---
+SEARCH_INTERVAL_SECONDS = 15
+IP_CACHE_MAX_SIZE = 100000
+IP_CACHE_ENTRY_TTL = 15
+IP_CACHE_CLEANUP_INTERVAL = 3600
+last_cleanup_execution_time = 0.0
 
-def cleanup_ip_cache():
+def cleanup_ip_cache(data_dict):
+    """在一个可变字典上执行清理操作"""
     global last_cleanup_execution_time
     current_time = time.time()
 
-    # 检查是否需要执行清理（达到清理周期 或 缓存大小超出限制）
+    # 仅在达到清理周期或缓存大小超出限制时执行
     if (current_time - last_cleanup_execution_time > IP_CACHE_CLEANUP_INTERVAL) or (
-        len(ip_last_search_time) > IP_CACHE_MAX_SIZE
+        len(data_dict) > IP_CACHE_MAX_SIZE
     ):
-        # 筛选出需要移除的条目（存活时间超过TTL的）
-        # 使用 list(ip_last_search_time.items()) 来获取当前条目的快照进行迭代
         keys_to_remove = [
             key
-            for key, last_access_time in list(ip_last_search_time.items())
+            for key, last_access_time in list(data_dict.items())
             if (current_time - last_access_time) > IP_CACHE_ENTRY_TTL
         ]
-
-        # 由于此函数在 ip_limit_lock 锁的保护下调用
         for key_to_remove in keys_to_remove:
-            ip_last_search_time.pop(key_to_remove, None)
-
-        last_cleanup_execution_time = current_time  # 更新最后清理时间
-
-
-import logging
+            data_dict.pop(key_to_remove, None)
+        # 更新最后清理时间
+        last_cleanup_execution_time = current_time
+    return data_dict
 
 log = logging.getLogger("werkzeug")
-# log.setLevel(logging.ERROR)
-
 
 def search_log(ip: str, searchgame: str, ua: str = "unknow"):
     now = datetime.now()
@@ -73,19 +84,17 @@ def search_log(ip: str, searchgame: str, ua: str = "unknow"):
     logstr += " " + ua
     logstr += " 搜索: " + searchgame
     print(logstr)
-    with lock:  # 获取锁，确保只有一个线程能写
+    with lock:
         with open("log.txt", "a", encoding="utf-8") as f:
             f.write(logstr + "\n")
-
 
 def request_log(ip: str, ua: str, method, url):
     now = datetime.now()
     logstr = now.strftime("%Y-%m-%d %H:%M:%S") + f" {ip} {ua} {method} 访问 {url}"
     print(logstr)
-    with lock:  # 获取锁，确保只有一个线程能写
+    with lock:
         with open("log.txt", "a", encoding="utf-8") as f:
             f.write(logstr + "\n")
-
 
 @app.route("/")
 def index():
@@ -95,23 +104,19 @@ def index():
         request_log(rip, ua, request.method, request.base_url)
     return redirect(f"https://searchgal.homes?api={request.base_url}")
 
-
 def search_platform(platform, game, *args, **kwargs):
     """执行单个平台的搜索"""
     zypassword = kwargs.get("zypassword", "")
     try:
-        # 特殊平台密码处理
         if platform["name"] == "紫缘Gal":
             result = platform["func"](game, False, zypassword)
         else:
             result = platform["func"](game)
 
         try:
-            # 错误简单输出
             error = str(result[3])
             if "Read timed out." in error:
                 error = "Search API 请求超时"
-
             if (
                 ("Search API 请求超时" in error)
                 or ("Network is unreachable" in error)
@@ -133,7 +138,6 @@ def search_platform(platform, game, *args, **kwargs):
                 error += "<br/>(目标站点服务器故障)"
             if "Connection aborted" in error:
                 error += "<br/>(尝试重新搜索, 如同样报错则可能是魔法问题, 或平台站点服务器故障)"
-
             elif error == "":
                 error = "搜索过程中遇到未知错误"
             print(platform["func"]("", True), "搜索错误:", error.replace("<br/>", " "))
@@ -154,7 +158,6 @@ def search_platform(platform, game, *args, **kwargs):
         print(f"搜索失败：{platform['func']('', True)} - {traceback.format_exc()}")
     return None
 
-
 def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs):
     if not game:
         return jsonify({"error": "游戏名称不能为空"}), 400
@@ -163,67 +166,96 @@ def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs)
     current_time = time.time()
 
     with ip_limit_lock:
-        last_search_time = ip_last_search_time.get(ip_address)
-        if (
-            last_search_time
-            and (current_time - last_search_time) < SEARCH_INTERVAL_SECONDS
-        ):
-            return jsonify(
-                {
-                    "error": f"搜索过于频繁, 请 {SEARCH_INTERVAL_SECONDS - int(current_time - last_search_time)} 秒后再试"
-                }
-            ), 429
-        ip_last_search_time[ip_address] = current_time
-        cleanup_ip_cache()
+        # --- START of atomic rate-limiting block ---
+        if IS_GUNICORN:
+            # Gunicorn 环境：直接操作共享内存
+            shm = shared_memory.SharedMemory(name=SHARED_MEM_NAME)
+            try:
+                # 读取和解析
+                # shm.buf 是一个 memoryview，没有 find 方法，需要先转换为 bytes
+                buf_bytes = shm.buf.tobytes()
+                null_pos = buf_bytes.find(b'\x00')
+                json_str = buf_bytes[:null_pos].decode('utf-8') if null_pos != -1 else '{}'
+                data = json.loads(json_str)
 
-    # 日志记录
+                # 检查速率
+                last_search = data.get(ip_address)
+                if last_search and (current_time - last_search) < SEARCH_INTERVAL_SECONDS:
+                    return jsonify({"error": f"搜索过于频繁, 请 {SEARCH_INTERVAL_SECONDS - int(current_time - last_search)} 秒后再试"}), 429
+
+                # 更新和清理
+                data[ip_address] = current_time
+                data = cleanup_ip_cache(data)
+
+                # 写回共享内存
+                json_bytes = json.dumps(data).encode('utf-8')
+                if len(json_bytes) + 1 > shm.size:
+                    print("ERROR: Shared memory is full!")
+                else:
+                    shm.buf[:len(json_bytes)] = json_bytes
+                    shm.buf[len(json_bytes)] = 0
+            finally:
+                shm.close()
+        else:
+            # 非 Gunicorn 环境：操作普通字典
+            global ip_last_search_time
+            last_search = ip_last_search_time.get(ip_address)
+            if last_search and (current_time - last_search) < SEARCH_INTERVAL_SECONDS:
+                return jsonify({"error": f"搜索过于频繁, 请 {SEARCH_INTERVAL_SECONDS - int(current_time - last_search)} 秒后再试"}), 429
+            
+            ip_last_search_time[ip_address] = current_time
+            ip_last_search_time = cleanup_ip_cache(ip_last_search_time)
+        # --- END of atomic rate-limiting block ---
+
     ua = request.headers.get("Sec-Ch-Ua-Platform", "unknow").strip('"')
     search_log(ip_address, game, ua)
 
+    # 打印内存使用情况
+    current, peak = tracemalloc.get_traced_memory()
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] PID:{os.getpid()} Memory: current={current / 1024**2:.2f}MB, peak={peak / 1024**2:.2f}MB")
+
     def generate():
-        futures = {
-            executor.submit(search_platform, platform, game, *args, **kwargs): platform
-            for platform in PLATFORMS
-            if use_magic or not platform["magic"]
-        }
-        total = len(futures)
-        completed = 0
+        # 在函数内部创建线程池，以避免与 Gunicorn 的 fork 模型冲突
+        with ThreadPoolExecutor(max_workers=20) as executor:
+            futures = {
+                executor.submit(search_platform, platform, game, *args, **kwargs): platform
+                for platform in PLATFORMS
+                if use_magic or not platform["magic"]
+            }
+            total = len(futures)
+            completed = 0
 
-        # 先发送总平台数
-        yield json.dumps({"total": total}) + "\n"
+            yield json.dumps({"total": total}) + "\n"
 
-        for future in as_completed(futures):
-            completed += 1
-            result = future.result()
-            if result:
-                yield (
-                    json.dumps(
-                        {
-                            "progress": {"completed": completed, "total": total},
-                            "result": result,
-                        }
+            for future in as_completed(futures):
+                completed += 1
+                result = future.result()
+                if result:
+                    yield (
+                        json.dumps(
+                            {
+                                "progress": {"completed": completed, "total": total},
+                                "result": result,
+                            }
+                        )
+                        + "\n"
                     )
-                    + "\n"
-                )
-            else:
-                yield (
-                    json.dumps({"progress": {"completed": completed, "total": total}})
-                    + "\n"
-                )
+                else:
+                    yield (
+                        json.dumps({"progress": {"completed": completed, "total": total}})
+                        + "\n"
+                    )
+                del future
+                gc.collect()
 
-            # 显式释放已完成的 future
-            del future
+            # 清理 future 列表
+            futures.clear()
             gc.collect()
 
-        # 清理 future 列表
-        futures.clear()
-        gc.collect()
-
-        # 发送完成信号
-        yield json.dumps({"done": True}) + "\n"
+            # 发送完成信号
+            yield json.dumps({"done": True}) + "\n"
 
     return Response(stream_with_context(generate()), mimetype="text/event-stream")
-
 
 @app.route("/gal", methods=["POST"])
 def searchgal():
@@ -234,7 +266,6 @@ def searchgal():
         request, PLATFORMS_GAL, game, use_magic, zypassword=zypassword
     )
 
-
 @app.route("/patch", methods=["POST"])
 def searchpatch():
     game = request.form.get("game", "").strip()
@@ -244,12 +275,8 @@ def searchpatch():
         request, PLATFORMS_PATCH, game, use_magic, zypassword=zypassword
     )
 
-
 if __name__ == "__main__":
-    # 开发: flask run -h 0.0.0.0 -p 8898
-    # 生产: nice -n 19 gunicorn --threads 4 --bind 0.0.0.0:8898 app:app
     print(
         "搜索器运行中，请勿关闭该黑框，浏览器访问 http://127.0.0.1:8898 进入 Web 搜索"
     )
-    tracemalloc.start()
     app.run(host="0.0.0.0", port=8898, threaded=True, debug=False)
