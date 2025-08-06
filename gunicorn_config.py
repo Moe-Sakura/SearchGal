@@ -8,6 +8,15 @@ from multiprocessing import Lock, shared_memory
 # 启动: gunicorn -c gunicorn_config.py app:app --preload
 # ---------------------------------------------------------------------
 
+# 进程超时时间
+timeout = 60
+
+# 进程数
+workers = 4
+
+# 绑定端口
+bind = "0.0.0.0:8898"
+
 # 共享内存的名称和大小
 # 注意：大小需要估算，如果字典变得太大，这里可能会成为瓶颈
 # 假设平均每个条目（IP + 时间戳）占用 50 字节，100,000 个条目就是 5MB
