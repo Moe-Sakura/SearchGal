@@ -10,13 +10,14 @@
 > 🖥️预览地址: [SearchGal.homes](https://searchgal.homes)<br>
 > (感谢 [@Asuna](https://saop.cc/) 大佬的服务器支撑与技术支持)
 
-✅ **双端适配**<br>
-▸ 提供 **EXE桌面程序**~~*(已废弃)*~~ 与 **WEB在线版** 双版本 <br>
-▸ WEB移动端完美适配，随时随地畅快搜索
+✅ **多端适配**<br>
+▸ WEB完美适配PC端与移动端，随时随地畅快搜索<br>
+▸ PC端支持展示游戏封面以及游戏介绍、游戏标签、人物信息 <i>(国内网络可能加载缓慢)</i><br>
+
 
 💡 **核心功能**<br>
 ▸ 实时聚合 **32+** 主流Gal资源平台 / **2+** Galgame补丁站<br>
-▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / 特殊条件<br>
+▸ 自动标注平台特性：<span style="color:#4CAF50">免登录</span> / <span style="color:#FFC107">需魔法</span> / <span style="color:#FFFFFF">特殊条件</span><br>
 ▸ 多线程加速搜索，快速响应
 
 ---
@@ -28,6 +29,11 @@ git clone https://github.com/Moe-Sakura/SearchGal.git
 cd SearchGal && screen -S sg
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
+
+# Windows
+python app.py
+
+# Linux
 nice -n 19 gunicorn -c gunicorn_config.py --preload app:app
 
 ```
@@ -37,9 +43,9 @@ nice -n 19 gunicorn -c gunicorn_config.py --preload app:app
 ---
 
 ## 📸 界面预览
-|          桌面端GUI          |          WEB端PC           |              WEB端移动              |
+|          搜索界面          |          游戏详情界面           |              移动端界面              |
 | :-------------------------: | :------------------------: | :---------------------------------: |
-| ![GUI演示](./docs/img/shot-GUI.avif) | ![WEB-PC](./docs/img/shot-WEB.avif) | ![WEB-Phone](./docs/img/shot-WEB-Phone.avif) |
+| ![PC端搜索界面](./docs/img/pc_search_view.avif) | ![PC端游戏详情界面](./docs/img/pc_game_view.avif) | ![PC端WEB界面](./docs/img/phone_search_view.avif) |
 
 ---
 
@@ -90,15 +96,16 @@ nice -n 19 gunicorn -c gunicorn_config.py --preload app:app
 ## 🛠️ 使用指南
 1️⃣ **精准搜索**<br>
 ▸ 使用中文游戏名效果最佳<br>
-▸ 示例：`Senren＊Banka` → `千恋万花`
+▸ 节选合适的核心词搜索更精确<br>
+▸ 示例：`Senren＊Banka` → `千恋万花` → `千恋`
 
 2️⃣ **结果筛选**<br>
-▸ 优先选择<span style="color:#4CAF50">绿色标签</span>平台（免登录+直链下载）<br>
+▸ 优先选择<span style="color:#4CAF50">绿色标签</span>平台（免登录）<br>
 ▸ 金色平台需配置代理，白色平台需完成对应条件
 
 3️⃣ **下载须知**<br>
 ▸ 推荐使用IDM/FDM等下载工具加速<br>
-▸ 遇到Cloudflare验证时耐心等待5秒
+▸ 遇到Cloudflare验证时耐心等待
 
 ---
 
