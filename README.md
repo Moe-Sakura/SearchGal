@@ -24,21 +24,28 @@
 
 ## 如何运行
 
+### Linux
+
+建议使用 [Nginx](https://nginx.org/) 反代 [Gunicorn](https://gunicorn.org/)
+
 ```sh
 git clone https://github.com/Moe-Sakura/SearchGal.git
 cd SearchGal && screen -S sg
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-
-# Windows
-python app.py
-
-# Linux
 nice -n 19 gunicorn -c gunicorn_config.py --preload app:app
 
 ```
 
-建议使用 [Nginx](https://nginx.org/) 反代 [Gunicorn](https://gunicorn.org/)
+### Windows
+
+```sh
+git clone https://github.com/Moe-Sakura/SearchGal.git
+cd SearchGal && python -m venv venv && venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+
+```
 
 ---
 
