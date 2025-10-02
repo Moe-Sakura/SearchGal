@@ -40,5 +40,5 @@ def ZiYuanShe(game: str, mode=False) -> list:
             pass
         return [[], -1, yinqin, e]
 
-ZiYuanShe.color = "white"
+ZiYuanShe.color = "lime"
 ZiYuanShe.magic = False
