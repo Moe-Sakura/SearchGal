@@ -106,10 +106,9 @@ def index():
 
 def search_platform(platform, game, *args, **kwargs):
     """执行单个平台的搜索"""
-    zypassword = kwargs.get("zypassword", "")
     try:
         if platform["name"] == "紫缘Gal":
-            result = platform["func"](game, False, zypassword)
+            result = platform["func"](game, False)
         else:
             result = platform["func"](game)
 
@@ -266,18 +265,16 @@ def _handle_search_request(request, PLATFORMS, game, use_magic, *args, **kwargs)
 def searchgal():
     game = request.form.get("game", "").strip()
     use_magic = request.form.get("magic", "false") == "true"
-    zypassword = request.form.get("zypassword", "").strip()
     return _handle_search_request(
-        request, PLATFORMS_GAL, game, use_magic, zypassword=zypassword
+        request, PLATFORMS_GAL, game, use_magic
     )
 
 @app.route("/patch", methods=["POST"])
 def searchpatch():
     game = request.form.get("game", "").strip()
     use_magic = request.form.get("magic", "false") == "true"
-    zypassword = request.form.get("zypassword", "").strip()
     return _handle_search_request(
-        request, PLATFORMS_PATCH, game, use_magic, zypassword=zypassword
+        request, PLATFORMS_PATCH, game, use_magic
     )
 
 if __name__ == "__main__":

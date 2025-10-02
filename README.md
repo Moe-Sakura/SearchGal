@@ -79,6 +79,7 @@ python app.py
 [![GGBases](https://img.shields.io/badge/GGBases-00C853)](https://www.ggbases.com/)
 [![月谣](https://img.shields.io/badge/月谣-00C853)](https://www.sayafx.vip/)
 [![05的资源小站](https://img.shields.io/badge/05的资源小站-00C853)](https://05fx.022016.xyz/)
+[![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
 ---
 [![鲲Galgame补丁](https://img.shields.io/badge/鲲Galgame补丁-00C853)](https://www.moyu.moe/)
 [![2dfan](https://img.shields.io/badge/2dfan-00C853)](https://2dfan.com)
@@ -87,7 +88,6 @@ python app.py
 [![量子ACG](https://img.shields.io/badge/量子ACG-FFFFFF)](https://lzacg.org/)
 [![FuFuGal](https://img.shields.io/badge/FuFuGal-FFFFFF)](https://www.fufugal.com/)
 [![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-FFFFFF)](https://acgyyg.ru/)
-[![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
 [![喵源领域](https://img.shields.io/badge/喵源领域-FFFFFF)](https://www.nyantaku.com/)
 [![Hikarinagi](https://img.shields.io/badge/Hikarinagi-FFFFFF)](https://www.hikarinagi.net/)
 

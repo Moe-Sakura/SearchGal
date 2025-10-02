@@ -30,7 +30,6 @@
 ## ⚠️ 注意事项
 - 建议优先使用游戏的官方名称进行搜索，提升准确率。
 - `magic` 参数可提升检索范围，但可能略慢。
-- `zypassword` 仅在需要访问“紫缘Gal”平台时填写。
 - 补丁接口专注于汉化、语音等补丁资源。
 
 ---
@@ -50,12 +49,6 @@
 | :------ | :----- | :------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
 | `game`  | string | 是       | -         | 需要搜索的游戏名称。支持中文、日文和英文，建议使用官方名称以提高匹配度。                                                                 |
 | `magic` | string | 否       | `"false"` | 是否启用魔法搜索功能。<br/>• `"true"` - 启用魔法搜索<br/>• `"false"` - 禁用魔法搜索<br/>启用后可能会搜索到更多结果，但响应时间可能更长。 |
-
-#### 扩展参数
-| 参数名       | 类型   | 是否必需 | 默认值 | 描述                                                                     |
-| :----------- | :----- | :------- | :----- | :----------------------------------------------------------------------- |
-| `zypassword` | string | 否       | -      | 用于搜索 "紫缘Gal" 平台的访问密码。<br/>如果不提供，将跳过该平台的搜索。 |
-
 ### 成功响应 (200 OK)
 
 响应体是一个 JSON 对象，包含一个 `results` 数组。
@@ -135,17 +128,12 @@
 async function searchGame(gameName, magic = false, ...args) {
   const url = '/gal';
   
-  // 第一个位置变量作为 zypassword
-  const zypassword = args[0] || '';
 
   // 使用 FormData 来构建请求体
   const formData = new FormData();
   formData.append('game', gameName);
   formData.append('magic', magic.toString()); // 转换为字符串 "true" 或 "false"
   
-  if (zypassword) {
-    formData.append('zypassword', zypassword);
-  }
 
   try {
     const response = await fetch(url, {
@@ -175,9 +163,6 @@ searchGame("Clover Day's");
 
 // 2. 启用 magic 搜索
 // searchGame("Some Game", true);
-
-// 3. 提供 zypassword
-// searchGame("Another Game", false, "your-password-here");
 ```
 
 ## 接口: 流式搜索
@@ -255,7 +240,7 @@ searchGame("Clover Day's");
 ```javascript
 async function searchGameStream(
   // 使用对象解构赋值，让参数传递更清晰
-  { gameName, magic = false, zypassword = '' },
+  { gameName, magic = false},
   // 将所有回调函数也组织在一个对象里
   { onProgress, onResult, onDone, onError }
 ) {
@@ -271,9 +256,6 @@ async function searchGameStream(
   const formData = new FormData();
   formData.append('game', gameName);
   formData.append('magic', magic.toString());
-  if (zypassword) {
-    formData.append('zypassword', zypassword);
-  }
 
   try {
     const response = await fetch(url, {
@@ -352,7 +334,6 @@ const callbacks = {
 // searchGameStream({
 //   gameName: "Another Game",
 //   magic: true,
-//   zypassword: "your-password-here"
 // }, callbacks);
 ```
 
