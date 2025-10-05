@@ -79,7 +79,7 @@ python app.py
 [![GGBases](https://img.shields.io/badge/GGBases-00C853)](https://www.ggbases.com/)
 [![月谣](https://img.shields.io/badge/月谣-00C853)](https://www.sayafx.vip/)
 [![05的资源小站](https://img.shields.io/badge/05的资源小站-00C853)](https://05fx.022016.xyz/)
-[![紫缘Gal](https://img.shields.io/badge/紫缘Gal-FFFFFF)](https://galzy.eu.org)
+[![紫缘Gal](https://img.shields.io/badge/紫缘Gal-00C853)](https://galzy.eu.org)
 ---
 [![鲲Galgame补丁](https://img.shields.io/badge/鲲Galgame补丁-00C853)](https://www.moyu.moe/)
 [![2dfan](https://img.shields.io/badge/2dfan-00C853)](https://2dfan.com)
