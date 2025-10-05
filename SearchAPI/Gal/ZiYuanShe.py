@@ -1,4 +1,4 @@
-import requests
+from ..common import *
 
 def ZiYuanShe(game: str, mode=False) -> list:
     yinqin = "紫缘Gal"
@@ -7,7 +7,10 @@ def ZiYuanShe(game: str, mode=False) -> list:
     
     try:
         mainurl = "https://galzy.eu.org"
-        searesp = requests.get(f"{mainurl}/api/search?q={game}", timeout=10)
+        searesp = requests.get(
+            f"{mainurl}/api/search?q={game}", 
+            headers=headers,
+            timeout=timeoutsec)
         resjson = searesp.json()
         searesp.close()
         
