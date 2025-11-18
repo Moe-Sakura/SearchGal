@@ -1,5 +1,4 @@
-> **重要通知**：本项目后续不再更新，后端项目已迁移至 https://github.com/Moe-Sakura/SearchGal.git
-
+> **重要通知**：本项目后续不再更新，后端项目已迁移至 [Wrangler-API](https://github.com/Moe-Sakura/Wrangler-API)
 
 # 🔍 SearchGal · Gal资源聚合搜索工具
 <p align="center">
