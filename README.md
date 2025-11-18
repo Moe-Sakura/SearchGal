@@ -1,3 +1,6 @@
+> **重要通知**：本项目后续不再更新，后端项目已迁移至 https://github.com/Moe-Sakura/SearchGal.git
+
+
 # 🔍 SearchGal · Gal资源聚合搜索工具
 <p align="center">
   <strong>WEB丨多源聚合丨快速响应</strong>
