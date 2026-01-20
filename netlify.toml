@@ -1,0 +1,27 @@
+[build]
+  command = "echo 'No build needed'"
+  functions = "netlify/functions"
+
+# 重定向到 Functions
+[[redirects]]
+  from = "/"
+  to = "/.netlify/functions/index"
+  status = 200
+
+[[redirects]]
+  from = "/gal"
+  to = "/.netlify/functions/gal"
+  status = 200
+
+[[redirects]]
+  from = "/patch"
+  to = "/.netlify/functions/patch"
+  status = 200
+
+# 环境变量（如果需要）
+[context.production.environment]
+  NODE_VERSION = "18"
+
+# 开发环境配置
+[dev]
+  port = 8888

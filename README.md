@@ -281,10 +281,12 @@ SearchGal/
 │   │   └── patch/           # 补丁资源平台
 │   └── utils/               # 工具函数
 ├── api/                     # Vercel Edge Functions
+├── netlify/                 # Netlify Functions
 ├── scripts/                 # 构建脚本
 ├── docs/                    # 文档资源
 ├── wrangler.toml            # Cloudflare Workers 配置
 ├── vercel.json              # Vercel 部署配置
+├── netlify.toml             # Netlify 部署配置
 ├── compose.yml              # Docker Compose 配置
 └── Dockerfile               # Docker 镜像构建文件
 ```
