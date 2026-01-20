@@ -1,4 +1,4 @@
-> **重要通知**：本项目后续不再更新，后端项目已迁移至 [Wrangler-API](https://github.com/Moe-Sakura/Wrangler-API)
+> **重要通知**：本 Python 后端版本后续不再更新，已迁移至 `old` 分支
 
 # 🔍 SearchGal · Gal资源聚合搜索工具
 <p align="center">
