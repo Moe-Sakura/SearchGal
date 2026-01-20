@@ -1,0 +1,20 @@
+{
+  "name": "new-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "node scripts/generate-indices.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250821.0",
+    "@types/node": "^25.0.9",
+    "@vercel/node": "^5.5.24",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.31.0"
+  }
+}
