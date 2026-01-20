@@ -4,7 +4,7 @@
 
 🚀 **极速响应** | 🌊 **SSE 流式传输** | 🎮 **32+ 平台聚合** | ☁️ **边缘部署**
 
-[前端项目](https://github.com/Moe-Sakura/frontend) • [在线预览](#-在线预览) • [快速部署](#-快速部署) • [API 文档](#-api-文档) • [开发者接入](#-开发者接入指南)
+[前端项目](https://github.com/Moe-Sakura/frontend) • [在线预览](https://searchgal.homes) • [快速部署](#-快速部署) • [API 文档](#-api-文档) • [开发者接入](#-开发者接入指南)
 
 </div>
 
@@ -126,15 +126,85 @@ podman-compose up -d
 | POST | `/gal` | 搜索游戏资源 |
 | POST | `/patch` | 搜索补丁资源 |
 
-**请求参数**: `game` (string) - 搜索关键词  
-**Content-Type**: `multipart/form-data` 或 `application/json`
+---
+
+### 请求参数
+
+| 参数名 | 类型 | 必填 | 说明 |
+|:------:|:----:|:----:|------|
+| `game` | string | ✅ | 搜索关键词 |
+
+**支持的 Content-Type**:
+- `multipart/form-data` (推荐)
+- `application/x-www-form-urlencoded`
+
+---
+
+### 请求示例
+
+#### 使用 cURL
+
+```bash
+# 搜索游戏资源
+curl -X POST "https://your-api-domain.com/gal" \
+  -F "game=千恋万花"
+
+# 搜索补丁资源
+curl -X POST "https://your-api-domain.com/patch" \
+  -F "game=千恋万花"
+```
+
+#### 使用 JavaScript (Fetch API)
+
+```javascript
+// 搜索游戏资源并处理 SSE 流式响应
+async function searchGal(keyword) {
+  const formData = new FormData();
+  formData.append('game', keyword);
+
+  const response = await fetch('https://your-api-domain.com/gal', {
+    method: 'POST',
+    body: formData
+  });
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    
+    const lines = decoder.decode(value).split('\n').filter(Boolean);
+    for (const line of lines) {
+      const data = JSON.parse(line);
+      
+      if (data.total) {
+        console.log(`总共 ${data.total} 个搜索源`);
+      }
+      if (data.progress) {
+        console.log(`进度: ${data.progress.completed}/${data.progress.total}`);
+      }
+      if (data.result) {
+        console.log('搜索结果:', data.result);
+      }
+      if (data.done) {
+        console.log('搜索完成');
+      }
+    }
+  }
+}
+
+searchGal('千恋万花');
+```
+
+---
 
 ### 响应格式 (SSE 流式)
 
 ```json
 {"total": 10}                                    // 总搜索源数量
 {"progress": {"completed": 1, "total": 10}}      // 进度更新
-{"progress": {...}, "result": {...}}             // 搜索结果
+{"progress": {"completed": 2, "total": 10}, "result": {"name": "xx资源站", "color": "lime", "tags": ["NoReq", "SuDrive"], "items": [{"name": "千恋万花", "url": "https://xx.com/game/12345"}]}}  // 搜索结果
 {"done": true}                                   // 结束信号
 ```
 
@@ -154,7 +224,7 @@ podman-compose up -d
 
 | 步骤 | 技巧 |
 |:----:|------|
-| 🔍 **精准搜索** | 使用中文名效果最佳，如 `Senren＊Banka` → `千恋万花` → `千恋` |
+| 🔍 **精准搜索** | 使用中文关键词效果最佳，如 `Senren＊Banka` → `千恋万花` → `千恋` |
 | 🎯 **结果筛选** | 优先选择 🟢绿色标签 (免登录)，🟡金色需代理，⚪白色需对应条件 |
 | ⬇️ **下载建议** | 推荐 IDM/FDM 加速，遇 Cloudflare 验证耐心等待 |
 
@@ -201,13 +271,22 @@ git push && PR      # 提交贡献
 ## 📂 项目结构
 
 ```
-src/
-├── index.ts          # Worker 入口
-├── core.ts           # 核心搜索逻辑
-├── types.ts          # 类型定义
-└── platforms/        # 平台适配器
-api/
-└── [...slug].ts      # Vercel Edge 入口
+SearchGal/
+├── src/                     # 核心源码
+│   ├── index.ts             # Cloudflare Workers 入口
+│   ├── core.ts              # 搜索引擎核心逻辑
+│   ├── types.ts             # TypeScript 类型定义
+│   ├── platforms/           # 平台适配器目录
+│   │   ├── gal/             # 游戏资源平台
+│   │   └── patch/           # 补丁资源平台
+│   └── utils/               # 工具函数
+├── api/                     # Vercel Edge Functions
+├── scripts/                 # 构建脚本
+├── docs/                    # 文档资源
+├── wrangler.toml            # Cloudflare Workers 配置
+├── vercel.json              # Vercel 部署配置
+├── compose.yml              # Docker Compose 配置
+└── Dockerfile               # Docker 镜像构建文件
 ```
 
 ---

@@ -1,19 +1,7 @@
 services:
-  workers:
-    image: cf-workers-dev:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: cf-workers-dev
+  searchgal:
+    image: jurangren/searchgal-api:latest
+    container_name: searchgal-api
     ports:
-      - "8787:8787" # 本地访问 Workers 预览
-      - "8976:8976" # 可选：Wrangler 的 dashboard（如果用了 --inspect）
-    volumes:
-      - .:/app # 代码实时挂载，改动无需重启
-      - podman-node-modules:/app/node_modules # 持久化 node_modules，避免重复安装
-    command:
-      ["npx", "wrangler", "dev", "--local", "--ip", "0.0.0.0", "--port", "8787"]
+      - "8787:8787"
     restart: unless-stopped
-
-volumes:
-  podman-node-modules:

@@ -1,0 +1,21 @@
+{
+    "functions": {
+        "api/**/*.ts": {
+            "includeFiles": "src/**/*"
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/gal",
+            "destination": "/api/gal"
+        },
+        {
+            "source": "/patch",
+            "destination": "/api/patch"
+        },
+        {
+            "source": "/",
+            "destination": "/api/index"
+        }
+    ]
+}
