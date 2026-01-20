@@ -30,7 +30,7 @@
 | ☁️ **边缘部署** | 支持 Cloudflare Workers / Vercel Edge 等平台 |
 | 🌊 **流式响应** | SSE 实时返回搜索结果，无需等待全部完成 |
 
-> 📜 **历史版本**: Python 版本请查看 [`legacy-python`](../../tree/legacy-python) 分支 **(已停止维护)**
+> 📜 **历史版本**: Python 版本请查看 [`old`](https://github.com/Moe-Sakura/SearchGal/tree/old) 分支 **(已停止维护)**
 
 ---
 
@@ -109,7 +109,7 @@ pnpm install        # 安装依赖
 pnpm wrangler dev   # 启动开发服务器
 ```
 
-### 🐳 Docker 部署
+### 🐳 Podman Compose 容器化部署
 
 ```bash
 podman-compose up -d
