@@ -5,7 +5,7 @@ export const handler: Handler = async (event) => {
     return {
         statusCode: 302,
         headers: {
-            'Location': `https://searchgal.homes?api=${encodeURIComponent(origin)}`
+            'Location': `https://searchgal.top?api=${encodeURIComponent(origin)}`
         }
     };
 };

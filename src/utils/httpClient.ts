@@ -2,7 +2,7 @@ const TIMEOUT_SECONDS = 15;
 
 const HEADERS = {
   "Connection": "close",
-  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 (From SearchGal.homes) (https://github.com/Moe-Sakura/SearchGal)",
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 (From SearchGal.top) (https://github.com/Moe-Sakura/SearchGal)",
 };
 
 /**
