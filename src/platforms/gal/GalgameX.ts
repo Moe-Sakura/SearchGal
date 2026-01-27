@@ -1,8 +1,8 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://www.galgamex.net/api/search";
-const BASE_URL = "https://www.galgamex.net/";
+const API_URL = "https://www.galgamex.top/api/search";
+const BASE_URL = "https://www.galgamex.top/";
 
 interface GalgameXItem {
   name: string;

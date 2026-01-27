@@ -90,7 +90,7 @@ async function searchVikaACG(game: string): Promise<PlatformSearchResult> {
 
 const VikaACG: Platform = {
   name: "VikaACG",
-  color: "white",
+  color: "gold",
   tags: ["LoginPay", "magic", "MixDrive"],
   magic: true,
   search: searchVikaACG,
