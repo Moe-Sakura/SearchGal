@@ -25,7 +25,7 @@
 | 特性 | 说明 |
 |:----:|------|
 | ✅ **多端适配** | PC/移动端完美适配，PC端支持展示游戏封面、介绍、标签 |
-| 💡 **多源聚合** | 实时聚合 **30+** Gal资源平台 + **2+** 补丁站 |
+| 💡 **多源聚合** | 实时聚合 **31+** Gal资源平台 + **2+** 补丁站 |
 | 🏷️ **智能标注** | 自动标注：🟢免登录 / 🟡需魔法 / ⚪特殊条件 |
 | ☁️ **边缘部署** | 支持 Cloudflare Workers / Vercel Edge 等平台 |
 | 🌊 **流式响应** | SSE 实时返回搜索结果，无需等待全部完成 |
@@ -71,6 +71,7 @@
 [![FuFuGal](https://img.shields.io/badge/FuFuGal-AAAAAA)](https://www.fufugal.com/)
 [![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-AAAAAA)](https://acgyyg.ru/)
 [![喵源领域](https://img.shields.io/badge/喵源领域-AAAAAA)](https://www.nyantaku.com/)
+[![玖黎ACG](https://img.shields.io/badge/玖黎ACG-AAAAAA)](https://jiuliacg.com/)
 
 ### 🟡 需魔法访问
 

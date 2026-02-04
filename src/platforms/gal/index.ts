@@ -8,6 +8,7 @@ import GalTuShuGuan from "./GalTuShuGuan";
 import GGBases from "./GGBases";
 import GGS from "./GGS";
 import JiMengACG from "./JiMengACG";
+import JiuLiACG from "./JiuLiACG";
 import Koyso from "./Koyso";
 import KunGalgame from "./KunGalgame";
 import LiangZiACG from "./LiangZiACG";
@@ -40,6 +41,7 @@ const platforms: Platform[] = [
   GGBases,
   GGS,
   JiMengACG,
+  JiuLiACG,
   Koyso,
   KunGalgame,
   LiangZiACG,
