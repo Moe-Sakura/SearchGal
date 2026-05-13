@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "packageManager": "pnpm@10.33.2",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260331.1",
     "@eslint/js": "^10.0.1",

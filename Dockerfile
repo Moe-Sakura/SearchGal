@@ -2,10 +2,10 @@ FROM node:24-bookworm-slim
 
 WORKDIR /app
 
-RUN corepack enable pnpm
+RUN corepack enable
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN corepack install && pnpm install --frozen-lockfile
 
 COPY . .
 
