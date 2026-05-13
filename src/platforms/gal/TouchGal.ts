@@ -1,8 +1,8 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://www.touchgal.top/api/search";
-const BASE_URL = "https://www.touchgal.top/";
+const API_URL = "https://www.touchgal.ink/api/search";
+const BASE_URL = "https://www.touchgal.ink/";
 
 async function searchTouchGal(game: string): Promise<PlatformSearchResult> {
   const searchResult: PlatformSearchResult = {
