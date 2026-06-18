@@ -12,6 +12,14 @@ interface KunGalgameItem {
   };
 }
 
+// API 现在返回 { code, data: { items: [...] } }，而非顶层数组。
+interface KunGalgameResponse {
+  code: number;
+  data?: {
+    items?: KunGalgameItem[];
+  };
+}
+
 async function searchKunGalgame(game: string): Promise<PlatformSearchResult> {
   const searchResult: PlatformSearchResult = {
     count: 0,
@@ -30,9 +38,10 @@ async function searchKunGalgame(game: string): Promise<PlatformSearchResult> {
       throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
     }
 
-    const data = await response.json() as KunGalgameItem[];
-    
-    const items: SearchResultItem[] = data.map(item => {
+    const data = await response.json() as KunGalgameResponse;
+    const list = data.data?.items ?? [];
+
+    const items: SearchResultItem[] = list.map(item => {
       const zhName = item.name["zh-cn"]?.trim();
       const jpName = item.name["ja-jp"]?.trim();
       return {

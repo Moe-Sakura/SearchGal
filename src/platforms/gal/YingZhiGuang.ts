@@ -1,8 +1,9 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const DATA_URL = "https://yinghu.netlify.app/search.xml";
-const BASE_URL = "https://yinghu.netlify.app";
+// 原 yinghu.netlify.app 已停用（search.xml 返回 503），站点迁移至 yinghu.asia
+const DATA_URL = "https://www.yinghu.asia/search.xml";
+const BASE_URL = "https://www.yinghu.asia";
 const REGEX = /<entry>.*?<title>(.*?)<\/title>.*?<url>(.*?)<\/url>.*?<\/entry>/gs;
 
 async function searchYingZhiGuang(game: string): Promise<PlatformSearchResult> {

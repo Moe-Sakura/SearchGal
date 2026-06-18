@@ -1,16 +1,26 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://www.moyu.moe/api/search";
+// moyu.moe（鲲Galgame补丁）已升级为 Nuxt /api/v1 接口：
+// POST /api/v1/search  body: { q, limit, page }
+// 返回: { code, message, data: { items: [{ id, name_zh_cn, name_ja_jp, ... }] } }
+const API_URL = "https://www.moyu.moe/api/v1/search";
 const BASE_URL = "https://www.moyu.moe/patch/";
 
 interface KunGalgameBuDingItem {
   id: number;
-  name?: Record<string, string | undefined> | string;
+  name_zh_cn?: string;
+  name_ja_jp?: string;
+  name_en_us?: string;
+  name_zh_tw?: string;
 }
 
 interface KunGalgameBuDingResponse {
-  galgames: KunGalgameBuDingItem[];
+  code: number;
+  message?: string;
+  data?: {
+    items?: KunGalgameBuDingItem[];
+  } | null;
 }
 
 async function searchKunGalgameBuDing(game: string): Promise<PlatformSearchResult> {
@@ -21,14 +31,9 @@ async function searchKunGalgameBuDing(game: string): Promise<PlatformSearchResul
 
   try {
     const payload = {
+      q: game.trim(),
       limit: 24, // Hardcoded as per original script
       page: 1,
-      query: game.split(/\s+/), // Split by whitespace
-      searchOption: {
-        searchInAlias: true,
-        searchInIntroduction: false,
-        searchInTag: false,
-      },
     };
 
     const response = await fetchClient(API_URL, {
@@ -45,17 +50,18 @@ async function searchKunGalgameBuDing(game: string): Promise<PlatformSearchResul
 
     const data = await response.json() as KunGalgameBuDingResponse;
 
-    const items: SearchResultItem[] = data.galgames.map(item => {
-      const nameByLocale = typeof item.name === "object" && item.name !== null
-        ? item.name
-        : undefined;
-      const localizedName = nameByLocale
-        ? (nameByLocale["zh-cn"]
-          || nameByLocale["ja-jp"]
-          || nameByLocale["en-us"])
-        : undefined;
-      const name = (localizedName && localizedName.trim())
-        || (typeof item.name === "string" ? item.name : "");
+    if (data.code !== 0) {
+      throw new Error(`资源平台 SearchAPI 返回错误码 ${data.code}${data.message ? `: ${data.message}` : ""}`);
+    }
+
+    const list = data.data?.items ?? [];
+
+    const items: SearchResultItem[] = list.map(item => {
+      const name = (item.name_zh_cn
+        || item.name_ja_jp
+        || item.name_en_us
+        || item.name_zh_tw
+        || "").trim();
 
       return {
         name,
