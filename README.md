@@ -2,7 +2,7 @@
 
 # 🔍 SearchGal · Gal资源聚合搜索工具
 
-🚀 **极速响应** | 🌊 **SSE 流式传输** | 🎮 **32+ 平台聚合** | ☁️ **边缘部署**
+🚀 **极速响应** | 🌊 **SSE 流式传输** | 🎮 **29+ 平台聚合** | ☁️ **边缘部署**
 
 [前端项目](https://github.com/Moe-Sakura/frontend) • [在线预览](https://searchgal.top) • [快速部署](#-快速部署) • [API 文档](#-api-文档) • [开发者接入](#-开发者接入指南)
 
@@ -25,7 +25,7 @@
 | 特性 | 说明 |
 |:----:|------|
 | ✅ **多端适配** | PC/移动端完美适配，PC端支持展示游戏封面、介绍、标签 |
-| 💡 **多源聚合** | 实时聚合 **31+** Gal资源平台 + **2+** 补丁站 |
+| 💡 **多源聚合** | 实时聚合 **27+** Gal资源平台 + **2+** 补丁站 |
 | 🏷️ **智能标注** | 自动标注：🟢免登录 / 🟡需魔法 / ⚪特殊条件 |
 | ☁️ **边缘部署** | 支持 Cloudflare Workers / Vercel Edge 等平台 |
 | 🌊 **流式响应** | SSE 实时返回搜索结果，无需等待全部完成 |
@@ -40,22 +40,18 @@
 
 [![VNS](https://img.shields.io/badge/VNS-00C853)](https://gal.saop.cc/)
 [![真红小站](https://img.shields.io/badge/真红小站-00C853)](https://shinnku.com)
-[![TouchGal](https://img.shields.io/badge/TouchGal-00C853)](https://www.touchgal.us/)
+[![KisuGal](https://img.shields.io/badge/KisuGal-00C853)](https://www.kisuacg.moe/)
 [![Galgamex](https://img.shields.io/badge/Galgamex-00C853)](https://www.galgamex.net/)
 [![忧郁的loli](https://img.shields.io/badge/忧郁的loli-00C853)](https://www.ttloli.com/)
 [![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)
 [![绮梦ACG](https://img.shields.io/badge/绮梦ACG-00C853)](https://game.acgs.one/)
-[![青桔ACG](https://img.shields.io/badge/青桔ACG-00C853)](https://spare.qingju.org/)
 [![鲲Galgame](https://img.shields.io/badge/鲲Galgame-00C853)](https://www.kungal.com/zh-cn/)
 [![未知云盘](https://img.shields.io/badge/未知云盘-00C853)](https://www.nullcloud.top/)
 [![梓澪の妙妙屋](https://img.shields.io/badge/梓澪の妙妙屋-00C853)](https://zi0.cc/)
-[![莉斯坦ACG](https://img.shields.io/badge/莉斯坦ACG-00C853)](https://www.limulu.moe/)
 [![猫猫网盘](https://img.shields.io/badge/猫猫网盘-00C853)](https://catcat.cloud/)
-[![彼岸星露](https://img.shields.io/badge/彼岸星露-00C853)](https://seve.yugal.cc/)
 [![稻荷GAL](https://img.shields.io/badge/稻荷GAL-00C853)](https://inarigal.com/)
 [![Koyso](https://img.shields.io/badge/Koyso-00C853)](https://koyso.to/)
-[![萤ノ光](https://img.shields.io/badge/萤ノ光-00C853)](https://yinghu.netlify.app/)
-[![GGBases](https://img.shields.io/badge/GGBases-00C853)](https://www.ggbases.com/)
+[![萤ノ光](https://img.shields.io/badge/萤ノ光-00C853)](https://www.yinghu.asia/)
 [![月谣](https://img.shields.io/badge/月谣-00C853)](https://www.sayafx.vip/)
 [![05的资源小站](https://img.shields.io/badge/05的资源小站-00C853)](https://05fx.022016.xyz/)
 [![紫缘Gal](https://img.shields.io/badge/紫缘Gal-00C853)](https://galzy.eu.org)
