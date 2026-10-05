@@ -1,12 +1,14 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
+// 新版搜索改为 POST；使用已实测可用的主站域名，避免绑定临时 CDN 域名。
 const API_URL = "https://inarigal.com/api/search";
 const BASE_URL = "https://inarigal.com/detail/";
 
 interface DaoHeGalItem {
   id: number;
-  title_cn: string;
+  title_cn?: string;
+  title_jp?: string;
 }
 
 interface DaoHeGalResponse {
@@ -23,10 +25,11 @@ async function searchDaoHeGal(game: string): Promise<PlatformSearchResult> {
   };
 
   try {
-    const url = new URL(API_URL);
-    url.searchParams.set("keywords", game);
-
-    const response = await fetchClient(url);
+    const response = await fetchClient(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ keywords: game.trim(), page: 1, pageSize: 24, nsfw: "1" }),
+    });
     if (!response.ok) {
       throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
     }
@@ -38,7 +41,7 @@ async function searchDaoHeGal(game: string): Promise<PlatformSearchResult> {
     }
     
     const items: SearchResultItem[] = data.data.list.map(item => ({
-      name: item.title_cn.trim(),
+      name: (item.title_cn || item.title_jp || "").trim(),
       url: BASE_URL + item.id,
     }));
 

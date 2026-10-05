@@ -1,7 +1,7 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const BASE_URL = "https://galzy.eu.org";
+const BASE_URL = "https://www.galzy.moe";
 
 async function searchZiYuanShe(game: string): Promise<PlatformSearchResult> {
   const searchResult: PlatformSearchResult = {
@@ -16,17 +16,19 @@ async function searchZiYuanShe(game: string): Promise<PlatformSearchResult> {
     }
     
     const resJson = (await response.json()) as {
-      hits?: { id: string; titles: { title: string; lang: string }[] }[];
+      hits?: { id: string; titles: (string | { title: string; lang: string })[]; titles_obj?: { title: string; lang: string }[] }[];
     };
 
     const gameListData = resJson.hits;
 
+    if (!Array.isArray(gameListData)) throw new Error("资源平台 SearchAPI 返回异常：缺少 hits");
     if (gameListData) {
       const items: SearchResultItem[] = gameListData.map((item) => {
         let name: string = "未知";
         let firstTitle: string | undefined;
 
-        for (const titleObj of item.titles) {
+        for (const value of item.titles_obj ?? item.titles) {
+          const titleObj = typeof value === "string" ? { title: value, lang: "" } : value;
           if (!firstTitle) {
             firstTitle = titleObj.title;
           }

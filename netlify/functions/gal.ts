@@ -81,7 +81,7 @@ export const handler: Handler = async (event) => {
             }
         }
 
-        if (!game || typeof game !== 'string') {
+        if (typeof game !== 'string' || !game.trim()) {
             return {
                 statusCode: 400,
                 headers: { 'Content-Type': 'application/json', ...corsHeaders },

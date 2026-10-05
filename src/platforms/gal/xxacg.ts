@@ -1,62 +1,16 @@
-import { fetchClient } from "../../utils/httpClient";
-import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
+import { searchWordPress } from "../../utils/wordpress";
+import type { Platform, PlatformSearchResult } from "../../types";
 
-const REGEX = /<h4 class="entry-title title"><a href="(?<URL>.*?)">(?<NAME>.*?)<\/a><\/h4>/gs;
-
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, "").trim();
-}
-
-async function searchXxacg(game: string): Promise<PlatformSearchResult> {
-  const searchResult: PlatformSearchResult = {
-    count: 0,
-    items: [],
-  };
-  
+async function search(game: string): Promise<PlatformSearchResult> {
   try {
-    const url = new URL("https://xxacg.net/");
-    url.searchParams.set("s", game);
-
-    const response = await fetchClient(url);
-    if (!response.ok) {
-      throw new Error(`Search 资源平台 SearchAPI 响应异常状态码 ${response.status}`);
-    }
-
-    const html = await response.text();
-    const matches = html.matchAll(REGEX);
-
-    const items: SearchResultItem[] = [];
-    for (const match of matches) {
-      if (match.groups?.NAME && match.groups?.URL) {
-        items.push({
-          name: stripHtml(match.groups.NAME),
-          url: match.groups.URL,
-        });
-      }
-    }
-    
-
-    searchResult.items = items;
-    searchResult.count = items.length;
-
+    const items = await searchWordPress(game, "https://xxacg.net/");
+    return { count: items.length, items };
   } catch (error) {
-    if (error instanceof Error) {
-      searchResult.error = error.message;
-    } else {
-      searchResult.error = "An unknown error occurred";
-    }
-    searchResult.count = -1;
+    return { count: -1, items: [], error: error instanceof Error ? error.message : String(error) };
   }
-
-  return searchResult;
 }
 
 const xxacg: Platform = {
-  name: "xxacg",
-  color: "white",
-  tags: ["Login", "magic", "NoSplDrive"],
-  magic: true,
-  search: searchXxacg,
+  name: "xxacg", color: "white", tags: ["Login", "magic", "NoSplDrive"], magic: true, search,
 };
-
 export default xxacg;

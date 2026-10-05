@@ -54,7 +54,12 @@ async function searchVikaACG(game: string): Promise<PlatformSearchResult> {
     });
 
     if (!response.ok) {
-      throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
+      let detail = "";
+      try {
+        const failure = await response.json() as VikaGetPostsResponse;
+        detail = failure.message || failure.statusMessage || "";
+      } catch { /* 非 JSON 的 WAF 错误页仅保留 HTTP 状态 */ }
+      throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}${detail ? `：${detail}` : ""}`);
     }
 
     const json: VikaGetPostsResponse = await response.json();

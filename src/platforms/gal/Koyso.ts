@@ -1,8 +1,8 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://koyso.to/";
-const BASE_URL = "https://koyso.to";
+const API_URL = "https://playzip.com/";
+const BASE_URL = "https://playzip.com";
 const REGEX = /<a class="game_item"\s+href="(?<URL>.+?)"\s*>.*?<span style="background-color: rgba\(128,128,128,0\)">(?<NAME>.+?)<\/span>/gs;
 
 async function searchKoyso(game: string): Promise<PlatformSearchResult> {
@@ -29,7 +29,7 @@ async function searchKoyso(game: string): Promise<PlatformSearchResult> {
       if (match.groups?.NAME && match.groups?.URL) {
         items.push({
           name: match.groups.NAME.trim(),
-          url: BASE_URL + match.groups.URL,
+          url: new URL(match.groups.URL, response.url || BASE_URL).href,
         });
       }
     }

@@ -1,8 +1,8 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://acgyyg.ru/";
-const REGEX = /<a {2}target="_blank" href="(?<URL>.*?)" title="(?<NAME>.*?)" {2}class="post-overlay">/gs;
+const API_URL = "https://acgyyg.cc/";
+const REGEX = /<a\s+target="_blank"\s+href="(?<URL>.*?)"\s+title="(?<NAME>.*?)"\s+class="post-overlay">/gs;
 
 async function searchACGYingYingGuai(game: string): Promise<PlatformSearchResult> {
   const searchResult: PlatformSearchResult = {
@@ -25,8 +25,12 @@ async function searchACGYingYingGuai(game: string): Promise<PlatformSearchResult
     const items: SearchResultItem[] = [];
     for (const match of matches) {
       if (match.groups?.NAME && match.groups?.URL) {
+        let name = match.groups.NAME.trim();
+        if (name.endsWith("-ACG嘤嘤怪")) {
+          name = name.substring(0, name.length - "-ACG嘤嘤怪".length).trim();
+        }
         items.push({
-          name: match.groups.NAME.trim(),
+          name,
           url: match.groups.URL,
         });
       }

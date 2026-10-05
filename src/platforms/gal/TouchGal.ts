@@ -41,7 +41,7 @@ async function searchTouchGal(game: string, env?: SearchEnv): Promise<PlatformSe
 
   const keyword = game.trim();
   // 关键词长度不符合官方 API 约束（3-100 字符）时直接返回空结果，避免必然的 BAD_REQUEST。
-  if (keyword.length < MIN_KEYWORD_LENGTH || keyword.length > MAX_KEYWORD_LENGTH) {
+  if ([...keyword].length < MIN_KEYWORD_LENGTH || [...keyword].length > MAX_KEYWORD_LENGTH) {
     return searchResult;
   }
 
@@ -73,7 +73,8 @@ async function searchTouchGal(game: string, env?: SearchEnv): Promise<PlatformSe
       throw new Error(`资源平台 SearchAPI 响应异常 ${code}：${message}`);
     }
 
-    const items: SearchResultItem[] = (data.data?.items ?? []).map(item => ({
+    if (!Array.isArray(data.data?.items)) throw new Error("资源平台 SearchAPI 返回异常：缺少 items");
+    const items: SearchResultItem[] = data.data.items.map(item => ({
       name: item.name.trim(),
       url: BASE_URL + item.uniqueId,
     }));

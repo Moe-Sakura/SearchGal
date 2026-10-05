@@ -27,7 +27,7 @@ export default async function handler(request: Request) {
         const formData = await request.formData();
         const game = formData.get("game") as string;
 
-        if (!game || typeof game !== 'string') {
+        if (typeof game !== 'string' || !game.trim()) {
             return new Response(JSON.stringify({ error: "Game name is required" }), {
                 status: 400,
                 headers: { "Content-Type": "application/json", ...corsHeaders },

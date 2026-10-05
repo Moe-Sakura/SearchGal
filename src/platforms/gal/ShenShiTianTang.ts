@@ -14,7 +14,7 @@ async function searchShenShiTianTang(game: string): Promise<PlatformSearchResult
     const url = new URL(API_URL);
     url.searchParams.set("s", game);
 
-    const response = await fetchClient(url);
+    const response = await fetchClient(url, { insecure: true });
     if (!response.ok) {
       throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
     }

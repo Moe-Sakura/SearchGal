@@ -2,7 +2,7 @@
 
 # 🔍 SearchGal · Gal资源聚合搜索工具
 
-🚀 **极速响应** | 🌊 **SSE 流式传输** | 🎮 **29+ 平台聚合** | ☁️ **边缘部署**
+🚀 **极速响应** | 🌊 **SSE 流式传输** | 🎮 **26+ 平台聚合** | ☁️ **边缘部署**
 
 [前端项目](https://github.com/Moe-Sakura/frontend) • [在线预览](https://searchgal.top) • [快速部署](#-快速部署) • [API 文档](#-api-文档) • [开发者接入](#-开发者接入指南)
 
@@ -25,7 +25,7 @@
 | 特性 | 说明 |
 |:----:|------|
 | ✅ **多端适配** | PC/移动端完美适配，PC端支持展示游戏封面、介绍、标签 |
-| 💡 **多源聚合** | 实时聚合 **27+** Gal资源平台 + **2+** 补丁站 |
+| 💡 **多源聚合** | 实时聚合 **25+** Gal资源平台 + **1+** 补丁站 |
 | 🏷️ **智能标注** | 自动标注：🟢免登录 / 🟡需魔法 / ⚪特殊条件 |
 | ☁️ **边缘部署** | 支持 Cloudflare Workers / Vercel Edge 等平台 |
 | 🌊 **流式响应** | SSE 实时返回搜索结果，无需等待全部完成 |
@@ -40,7 +40,6 @@
 
 [![VNS](https://img.shields.io/badge/VNS-00C853)](https://gal.saop.cc/)
 [![真红小站](https://img.shields.io/badge/真红小站-00C853)](https://shinnku.com)
-[![KisuGal](https://img.shields.io/badge/KisuGal-00C853)](https://www.kisuacg.moe/)
 [![Galgamex](https://img.shields.io/badge/Galgamex-00C853)](https://www.galgamex.net/)
 [![忧郁的loli](https://img.shields.io/badge/忧郁的loli-00C853)](https://www.ttloli.com/)
 [![GAL图书馆](https://img.shields.io/badge/GAL图书馆-00C853)](https://gallibrary.pw/)
@@ -49,28 +48,27 @@
 [![梓澪の妙妙屋](https://img.shields.io/badge/梓澪の妙妙屋-00C853)](https://zi0.cc/)
 [![猫猫网盘](https://img.shields.io/badge/猫猫网盘-00C853)](https://catcat.cloud/)
 [![稻荷GAL](https://img.shields.io/badge/稻荷GAL-00C853)](https://inarigal.com/)
-[![Koyso](https://img.shields.io/badge/Koyso-00C853)](https://koyso.to/)
-[![萤ノ光](https://img.shields.io/badge/萤ノ光-00C853)](https://www.yinghu.asia/)
+[![Koyso](https://img.shields.io/badge/Koyso-00C853)](https://playzip.com/)
 [![月谣](https://img.shields.io/badge/月谣-00C853)](https://www.sayafx.vip/)
-[![05的资源小站](https://img.shields.io/badge/05的资源小站-00C853)](https://05fx.022016.xyz/)
-[![紫缘Gal](https://img.shields.io/badge/紫缘Gal-00C853)](https://galzy.eu.org)
+[![05的资源小站](https://img.shields.io/badge/05的资源小站-00C853)](https://www.022016.xyz/)
+[![紫缘Gal](https://img.shields.io/badge/紫缘Gal-00C853)](https://www.galzy.moe/)
+[![SakuGAL](https://img.shields.io/badge/SakuGAL-00C853)](https://sakugal.com/)
+[![TouchGal](https://img.shields.io/badge/TouchGal-00C853)](https://www.touchgal.ink/)
 
 #### 🟢 补丁站
 
 [![鲲Galgame补丁](https://img.shields.io/badge/鲲Galgame补丁-00C853)](https://www.moyu.moe/)
-[![2dfan](https://img.shields.io/badge/2dfan-00C853)](https://2dfan.com)
 
 ### ⚪ 需登录/特殊条件
 
-[![量子ACG](https://img.shields.io/badge/量子ACG-AAAAAA)](https://lzacg.org/)
+[![量子ACG](https://img.shields.io/badge/量子ACG-AAAAAA)](https://lzacg.cc/)
 [![FuFuGal](https://img.shields.io/badge/FuFuGal-AAAAAA)](https://www.fufugal.com/)
-[![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-AAAAAA)](https://acgyyg.ru/)
+[![ACG嘤嘤怪](https://img.shields.io/badge/ACG嘤嘤怪-AAAAAA)](https://acgyyg.cc/)
 [![喵源领域](https://img.shields.io/badge/喵源领域-AAAAAA)](https://www.nyantaku.com/)
 [![玖黎ACG](https://img.shields.io/badge/玖黎ACG-AAAAAA)](https://jiuliacg.com/)
 
 ### 🟡 需魔法访问
 
-[![VikaACG](https://img.shields.io/badge/VikaACG-FFC107)](https://www.vikacg.com/)
 [![绅仕天堂](https://img.shields.io/badge/绅仕天堂-FFC107)](https://www.gogalgame.com/)
 [![天游二次元](https://img.shields.io/badge/天游二次元-FFC107)](https://www.tiangal.com/)
 [![Nysoure](https://img.shields.io/badge/Nysoure-FFC107)](https://res.nyne.dev/)
@@ -263,6 +261,7 @@ const YourSite: Platform = {
   name: "站点名称",
   color: "lime",
   tags: ["NoReq"],
+  magic: false,
   search: async (game) => {
     // 实现搜索逻辑
     return { count: 0, items: [] };
@@ -322,6 +321,6 @@ SearchGal/
 
 **欢迎各位 GalGame 爱好者优化本项目 ❤️**
 
-[MIT License](./LICENSE) © SearchGal
+[GNU AGPLv3 License](./LICENSE) © SearchGal
 
 </div>

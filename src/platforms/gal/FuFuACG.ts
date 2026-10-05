@@ -1,58 +1,31 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://www.fufugal.com/so";
-const BASE_URL = "https://www.fufugal.com/detail";
-
-interface FuFuACGItem {
-  game_id: number;
-  game_name: string;
-}
-
-interface FuFuACGResponse {
-  obj: FuFuACGItem[];
-}
+const BASE_URL = "https://www.fufugal.com";
+interface FuFuGame { game_id: number; game_name: string }
 
 async function searchFuFuACG(game: string): Promise<PlatformSearchResult> {
-  const searchResult: PlatformSearchResult = {
-    count: 0,
-    items: [],
-  };
-
   try {
-    const url = new URL(API_URL);
-    url.searchParams.set("query", game);
-
-    const response = await fetchClient(url, {
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
+    const url = new URL("/so", BASE_URL);
+    url.searchParams.set("query", game.trim());
+    const response = await fetchClient(url, { headers: { Accept: "application/json, text/plain, */*" } });
+    if (!response.ok) throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
+    const data = await response.json() as { code: number; msg?: string; obj?: FuFuGame[] };
+    if (data.code !== 0 || !Array.isArray(data.obj)) {
+      throw new Error(`资源平台 SearchAPI 返回异常 ${data.code}：${data.msg || "缺少 obj"}`);
     }
-
-    const data = await response.json() as FuFuACGResponse;
-    
-    const items: SearchResultItem[] = data.obj.map(item => ({
-      name: item.game_name,
-      url: `${BASE_URL}?id=${item.game_id}`,
-    }));
-
-    searchResult.items = items;
-    searchResult.count = items.length;
-
+    const query = game.trim().toLowerCase();
+    // 该站在无匹配时返回随机推荐；不能将推荐当作搜索结果。
+    const items: SearchResultItem[] = data.obj
+      .filter(item => item.game_name.toLowerCase().includes(query))
+      .map(item => ({
+        name: item.game_name.trim(),
+        url: `${BASE_URL}/detail?id=${item.game_id}`,
+      }));
+    return { count: items.length, items };
   } catch (error) {
-    if (error instanceof Error) {
-      searchResult.error = error.message;
-    } else {
-      searchResult.error = "An unknown error occurred";
-    }
-    searchResult.count = -1;
+    return { count: -1, items: [], error: error instanceof Error ? error.message : String(error) };
   }
-
-  return searchResult;
 }
 
 const FuFuACG: Platform = {

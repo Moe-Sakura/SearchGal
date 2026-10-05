@@ -34,42 +34,30 @@ export async function handleSearchRequestStream(
   await writer.write(encoder.encode(formatStreamEvent({ total })));
 
   const searchPromises = platforms.map(async (platform) => {
+    let result;
     try {
-      const result = await platform.search(game, env);
-      completed++;
-      
-      const progress: StreamProgress = { completed, total };
-      
-      if (result.count > 0 || result.error) {
-        if (result.error) {
-          // 记录平台错误
-          console.log(JSON.stringify({
-            message: `平台 ${platform.name} 搜索错误: ${result.error}`,
-            level: "error",
-          }));
-        }
-        const streamResult: StreamResult = {
-          name: platform.name,
-          color: result.error ? 'red' : platform.color,
-          tags: platform.tags,
-          items: result.items,
-          error: result.error,
-        };
-        await writer.write(encoder.encode(formatStreamEvent({ progress, result: streamResult })));
-      } else {
-        // 即使没有结果或错误，也发送进度更新
-        await writer.write(encoder.encode(formatStreamEvent({ progress })));
+      result = await platform.search(game, env);
+    } catch (error) {
+      result = { count: -1, items: [], error: error instanceof Error ? error.message : String(error) };
+    }
+    completed++;
+    const progress: StreamProgress = { completed, total };
+    if (result.count > 0 || result.error) {
+      if (result.error) {
+        console.log(JSON.stringify({
+          message: `平台 ${platform.name} 搜索错误: ${result.error}`,
+          level: "error",
+        }));
       }
-    } catch (e) {
-      completed++;
-      // 记录平台内部的未知错误
-      console.error(`Error searching platform ${platform.name}:`, e);
-      // 记录平台内部的未知错误
-      console.log(JSON.stringify({
-        message: `平台 ${platform.name} 内部错误: ${e instanceof Error ? e.message : String(e)}`,
-        level: "error",
-      }));
-      const progress: StreamProgress = { completed, total };
+      const streamResult: StreamResult = {
+        name: platform.name,
+        color: result.error ? "red" : platform.color,
+        tags: platform.tags,
+        items: result.items,
+        error: result.error,
+      };
+      await writer.write(encoder.encode(formatStreamEvent({ progress, result: streamResult })));
+    } else {
       await writer.write(encoder.encode(formatStreamEvent({ progress })));
     }
   });

@@ -1,76 +1,37 @@
 import { fetchClient } from "../../utils/httpClient";
-import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
+import type { Platform, PlatformSearchResult } from "../../types";
 
-const API_URL = "https://www.kungal.com/api/search";
-const BASE_URL = "https://www.kungal.com/zh-cn/galgame/";
+const API_URL = "https://www.kungal.com/api/v1/search/works";
+const BASE_URL = "https://www.kungal.com/galgame/";
 
-interface KunGalgameItem {
-  id: number;
-  name: {
-    "zh-cn": string;
-    "ja-jp": string;
-  };
-}
-
-// API 现在返回 { code, data: { items: [...] } }，而非顶层数组。
-interface KunGalgameResponse {
-  code: number;
-  data?: {
-    items?: KunGalgameItem[];
-  };
+interface KunWork {
+  id: string;
+  display_name: string;
+  localized?: Record<string, { value: string }>;
 }
 
 async function searchKunGalgame(game: string): Promise<PlatformSearchResult> {
-  const searchResult: PlatformSearchResult = {
-    count: 0,
-    items: [],
-  };
-
   try {
     const url = new URL(API_URL);
-    url.searchParams.set("keywords", game);
-    url.searchParams.set("type", "galgame");
+    url.searchParams.set("q", game.trim());
     url.searchParams.set("page", "1");
-    url.searchParams.set("limit", "12"); // Hardcoded as per original script
-
+    url.searchParams.set("limit", "12");
+    url.searchParams.set("include_nsfw", "true");
     const response = await fetchClient(url);
-    if (!response.ok) {
-      throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
-    }
-
-    const data = await response.json() as KunGalgameResponse;
-    const list = data.data?.items ?? [];
-
-    const items: SearchResultItem[] = list.map(item => {
-      const zhName = item.name["zh-cn"]?.trim();
-      const jpName = item.name["ja-jp"]?.trim();
-      return {
-        name: zhName || jpName,
-        url: BASE_URL + item.id,
-      };
-    });
-
-    searchResult.items = items;
-    searchResult.count = items.length;
-
+    if (!response.ok) throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
+    const data = await response.json() as { items?: KunWork[]; detail?: string };
+    if (!Array.isArray(data.items)) throw new Error(`资源平台 SearchAPI 返回异常：${data.detail || "缺少 items"}`);
+    const items = data.items.map(item => ({
+      name: (item.localized?.["zh-Hans"]?.value || item.display_name).trim(),
+      url: BASE_URL + encodeURIComponent(item.id),
+    }));
+    return { count: items.length, items };
   } catch (error) {
-    if (error instanceof Error) {
-      searchResult.error = error.message;
-    } else {
-      searchResult.error = "An unknown error occurred";
-    }
-    searchResult.count = -1;
+    return { count: -1, items: [], error: error instanceof Error ? error.message : String(error) };
   }
-
-  return searchResult;
 }
 
 const KunGalgame: Platform = {
-  name: "鲲Galgame",
-  color: "lime",
-  tags: ["NoReq", "SuDrive"],
-  magic: false,
-  search: searchKunGalgame,
+  name: "鲲Galgame", color: "lime", tags: ["NoReq", "SuDrive"], magic: false, search: searchKunGalgame,
 };
-
 export default KunGalgame;

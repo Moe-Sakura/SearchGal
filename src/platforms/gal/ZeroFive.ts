@@ -1,8 +1,8 @@
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://05fx.022016.xyz/api/fs/search";
-const BASE_URL = "https://05fx.022016.xyz";
+const API_URL = "https://www.022016.xyz/api/fs/search";
+const BASE_URL = "https://www.022016.xyz";
 
 interface ZeroFiveItem {
   name: string;
@@ -51,7 +51,7 @@ async function searchZeroFive(game: string): Promise<PlatformSearchResult> {
       throw new Error(`${data.message}`);
     }
 
-    const items: SearchResultItem[] = data.data.content.map(item => ({
+    const items: SearchResultItem[] = (data.data?.content || []).map(item => ({
       name: item.name.trim(),
       url: BASE_URL + item.parent + "/" + item.name,
     }));

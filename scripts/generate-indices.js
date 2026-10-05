@@ -10,12 +10,17 @@ const platformsDir = path.join(__dirname, '../src/platforms');
 const DISABLED = {
   gal: {
     GGBases: 'openresty WAF 按 searchgal UA 屏蔽，换 UA 即绕过站长主动屏蔽，故停用',
-    TouchGal: 'Cloudflare 人机质询 + 源站按 searchgal UA 屏蔽，无法抓取，故停用',
+    JiMengACG: '绮梦ACG 已关闭，保留源文件但不再注册',
     BiAnXingLu: '源站返回 521（Cloudflare 回源失败），站点已宕机，故停用',
     LiSiTanACG: '已迁站 singureo.com 并改为 SPA 客户端搜索，原 search.xml 索引下线，无可调用接口，故停用',
     QingJiACG: '全站 Cloudflare 人机质询，所有 UA 均被拦截，无法抓取，故停用',
+    KisuGal: '原域名解析已失效（DNS ENOTFOUND），当前无可用新域名，故停用',
+    YingZhiGuang: '原 search.xml 索引文件已下线，无可用搜索接口，故停用',
+    VikaACG: '官方接口增加了客户端签名与设备校验（返回 400 非法的客户端），无法服务端直接抓取，故停用',
   },
-  patch: {},
+  patch: {
+    TWOdfan: '全站 Cloudflare 人机防护拦截，返回 403，服务端无法直接抓取，故停用',
+  },
 };
 
 function generateIndexFile(directory) {
@@ -25,7 +30,8 @@ function generateIndexFile(directory) {
   const disabled = DISABLED[directory] || {};
 
   const files = fs.readdirSync(dirPath)
-    .filter(file => file.endsWith('.ts') && file !== 'index.ts');
+    .filter(file => file.endsWith('.ts') && file !== 'index.ts')
+    .sort();
 
   if (files.length === 0) return;
 

@@ -26,3 +26,13 @@ package-lock.json
 .claude
 
 .history
+
+# Tests and test build
+test/
+tests/
+*.test.*
+.test-build/
+testbuild/
+scripts/run-tests.*
+scripts/compile-test-*
+scripts/audit-*

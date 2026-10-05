@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0-only",
   "description": "",
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {

@@ -1,84 +1,34 @@
 import { fetchClient } from "../../utils/httpClient";
+import { assertSearchPage, decodeHtmlText, uniqueItems } from "../../utils/search";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
-const API_URL = "https://www.galgamex.top/api/search";
-const BASE_URL = "https://www.galgamex.top/";
+const BASE_URL = "https://www.galgamex.net";
 
-interface GalgameXItem {
-  name: string;
-  uniqueId: string;
-}
-
-interface GalgameXResponse {
-  galgames: GalgameXItem[];
-}
-
+// 新版 Next.js 站点公开 SSR 搜索页，不依赖会随部署变化的 Server Action ID。
 async function searchGalgameX(game: string): Promise<PlatformSearchResult> {
-  const searchResult: PlatformSearchResult = {
-    count: 0,
-    items: [],
-  };
-
   try {
-    const payload = {
-      queryString: JSON.stringify([{ type: "keyword", name: game }]),
-      limit: 24,
-      page: 1,
-      searchOption: {
-        searchInIntroduction: true,
-        searchInAlias: true,
-        searchInTag: true,
-      },
-      selectedLanguage: "all",
-      selectedMonths: ["all"],
-      selectedPlatform: "all",
-      selectedType: "all",
-      selectedYears: ["all"],
-      sortField: "resource_update_time",
-      sortOrder: "desc",
-      tagIds: "",
-    };
-
-    const response = await fetchClient(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
+    const url = new URL("/search", BASE_URL);
+    url.searchParams.set("q", game.trim());
+    const response = await fetchClient(url);
+    if (!response.ok) throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
+    const html = await response.text();
+    assertSearchPage(html);
+    const items: SearchResultItem[] = [];
+    for (const match of html.matchAll(/<a\b[^>]*href=(["'])([^"']*\/game\/[^"']+)\1[^>]*>([\s\S]*?)<\/a>/gi)) {
+      const title = match[3].match(/<h[234]\b[^>]*>([\s\S]*?)<\/h[234]>/i);
+      if (!title) continue;
+      const href = new URL(decodeHtmlText(match[2]), BASE_URL);
+      if (href.origin !== BASE_URL || !/^\/game\/[\w-]+$/.test(href.pathname)) continue;
+      items.push({ name: decodeHtmlText(title[1]), url: href.href });
     }
-
-    const data = await response.json() as GalgameXResponse;
-    
-    const items: SearchResultItem[] = data.galgames.map(item => ({
-      name: item.name.trim(),
-      url: BASE_URL + item.uniqueId,
-    }));
-
-    searchResult.items = items;
-    searchResult.count = items.length;
-
+    const results = uniqueItems(items);
+    return { count: results.length, items: results };
   } catch (error) {
-    if (error instanceof Error) {
-      searchResult.error = error.message;
-    } else {
-      searchResult.error = "An unknown error occurred";
-    }
-    searchResult.count = -1;
+    return { count: -1, items: [], error: error instanceof Error ? error.message : String(error) };
   }
-
-  return searchResult;
 }
 
 const GalgameX: Platform = {
-  name: "Galgamex",
-  color: "lime",
-  tags: ["NoReq", "SuDrive"],
-  magic: false,
-  search: searchGalgameX,
+  name: "Galgamex", color: "lime", tags: ["NoReq", "SuDrive"], magic: false, search: searchGalgameX,
 };
-
 export default GalgameX;
