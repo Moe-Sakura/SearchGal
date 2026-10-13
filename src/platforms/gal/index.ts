@@ -1,6 +1,7 @@
 import type { Platform } from "../../types";
 import ACGYingYingGuai from "./ACGYingYingGuai";
 // import BiAnXingLu from "./BiAnXingLu"; // 已禁用：源站返回 521（Cloudflare 回源失败），站点已宕机，故停用
+import Charlotte from "./Charlotte";
 import DaoHeGal from "./DaoHeGal";
 import FuFuACG from "./FuFuACG";
 // import GGBases from "./GGBases"; // 已禁用：openresty WAF 按 searchgal UA 屏蔽，换 UA 即绕过站长主动屏蔽，故停用
@@ -36,6 +37,7 @@ import xxacg from "./xxacg";
 const platforms: Platform[] = [
   ACGYingYingGuai,
   // BiAnXingLu, // 已禁用
+  Charlotte,
   DaoHeGal,
   FuFuACG,
   // GGBases, // 已禁用

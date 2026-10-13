@@ -16,6 +16,9 @@ export interface PlatformSearchResult {
 export interface SearchEnv {
   // TouchGal 官方元数据 API token（tgal_live_...），在 developer.touchgal.com 申请
   TOUCHGAL_API_TOKEN?: string;
+  // Charlotte 站点根地址及专用搜索密钥，仅在服务端使用
+  CHARLOTTE_BASE_URL?: string;
+  CHARLOTTE_API_KEY?: string;
 }
 
 // 平台对象的接口
