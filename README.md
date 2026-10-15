@@ -108,6 +108,8 @@ pnpm wrangler dev   # 启动开发服务器
 | 变量 | 必需 | 说明 |
 |------|:----:|------|
 | `TOUCHGAL_API_TOKEN` | 可选 | TouchGal 官方元数据 API token（`tgal_live_...`）。主站已整站开启 Cloudflare 质询，无法直接抓取，需在 [developer.touchgal.com](https://developer.touchgal.com) 申请、审核通过后创建 token。**未配置时 TouchGal 平台会自动跳过（不报错），配置后即可恢复搜索。** |
+| `CHARLOTTE_BASE_URL` | 可选 | Charlotte 的 HTTPS 站点根地址，如 `https://your-charlotte.example`，不要填写 `/api` 路径。本地开发支持 `http://localhost:3000`。与 `CHARLOTTE_API_KEY` 同时配置后启用。 |
+| `CHARLOTTE_API_KEY` | 可选 | Charlotte 专用搜索密钥，值须与 Charlotte 服务端的 `NUXT_SEARCHGAL_API_KEY` 一致。仅供服务端使用，不要使用完整资源接口的私有密钥。缺少地址或密钥时自动跳过 Charlotte。 |
 
 按部署平台设置：
 
@@ -125,6 +127,66 @@ netlify env:set TOUCHGAL_API_TOKEN tgal_live_xxx
 # Docker / Podman Compose：通过容器环境变量传入（compose.yml 已透传）
 TOUCHGAL_API_TOKEN=tgal_live_xxx podman-compose up -d
 ```
+
+#### Charlotte 接入
+
+先在 Charlotte 部署 `GET /api/integration/search` 接口，并配置独立的 `NUXT_SEARCHGAL_API_KEY`（至少 32 个 UTF-8 字节，推荐随机十六进制字符串）。SearchGal 的服务端配置如下：
+
+```dotenv
+CHARLOTTE_BASE_URL=https://your-charlotte.example
+CHARLOTTE_API_KEY=与Charlotte专用搜索密钥相同的值
+```
+
+- **Cloudflare Workers**：使用 `pnpm wrangler secret put CHARLOTTE_BASE_URL` 和 `pnpm wrangler secret put CHARLOTTE_API_KEY` 设置；本地开发将两项写入未提交的 `.dev.vars`。
+- **Vercel / Netlify**：在项目的服务端环境变量设置中添加以上两项，再按平台流程重新部署。
+- **Docker / Podman Compose**：在运行 Compose 的环境或未提交的 `.env` 中设置两项；Compose 会传入容器，容器启动时生成 Wrangler 所需的 `.dev.vars`。代码接入后需构建/使用包含本次变更的镜像，单独修改配置不会更新旧镜像。
+
+每次搜索调用 `/api/integration/search?q=关键词&limit=12`，通过 `X-API-Key` 认证，不携带用户 Cookie。关键词 trim 后须为 1～100 个 Unicode 字符且不含空字符；不符合条件时跳过 Charlotte。结果只显示标题及 `/games/{id}` 详情页链接，标记为需登录（`Login`）。
+
+R18 搜索摘要由 **Charlotte 服务端**的 `NUXT_SEARCHGAL_INCLUDE_NSFW=true` 启用，SearchGal 不发送覆盖该设置的参数；实际详情浏览和下载仍遵守 Charlotte 的登录与内容偏好规则。
+
+接口应直接返回 JSON。若有 Cloudflare 人机质询，需为该 API 路径配置适合服务端调用的规则，并保留密钥验证与限流。SearchGal 不跟随接口重定向，请填写最终站点地址（包括正确的 `www` 子域名）。401、429、超时或格式错误会显示为 Charlotte 搜索源错误；429 不自动重试，也不会影响其他搜索源。
+
+Charlotte 当前按专用密钥共享每分钟 120 次额度（命中缓存也计数），部署多个 SearchGal 实例时需要合并考虑调用量。SearchGal 沿用统一 15 秒请求超时，不额外缓存结果。
+
+#### 本地连通性验证（Windows PowerShell / Node.js 22+）
+
+Charlotte 的 `.env` 应已配置可用的本地 PostgreSQL 数据库，数据库中需要至少一个有已审核、未删除、未标记失效资源的游戏。下面的固定密钥仅用于本机测试，不要用于线上。
+
+终端一启动 Charlotte（目录按实际位置调整）：
+
+```powershell
+cd D:\MyProject\Charlotte
+$env:NUXT_SEARCHGAL_API_KEY = "searchgal-local-test-key-2026-10-13"
+$env:NUXT_SEARCHGAL_INCLUDE_NSFW = "true"
+$env:NODE_APP_INSTANCE = "1" # 此测试进程不执行主实例定时任务
+npm run dev -- --host 127.0.0.1 --port 3100
+```
+
+在 SearchGal 根目录的 `.dev.vars` 中添加或更新以下两项，保留已有的其他配置：
+
+```dotenv
+CHARLOTTE_BASE_URL=http://127.0.0.1:3100
+CHARLOTTE_API_KEY=searchgal-local-test-key-2026-10-13
+```
+
+终端二启动 SearchGal：
+
+```powershell
+cd D:\MyProject\SearchGal
+pnpm dev --local --ip 127.0.0.1 --port 8787
+```
+
+终端三执行检查；将游戏名替换为本地数据库中已知有资源的条目：
+
+```powershell
+cd D:\MyProject\SearchGal
+pnpm check:charlotte --keyword "命运石之门"
+```
+
+检查脚本读取当前目录 `.dev.vars`，也支持环境变量（优先）。它会验证 Charlotte 直连有结果、响应字段和缓存头、缺少/错误密钥的 401、空关键词的 400，再请求 SearchGal `/gal`，确认 Charlotte 结果与直连一致、密钥未泄露且流正常结束。仅收到 HTTP 200 或空数组不会被判为全部通过。任一步失败退出码为 1；全部通过退出码为 0。其他外部搜索源错误单独提示。
+
+SearchGal 使用其他端口时追加 `--searchgal-url http://127.0.0.1:端口`。修改 `.dev.vars` 后重启 SearchGal；修改 Charlotte 配置后重启 Charlotte。测试结束后在两个服务终端按 Ctrl+C。此流程验证本地 HTTP、真实数据库和 Worker 链路；生产 Redis、HTTPS、Cloudflare 规则仍需部署后验证。
 
 ### 🐳 Podman Compose 容器化部署
 

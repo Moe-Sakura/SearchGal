@@ -13,3 +13,7 @@ node_modules
 .vscode
 .claude
 .history
+
+# 本地验证文件不进入运行镜像
+tests
+.test-build

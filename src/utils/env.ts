@@ -25,5 +25,9 @@ export function resolveSearchEnv(binding?: Record<string, unknown>): SearchEnv {
   return {
     TOUCHGAL_API_TOKEN:
       pickString(binding, "TOUCHGAL_API_TOKEN") ?? pickString(processEnv, "TOUCHGAL_API_TOKEN"),
+    CHARLOTTE_BASE_URL:
+      pickString(binding, "CHARLOTTE_BASE_URL") ?? pickString(processEnv, "CHARLOTTE_BASE_URL"),
+    CHARLOTTE_API_KEY:
+      pickString(binding, "CHARLOTTE_API_KEY") ?? pickString(processEnv, "CHARLOTTE_API_KEY"),
   };
 }

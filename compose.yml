@@ -7,4 +7,7 @@ services:
     environment:
       # TouchGal 官方 API token（可选），在 developer.touchgal.com 申请
       - TOUCHGAL_API_TOKEN=${TOUCHGAL_API_TOKEN:-}
+      # Charlotte 专用搜索接口（两项均配置后启用）
+      - CHARLOTTE_BASE_URL=${CHARLOTTE_BASE_URL:-}
+      - CHARLOTTE_API_KEY=${CHARLOTTE_API_KEY:-}
     restart: unless-stopped
