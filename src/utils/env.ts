@@ -29,5 +29,9 @@ export function resolveSearchEnv(binding?: Record<string, unknown>): SearchEnv {
       pickString(binding, "CHARLOTTE_BASE_URL") ?? pickString(processEnv, "CHARLOTTE_BASE_URL"),
     CHARLOTTE_API_KEY:
       pickString(binding, "CHARLOTTE_API_KEY") ?? pickString(processEnv, "CHARLOTTE_API_KEY"),
+    JIULIACG_BASE_URL:
+      pickString(binding, "JIULIACG_BASE_URL") ?? pickString(processEnv, "JIULIACG_BASE_URL"),
+    JIULIACG_API_KEY:
+      pickString(binding, "JIULIACG_API_KEY") ?? pickString(processEnv, "JIULIACG_API_KEY"),
   };
 }
