@@ -1,9 +1,9 @@
+import { load } from "cheerio/slim";
 import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
 const API_URL = "https://www.shinnku.com/search";
 const BASE_URL = "https://www.shinnku.com";
-const REGEX = /hover:underline" href="(?<URL>.+?)">\s*(?<NAME>.+?)\s*<\/a>/gs;
 
 async function searchZhenHongXiaoZhan(game: string): Promise<PlatformSearchResult> {
   const searchResult: PlatformSearchResult = {
@@ -20,17 +20,20 @@ async function searchZhenHongXiaoZhan(game: string): Promise<PlatformSearchResul
       throw new Error(`资源平台 SearchAPI 响应异常状态码 ${response.status}`);
     }
 
-    const html = await response.text();
-    const matches = html.matchAll(REGEX);
-
+    const $ = load(await response.text());
     const items: SearchResultItem[] = [];
-    for (const match of matches) {
-      if (match.groups?.NAME && match.groups?.URL) {
-        items.push({
-          name: match.groups.NAME.trim(),
-          url: BASE_URL + match.groups.URL,
-        });
+    for (const link of $('a[class~="hover:underline"][href]').toArray()) {
+      const href = $(link).attr("href")?.trim();
+      const name = $(link).text().trim();
+      if (!href || !name) continue;
+      let resultUrl: URL;
+      try {
+        resultUrl = new URL(href, BASE_URL);
+      } catch {
+        continue;
       }
+      if (resultUrl.origin !== BASE_URL) continue;
+      items.push({ name, url: resultUrl.href });
     }
 
     searchResult.items = items;

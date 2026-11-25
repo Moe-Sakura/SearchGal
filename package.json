@@ -38,5 +38,8 @@
   ],
   "engines": {
     "node": "26.x"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0"
   }
 }
