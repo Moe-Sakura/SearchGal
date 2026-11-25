@@ -10,4 +10,7 @@ services:
       # Charlotte 专用搜索接口（两项均配置后启用）
       - CHARLOTTE_BASE_URL=${CHARLOTTE_BASE_URL:-}
       - CHARLOTTE_API_KEY=${CHARLOTTE_API_KEY:-}
+      # 玖黎ACG 专用搜索接口（两项均配置后启用）
+      - JIULIACG_BASE_URL=${JIULIACG_BASE_URL:-}
+      - JIULIACG_API_KEY=${JIULIACG_API_KEY:-}
     restart: unless-stopped

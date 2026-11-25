@@ -14,7 +14,13 @@ function serialize(key, value) {
 }
 
 // Wrangler 本地模式从 .dev.vars 读取绑定。
-const keys = ['TOUCHGAL_API_TOKEN', 'CHARLOTTE_BASE_URL', 'CHARLOTTE_API_KEY'];
+const keys = [
+  'TOUCHGAL_API_TOKEN',
+  'CHARLOTTE_BASE_URL',
+  'CHARLOTTE_API_KEY',
+  'JIULIACG_BASE_URL',
+  'JIULIACG_API_KEY',
+];
 const lines = keys
   .filter(key => process.env[key])
   .map(key => serialize(key, process.env[key]));
