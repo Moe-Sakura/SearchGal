@@ -9,10 +9,11 @@
     "dev:wrangler": "wrangler dev",
     "generate": "node scripts/generate-indices.js",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/ api/",
-    "lint:fix": "eslint src/ api/ --fix",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write",
     "check:charlotte": "node scripts/check-charlotte.mjs",
-    "check": "tsc --noEmit && eslint src/ api/"
+    "check": "tsc --noEmit && biome lint",
+    "check:search-http": "node --import tsx --test scripts/check-search-http.mjs"
   },
   "keywords": [],
   "author": "",
@@ -20,16 +21,13 @@
   "description": "",
   "packageManager": "pnpm@10.33.2",
   "devDependencies": {
+    "@biomejs/biome": "^2.6.9",
     "@cloudflare/workers-types": "^4.20260331.1",
-    "@eslint/js": "^10.0.1",
     "@netlify/functions": "^5.1.5",
-    "@types/busboy": "^1.5.4",
     "@types/node": "^25.5.0",
     "@vercel/node": "^5.6.22",
-    "busboy": "^1.6.0",
-    "eslint": "^10.1.0",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.0",
+    "tsx": "^4.23.15",
+    "typescript": "7.0.2",
     "wrangler": "^4.79.0"
   }
 }

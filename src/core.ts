@@ -1,4 +1,4 @@
-import type { Platform, SearchEnv, StreamProgress, StreamResult } from "./types";
+import type { Platform, PlatformSearchResult, SearchEnv, StreamProgress, StreamResult } from "./types";
 import platformsGal from "./platforms/gal";
 import platformsPatch from "./platforms/patch";
 
@@ -34,7 +34,7 @@ export async function handleSearchRequestStream(
   await writer.write(encoder.encode(formatStreamEvent({ total })));
 
   const searchPromises = platforms.map(async (platform) => {
-    let result;
+    let result: PlatformSearchResult;
     try {
       result = await platform.search(game, env);
     } catch (error) {
