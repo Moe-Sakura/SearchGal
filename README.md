@@ -99,9 +99,11 @@
 ### 💻 本地开发
 
 ```bash
-pnpm install        # 安装依赖
-pnpm wrangler dev   # 启动开发服务器
+bun install --frozen-lockfile        # 安装依赖
+bun run wrangler dev   # 启动开发服务器
 ```
+
+需要 Bun 1.4 和 Node.js 26。使用 `bun run check` 运行类型检查和 Biome，使用 `bun run test` 运行 Vitest HTTP 回归。
 
 ### 🔑 环境变量
 
@@ -115,7 +117,7 @@ pnpm wrangler dev   # 启动开发服务器
 
 ```bash
 # Cloudflare Workers：作为 secret 注入（本地开发放入 .dev.vars 文件，不要提交）
-pnpm wrangler secret put TOUCHGAL_API_TOKEN
+bun run wrangler secret put TOUCHGAL_API_TOKEN
 echo 'TOUCHGAL_API_TOKEN=tgal_live_xxx' >> .dev.vars
 
 # Vercel：项目 Settings → Environment Variables，或
@@ -137,7 +139,7 @@ CHARLOTTE_BASE_URL=https://your-charlotte.example
 CHARLOTTE_API_KEY=与Charlotte专用搜索密钥相同的值
 ```
 
-- **Cloudflare Workers**：使用 `pnpm wrangler secret put CHARLOTTE_BASE_URL` 和 `pnpm wrangler secret put CHARLOTTE_API_KEY` 设置；本地开发将两项写入未提交的 `.dev.vars`。
+- **Cloudflare Workers**：使用 `bun run wrangler secret put CHARLOTTE_BASE_URL` 和 `bun run wrangler secret put CHARLOTTE_API_KEY` 设置；本地开发将两项写入未提交的 `.dev.vars`。
 - **Vercel / Netlify**：在项目的服务端环境变量设置中添加以上两项，再按平台流程重新部署。
 - **Docker / Podman Compose**：在运行 Compose 的环境或未提交的 `.env` 中设置两项；Compose 会传入容器，容器启动时生成 Wrangler 所需的 `.dev.vars`。代码接入后需构建/使用包含本次变更的镜像，单独修改配置不会更新旧镜像。
 
@@ -174,14 +176,14 @@ CHARLOTTE_API_KEY=searchgal-local-test-key-2026-10-13
 
 ```powershell
 cd D:\MyProject\SearchGal
-pnpm dev --local --ip 127.0.0.1 --port 8787
+bun run dev --local --ip 127.0.0.1 --port 8787
 ```
 
 终端三执行检查；将游戏名替换为本地数据库中已知有资源的条目：
 
 ```powershell
 cd D:\MyProject\SearchGal
-pnpm check:charlotte --keyword "命运石之门"
+bun run check:charlotte --keyword "命运石之门"
 ```
 
 检查脚本读取当前目录 `.dev.vars`，也支持环境变量（优先）。它会验证 Charlotte 直连有结果、响应字段和缓存头、缺少/错误密钥的 401、空关键词的 400，再请求 SearchGal `/gal`，确认 Charlotte 结果与直连一致、密钥未泄露且流正常结束。仅收到 HTTP 200 或空数组不会被判为全部通过。任一步失败退出码为 1；全部通过退出码为 0。其他外部搜索源错误单独提示。
@@ -334,7 +336,7 @@ export default YourSite;
 
 **3. 注册 & 提交**
 ```bash
-pnpm run generate   # 自动注册
+bun run generate   # 自动注册
 git push && PR      # 提交贡献
 ```
 
