@@ -3,7 +3,7 @@ import { once } from 'node:events';
 import { createServer } from 'node:http';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
-import { test } from 'node:test';
+import { test } from 'vitest';
 import { PLATFORMS_GAL, PLATFORMS_PATCH } from '../src/core.ts';
 import worker from '../src/index.ts';
 import vercelGal from '../api/gal.ts';

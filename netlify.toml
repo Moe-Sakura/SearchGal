@@ -1,5 +1,5 @@
 [build]
-  command = "echo 'No build needed'"
+  command = "bun install --frozen-lockfile"
   functions = "netlify/functions"
 
 # 重定向到 Functions
@@ -18,9 +18,10 @@
   to = "/.netlify/functions/patch"
   status = 200
 
-# 环境变量（如果需要）
-[context.production.environment]
-  NODE_VERSION = "18"
+# 固定安装和构建工具版本
+[build.environment]
+  BUN_VERSION = "1.4.5"
+  BUN_FLAGS = "--frozen-lockfile"
 
 # 开发环境配置
 [dev]
