@@ -2,9 +2,9 @@ import { fetchClient } from "../../utils/httpClient";
 import type { Platform, PlatformSearchResult, SearchResultItem } from "../../types";
 
 // SakuGAL 搜索结果页标题链接形如：
-// <a href="https://sakugal.com/game/3775.html" class="dark:hover:text-[var(--primary)] hover:text-[var(--primary)] duration-300 text-sm sm:text-base font-semibold">标题</a>
+// <a href="https://game.sakugal.one/game/3775.html" class="card-title text-left text-sm sm:text-base font-semibold" title="…">标题</a>
 // 封面图 <a> 带 media-diy class，不含 font-semibold，不会被误抓
-const REGEX = /<a href="(?<URL>https:\/\/sakugal\.com\/game\/\d+\.html)"[^>]*class="[^"]*font-semibold[^"]*"[^>]*>(?<NAME>.*?)<\/a>/gs;
+const REGEX = /<a href="(?<URL>https:\/\/game\.sakugal\.one\/game\/\d+\.html)"[^>]*class="[^"]*font-semibold[^"]*"[^>]*>(?<NAME>.*?)<\/a>/gs;
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
@@ -17,7 +17,7 @@ async function searchSakuGal(game: string): Promise<PlatformSearchResult> {
   };
 
   try {
-    const url = new URL("https://sakugal.com/");
+    const url = new URL("https://game.sakugal.one/");
     url.searchParams.set("s", game);
 
     const response = await fetchClient(url);
