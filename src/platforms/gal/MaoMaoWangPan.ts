@@ -55,7 +55,7 @@ async function searchMaoMaoWangPan(game: string): Promise<PlatformSearchResult> 
       .filter(item => item.parent.startsWith("/GalGame/SP后端1[GalGame分区]/"))
       .map(item => ({
         name: item.name.trim(),
-        url: BASE_URL + item.parent + "/" + item.name,
+        url: `${BASE_URL}${item.parent}/${item.name}`,
       }));
 
     searchResult.items = items;

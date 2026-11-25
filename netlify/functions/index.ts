@@ -1,4 +1,4 @@
-import { Handler } from '@netlify/functions';
+import type { Handler } from '@netlify/functions';
 import { buildRedirectResponse } from '../../src/redirect';
 
 export const handler: Handler = async (event) => {

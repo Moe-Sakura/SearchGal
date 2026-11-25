@@ -53,7 +53,7 @@ async function searchZiLingDeMiaoMiaoWu(game: string): Promise<PlatformSearchRes
 
     const items: SearchResultItem[] = data.data.content.map(item => ({
       name: item.name.trim(),
-      url: BASE_URL + item.parent + "/" + item.name,
+      url: `${BASE_URL}${item.parent}/${item.name}`,
     }));
 
     searchResult.items = items;
