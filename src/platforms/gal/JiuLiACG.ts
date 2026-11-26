@@ -1,7 +1,8 @@
 import type { Platform, PlatformSearchResult, SearchEnv, SearchResultItem } from "../../types";
 import { fetchClient } from "../../utils/httpClient";
 
-const RESULT_LIMIT = 12;
+// SearchGal 接口不再设置最大结果数，使用一个足够大的请求值返回当前全部匹配项。
+const RESULT_LIMIT = 100_000;
 
 function failure(message: string): PlatformSearchResult {
   return { count: -1, items: [], error: `玖黎ACG SearchAPI：${message}` };
