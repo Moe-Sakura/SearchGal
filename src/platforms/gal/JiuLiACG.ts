@@ -1,7 +1,9 @@
 import type { Platform, PlatformSearchResult, SearchEnv, SearchResultItem } from "../../types";
-import { fetchClient } from "../../utils/httpClient";
+import { fetchClient, ResponseBodyTooLargeError } from "../../utils/httpClient";
 
-const RESULT_LIMIT = 12;
+const UPSTREAM_RESULT_LIMIT = 50;
+const MAX_RETURNED_RESULTS = 50;
+const MAX_RESPONSE_BYTES = 512 * 1024;
 
 function failure(message: string): PlatformSearchResult {
   return { count: -1, items: [], error: `玖黎ACG SearchAPI：${message}` };
@@ -35,15 +37,16 @@ async function searchJiuLiACG(game: string, env?: SearchEnv): Promise<PlatformSe
 
   const url = new URL("/api/integration/search", site);
   url.searchParams.set("q", keyword);
-  url.searchParams.set("limit", String(RESULT_LIMIT));
+  url.searchParams.set("limit", String(UPSTREAM_RESULT_LIMIT));
 
   let response: Response;
   try {
     response = await fetchClient(url, {
       headers: { "X-API-Key": apiKey, "Accept": "application/json" },
       redirect: "manual",
-    });
-  } catch {
+    }, MAX_RESPONSE_BYTES);
+  } catch (error) {
+    if (error instanceof ResponseBodyTooLargeError) return failure("响应体超出大小限制");
     return failure("请求失败或超时，请检查站点状态和网络连接");
   }
 
@@ -60,8 +63,8 @@ async function searchJiuLiACG(game: string, env?: SearchEnv): Promise<PlatformSe
   } catch {
     return failure("响应不是有效 JSON，请检查接口地址及 Cloudflare 规则");
   }
-  if (!isRecord(data) || !Array.isArray(data.items) || data.items.length > RESULT_LIMIT) {
-    return failure("响应格式错误：缺少 items 数组或结果数量超过限制");
+  if (!isRecord(data) || !Array.isArray(data.items)) {
+    return failure("响应格式错误：缺少 items 数组");
   }
 
   const items: SearchResultItem[] = [];
@@ -75,6 +78,7 @@ async function searchJiuLiACG(game: string, env?: SearchEnv): Promise<PlatformSe
     if (seenIds.has(item.id)) continue;
     seenIds.add(item.id);
     items.push({ name: item.title.trim(), url: new URL(item.path, site).href });
+    if (items.length === MAX_RETURNED_RESULTS) break;
   }
 
   return { count: items.length, items };
